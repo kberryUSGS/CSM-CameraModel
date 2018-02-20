@@ -10,8 +10,8 @@ incdir = os.path.dirname(sysconfig.get_path('include'))
 
 INCLUDE_DIRS = ['include/json', 'include/genericframe', 'include/orex',
                 'include/genericls',
-                'include/', incdir, os.path.join(incdir, 'csm')]
-LIBRARY_DIRS = []  # This assumes that libcsmapi is installed in a standard place
+                'include/', '/scratch/csm/include/','/scratch/csm/include/csm/' ] #incdir, os.path.join(incdir, 'csm')]
+LIBRARY_DIRS = ['/scratch/csm/lib']  # This assumes that libcsmapi is installed in a standard place
 LIBRARIES = ['csmapi']
 COMPILE_ARGS = ['-g', '-std=c++11']#, '-stdlib=libc++']
 
