@@ -13,7 +13,9 @@ using json = nlohmann::json;
 // Calculates a rotation matrix from Euler angles
 // in - euler[3]
 // out - rotationMatrix[9]
-void calculateRotationMatrixFromEuler(double euler[], double rotationMatrix[]) {
+void
+calculateRotationMatrixFromEuler(double euler[], double rotationMatrix[])
+{
   double cos_a = cos(euler[0]);
   double sin_a = sin(euler[0]);
   double cos_b = cos(euler[1]);
@@ -35,8 +37,9 @@ void calculateRotationMatrixFromEuler(double euler[], double rotationMatrix[]) {
 // uses a quaternion to calclate a rotation matrix.
 // in - q[4]
 // out - rotationMatrix[9]
-void calculateRotationMatrixFromQuaternions(double q[4],
-                                            double rotationMatrix[9]) {
+void
+calculateRotationMatrixFromQuaternions(double q[4], double rotationMatrix[9])
+{
   double norm = sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
   q[0] /= norm;
   q[1] /= norm;
@@ -63,12 +66,20 @@ void calculateRotationMatrixFromQuaternions(double q[4],
 // first ccd sample for the image in - iTransS[3] - the transformation from
 // focal plane to ccd samples in - iTransL[3] - the transformation from focal
 // plane to ccd lines out - distortedX out - distortedY
-void computeDistortedFocalPlaneCoordinates(
-    const double &line, const double &sample, const double &sampleOrigin,
-    const double &lineOrigin, const double &sampleSumming,
-    const double &lineSumming, const double &startingSample,
-    const double &startingLine, const double iTransS[], const double iTransL[],
-    double &distortedX, double &distortedY) {
+void
+computeDistortedFocalPlaneCoordinates(const double& line,
+                                      const double& sample,
+                                      const double& sampleOrigin,
+                                      const double& lineOrigin,
+                                      const double& sampleSumming,
+                                      const double& lineSumming,
+                                      const double& startingSample,
+                                      const double& startingLine,
+                                      const double iTransS[],
+                                      const double iTransL[],
+                                      double& distortedX,
+                                      double& distortedY)
+{
   double detSample = sample * sampleSumming + startingSample;
   double detLine = line * lineSumming + startingLine;
   double m11 = iTransL[1];
@@ -96,16 +107,24 @@ void computeDistortedFocalPlaneCoordinates(
 // first ccd sample for the image in - iTransS[3] - the transformation from
 // focal plane to ccd samples in - iTransL[3] - the transformation from focal
 // plane to ccd lines out - natFocalPlane
-void computePixel(const double &distortedX, const double &distortedY,
-                  const double &sampleOrigin, const double &lineOrigin,
-                  const double &sampleSumming, const double &lineSumming,
-                  const double &startingSample, const double &startingLine,
-                  const double iTransS[], const double iTransL[], double &line,
-                  double &sample) {
+void
+computePixel(const double& distortedX,
+             const double& distortedY,
+             const double& sampleOrigin,
+             const double& lineOrigin,
+             const double& sampleSumming,
+             const double& lineSumming,
+             const double& startingSample,
+             const double& startingLine,
+             const double iTransS[],
+             const double iTransL[],
+             double& line,
+             double& sample)
+{
   double centeredSample =
-      iTransS[0] + iTransS[1] * distortedX + iTransS[2] * distortedY;
+    iTransS[0] + iTransS[1] * distortedX + iTransS[2] * distortedY;
   double centeredLine =
-      iTransL[0] + iTransL[1] * distortedX + iTransL[2] * distortedY;
+    iTransL[0] + iTransL[1] * distortedX + iTransL[2] * distortedY;
   double detSample = centeredSample + sampleOrigin;
   double detLine = centeredLine + lineOrigin;
   sample = (detSample - startingSample) / sampleSumming;
@@ -116,35 +135,44 @@ void computePixel(const double &distortedX, const double &distortedY,
 // camera space) in - undistortedFocalPlaneX in - undistortedFocalPlaneY in -
 // zDirection - Either 1 or -1. The direction of the boresight in - focalLength
 // out - cameraLook[3]
-void createCameraLookVector(const double &undistortedFocalPlaneX,
-                            const double &undistortedFocalPlaneY,
-                            const double &zDirection, const double &focalLength,
-                            double cameraLook[]) {
+void
+createCameraLookVector(const double& undistortedFocalPlaneX,
+                       const double& undistortedFocalPlaneY,
+                       const double& zDirection,
+                       const double& focalLength,
+                       double cameraLook[])
+{
   cameraLook[0] = -undistortedFocalPlaneX * zDirection;
   cameraLook[1] = -undistortedFocalPlaneY * zDirection;
   cameraLook[2] = -focalLength;
   double magnitude =
-      sqrt(cameraLook[0] * cameraLook[0] + cameraLook[1] * cameraLook[1] +
-           cameraLook[2] * cameraLook[2]);
+    sqrt(cameraLook[0] * cameraLook[0] + cameraLook[1] * cameraLook[1] +
+         cameraLook[2] * cameraLook[2]);
   cameraLook[0] /= magnitude;
   cameraLook[1] /= magnitude;
   cameraLook[2] /= magnitude;
 }
 
 // Lagrange Interpolation for equally spaced data
-void lagrangeInterp(const int &numTime, const double *valueArray,
-                    const double &startTime, const double &delTime,
-                    const double &time, const int &vectorLength,
-                    const int &i_order, double *valueVector) {
+void
+lagrangeInterp(const int& numTime,
+               const double* valueArray,
+               const double& startTime,
+               const double& delTime,
+               const double& time,
+               const int& vectorLength,
+               const int& i_order,
+               double* valueVector)
+{
   // Lagrange interpolation for uniform post interval.
   // Largest order possible is 8th. Points far away from
   // data center are handled gracefully to avoid failure.
 
   if (numTime < 2) {
     throw csm::Error(
-        csm::Error::INDEX_OUT_OF_RANGE,
-        "At least 2 points are required to perform Lagrange interpolation.",
-        "lagrangeInterp");
+      csm::Error::INDEX_OUT_OF_RANGE,
+      "At least 2 points are required to perform Lagrange interpolation.",
+      "lagrangeInterp");
   }
 
   // Compute index
@@ -235,15 +263,19 @@ void lagrangeInterp(const int &numTime, const double *valueArray,
   }
 }
 
-double brentRoot(double lowerBound, double upperBound,
-                 std::function<double(double)> func, double epsilon) {
+double
+brentRoot(double lowerBound,
+          double upperBound,
+          std::function<double(double)> func,
+          double epsilon)
+{
   double counterPoint = lowerBound;
   double currentPoint = upperBound;
   double counterFunc = func(counterPoint);
   double currentFunc = func(currentPoint);
   if (counterFunc * currentFunc > 0.0) {
     throw std::invalid_argument(
-        "Function values at the boundaries have the same sign [brentRoot].");
+      "Function values at the boundaries have the same sign [brentRoot].");
   }
   if (fabs(counterFunc) < fabs(currentFunc)) {
     std::swap(counterPoint, currentPoint);
@@ -267,23 +299,23 @@ double brentRoot(double lowerBound, double upperBound,
       nextPoint += (currentPoint * counterFunc * previousFunc) /
                    ((currentFunc - counterFunc) * (currentFunc - previousFunc));
       nextPoint +=
-          (previousPoint * currentFunc * counterFunc) /
-          ((previousFunc - counterFunc) * (previousFunc - currentFunc));
+        (previousPoint * currentFunc * counterFunc) /
+        ((previousFunc - counterFunc) * (previousFunc - currentFunc));
     }
     // Secant method
     else {
       nextPoint = currentPoint - currentFunc * (currentPoint - counterPoint) /
-                                     (currentFunc - counterFunc);
+                                   (currentFunc - counterFunc);
     }
 
     // Bisection method
     if (((currentPoint - nextPoint) *
-             (nextPoint - (3 * counterPoint + currentPoint) / 4) <
+           (nextPoint - (3 * counterPoint + currentPoint) / 4) <
          0) ||
         (bisected && fabs(nextPoint - currentPoint) >=
-                         fabs(currentPoint - previousPoint) / 2) ||
+                       fabs(currentPoint - previousPoint) / 2) ||
         (!bisected && fabs(nextPoint - currentPoint) >=
-                          fabs(previousPoint - evenOlderPoint) / 2) ||
+                        fabs(previousPoint - evenOlderPoint) / 2) ||
         (bisected && fabs(currentPoint - previousPoint) < epsilon) ||
         (!bisected && fabs(previousPoint - evenOlderPoint) < epsilon)) {
       nextPoint = (currentPoint + counterPoint) / 2;
@@ -309,7 +341,9 @@ double brentRoot(double lowerBound, double upperBound,
   return nextPoint;
 }
 
-double evaluatePolynomial(const std::vector<double> &coeffs, double x) {
+double
+evaluatePolynomial(const std::vector<double>& coeffs, double x)
+{
   if (coeffs.empty()) {
     throw std::invalid_argument("Polynomial coeffs must be non-empty.");
   }
@@ -323,8 +357,9 @@ double evaluatePolynomial(const std::vector<double> &coeffs, double x) {
   return value;
 }
 
-double evaluatePolynomialDerivative(const std::vector<double> &coeffs,
-                                    double x) {
+double
+evaluatePolynomialDerivative(const std::vector<double>& coeffs, double x)
+{
   if (coeffs.empty()) {
     throw std::invalid_argument("Polynomial coeffs must be non-empty.");
   }
@@ -338,8 +373,12 @@ double evaluatePolynomialDerivative(const std::vector<double> &coeffs,
   return value;
 }
 
-double polynomialRoot(const std::vector<double> &coeffs, double guess,
-                      double threshold, int maxIterations) {
+double
+polynomialRoot(const std::vector<double>& coeffs,
+               double guess,
+               double threshold,
+               int maxIterations)
+{
   double root = guess;
   double polyValue = evaluatePolynomial(coeffs, root);
   double polyDeriv = 0.0;
@@ -360,9 +399,15 @@ double polynomialRoot(const std::vector<double> &coeffs, double guess,
                               std::to_string(maxIterations) + " iterations");
 }
 
-double computeEllipsoidElevation(double x, double y, double z, double semiMajor,
-                                 double semiMinor, double desired_precision,
-                                 double *achieved_precision) {
+double
+computeEllipsoidElevation(double x,
+                          double y,
+                          double z,
+                          double semiMajor,
+                          double semiMinor,
+                          double desired_precision,
+                          double* achieved_precision)
+{
   // Compute elevation given xyz
   // Requires semi-major-axis and eccentricity-square
   const int MKTR = 10;
@@ -413,60 +458,77 @@ double computeEllipsoidElevation(double x, double y, double z, double semiMajor,
   return h;
 }
 
-csm::EcefVector operator*(double scalar, const csm::EcefVector &vec) {
+csm::EcefVector operator*(double scalar, const csm::EcefVector& vec)
+{
   return csm::EcefVector(scalar * vec.x, scalar * vec.y, scalar * vec.z);
 }
 
-csm::EcefVector operator*(const csm::EcefVector &vec, double scalar) {
+csm::EcefVector operator*(const csm::EcefVector& vec, double scalar)
+{
   return scalar * vec;
 }
 
-csm::EcefVector operator/(const csm::EcefVector &vec, double scalar) {
+csm::EcefVector
+operator/(const csm::EcefVector& vec, double scalar)
+{
   return 1.0 / scalar * vec;
 }
 
-csm::EcefVector operator+(const csm::EcefVector &vec1,
-                          const csm::EcefVector &vec2) {
+csm::EcefVector
+operator+(const csm::EcefVector& vec1, const csm::EcefVector& vec2)
+{
   return csm::EcefVector(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
 }
 
-csm::EcefVector operator-(const csm::EcefVector &vec1,
-                          const csm::EcefVector &vec2) {
+csm::EcefVector
+operator-(const csm::EcefVector& vec1, const csm::EcefVector& vec2)
+{
   return csm::EcefVector(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
 }
 
-double dot(const csm::EcefVector &vec1, const csm::EcefVector &vec2) {
+double
+dot(const csm::EcefVector& vec1, const csm::EcefVector& vec2)
+{
   return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 }
 
-csm::EcefVector cross(const csm::EcefVector &vec1,
-                      const csm::EcefVector &vec2) {
+csm::EcefVector
+cross(const csm::EcefVector& vec1, const csm::EcefVector& vec2)
+{
   return csm::EcefVector(vec1.y * vec2.z - vec1.z * vec2.y,
                          vec1.z * vec2.x - vec1.x * vec2.z,
                          vec1.x * vec2.y - vec1.y * vec2.x);
 }
 
-double norm(const csm::EcefVector &vec) {
+double
+norm(const csm::EcefVector& vec)
+{
   return sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
-csm::EcefVector normalized(const csm::EcefVector &vec) {
+csm::EcefVector
+normalized(const csm::EcefVector& vec)
+{
   return vec / norm(vec);
 }
 
-csm::EcefVector projection(const csm::EcefVector &vec1,
-                           const csm::EcefVector &vec2) {
+csm::EcefVector
+projection(const csm::EcefVector& vec1, const csm::EcefVector& vec2)
+{
   return dot(vec1, vec2) / dot(vec2, vec2) * vec2;
 }
 
-csm::EcefVector rejection(const csm::EcefVector &vec1,
-                          const csm::EcefVector &vec2) {
+csm::EcefVector
+rejection(const csm::EcefVector& vec1, const csm::EcefVector& vec2)
+{
   return vec1 - projection(vec1, vec2);
 }
 
 // convert a measurement
-double metric_conversion(double val, std::string from, std::string to) {
-  json typemap = {{"m", 0}, {"km", 3}};
+double
+metric_conversion(double val, std::string from, std::string to)
+{
+  json typemap = { { "m", 0 }, { "km", 3 } };
 
   // everything to lowercase
   std::transform(from.begin(), from.end(), from.begin(), ::tolower);
@@ -474,7 +536,9 @@ double metric_conversion(double val, std::string from, std::string to) {
   return val * pow(10, typemap[from].get<int>() - typemap[to].get<int>());
 }
 
-std::string getSensorModelName(json isd, csm::WarningList *list) {
+std::string
+getSensorModelName(json isd, csm::WarningList* list)
+{
   std::string name = "";
   try {
     name = isd.at("name_model");
@@ -488,7 +552,9 @@ std::string getSensorModelName(json isd, csm::WarningList *list) {
   return name;
 }
 
-std::string getImageId(json isd, csm::WarningList *list) {
+std::string
+getImageId(json isd, csm::WarningList* list)
+{
   std::string id = "";
   try {
     id = isd.at("image_identifier");
@@ -502,7 +568,9 @@ std::string getImageId(json isd, csm::WarningList *list) {
   return id;
 }
 
-std::string getSensorName(json isd, csm::WarningList *list) {
+std::string
+getSensorName(json isd, csm::WarningList* list)
+{
   std::string name = "";
   try {
     name = isd.at("name_sensor");
@@ -516,7 +584,9 @@ std::string getSensorName(json isd, csm::WarningList *list) {
   return name;
 }
 
-std::string getPlatformName(json isd, csm::WarningList *list) {
+std::string
+getPlatformName(json isd, csm::WarningList* list)
+{
   std::string name = "";
   try {
     name = isd.at("name_platform");
@@ -530,7 +600,9 @@ std::string getPlatformName(json isd, csm::WarningList *list) {
   return name;
 }
 
-std::string getLogFile(nlohmann::json isd, csm::WarningList *list) {
+std::string
+getLogFile(nlohmann::json isd, csm::WarningList* list)
+{
   std::string file = "";
   try {
     file = isd.at("log_file");
@@ -544,37 +616,43 @@ std::string getLogFile(nlohmann::json isd, csm::WarningList *list) {
   return file;
 }
 
-int getTotalLines(json isd, csm::WarningList *list) {
+int
+getTotalLines(json isd, csm::WarningList* list)
+{
   int lines = 0;
   try {
     lines = isd.at("image_lines");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the number of lines in the image.",
-                       "Utilities::getTotalLines()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the number of lines in the image.",
+                     "Utilities::getTotalLines()"));
     }
   }
   return lines;
 }
 
-int getTotalSamples(json isd, csm::WarningList *list) {
+int
+getTotalSamples(json isd, csm::WarningList* list)
+{
   int samples = 0;
   try {
     samples = isd.at("image_samples");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the number of samples in the image.",
-                       "Utilities::getTotalSamples()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the number of samples in the image.",
+                     "Utilities::getTotalSamples()"));
     }
   }
   return samples;
 }
 
-double getStartingTime(json isd, csm::WarningList *list) {
+double
+getStartingTime(json isd, csm::WarningList* list)
+{
   double time = 0.0;
   try {
     time = isd.at("starting_ephemeris_time");
@@ -588,7 +666,9 @@ double getStartingTime(json isd, csm::WarningList *list) {
   return time;
 }
 
-double getCenterTime(json isd, csm::WarningList *list) {
+double
+getCenterTime(json isd, csm::WarningList* list)
+{
   double time = 0.0;
   try {
     time = isd.at("center_ephemeris_time");
@@ -602,7 +682,9 @@ double getCenterTime(json isd, csm::WarningList *list) {
   return time;
 }
 
-double getEndingTime(json isd, csm::WarningList *list) {
+double
+getEndingTime(json isd, csm::WarningList* list)
+{
   double time = 0.0;
   try {
     time = isd.at("ending_ephemeris_time");
@@ -616,17 +698,19 @@ double getEndingTime(json isd, csm::WarningList *list) {
   return time;
 }
 
-std::vector<double> getIntegrationStartLines(
-    std::vector<std::vector<double>> lineScanRate, csm::WarningList *list) {
+std::vector<double>
+getIntegrationStartLines(std::vector<std::vector<double>> lineScanRate,
+                         csm::WarningList* list)
+{
   std::vector<double> lines;
   try {
-    for (auto &scanRate : lineScanRate) {
+    for (auto& scanRate : lineScanRate) {
       if (scanRate.size() != 3) {
         throw csm::Error(
-            csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-            "Unable to parse integration start lines from line "
-            "scan rate due to malformed vector. Expected vector size of 3.",
-            "Utilities::getIntegrationStartLines()");
+          csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+          "Unable to parse integration start lines from line "
+          "scan rate due to malformed vector. Expected vector size of 3.",
+          "Utilities::getIntegrationStartLines()");
       }
       lines.push_back(scanRate[0]);
     }
@@ -641,17 +725,19 @@ std::vector<double> getIntegrationStartLines(
   return lines;
 }
 
-std::vector<double> getIntegrationStartTimes(
-    std::vector<std::vector<double>> lineScanRate, csm::WarningList *list) {
+std::vector<double>
+getIntegrationStartTimes(std::vector<std::vector<double>> lineScanRate,
+                         csm::WarningList* list)
+{
   std::vector<double> times;
   try {
-    for (auto &scanRate : lineScanRate) {
+    for (auto& scanRate : lineScanRate) {
       if (scanRate.size() != 3) {
         throw csm::Error(
-            csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-            "Unable to parse integration start times from line "
-            "scan rate due to malformed vector. Expected vector size of 3.",
-            "Utilities::getIntegrationStartTimes()");
+          csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+          "Unable to parse integration start times from line "
+          "scan rate due to malformed vector. Expected vector size of 3.",
+          "Utilities::getIntegrationStartTimes()");
       }
       times.push_back(scanRate[1]);
     }
@@ -666,17 +752,19 @@ std::vector<double> getIntegrationStartTimes(
   return times;
 }
 
-std::vector<double> getIntegrationTimes(
-    std::vector<std::vector<double>> lineScanRate, csm::WarningList *list) {
+std::vector<double>
+getIntegrationTimes(std::vector<std::vector<double>> lineScanRate,
+                    csm::WarningList* list)
+{
   std::vector<double> times;
   try {
-    for (auto &scanRate : lineScanRate) {
+    for (auto& scanRate : lineScanRate) {
       if (scanRate.size() != 3) {
         throw csm::Error(
-            csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
-            "Unable to parse integration times from line "
-            "scan rate due to malformed vector. Expected vector size of 3.",
-            "Utilities::getIntegrationTimes()");
+          csm::Error::SENSOR_MODEL_NOT_CONSTRUCTIBLE,
+          "Unable to parse integration times from line "
+          "scan rate due to malformed vector. Expected vector size of 3.",
+          "Utilities::getIntegrationTimes()");
       }
       times.push_back(scanRate[2]);
     }
@@ -691,37 +779,43 @@ std::vector<double> getIntegrationTimes(
   return times;
 }
 
-int getSampleSumming(json isd, csm::WarningList *list) {
+int
+getSampleSumming(json isd, csm::WarningList* list)
+{
   int summing = 0;
   try {
     summing = isd.at("detector_sample_summing");
   } catch (...) {
     if (list) {
       list->push_back(csm::Warning(
-          csm::Warning::DATA_NOT_AVAILABLE,
-          "Could not parse the sample direction detector pixel summing.",
-          "Utilities::getSampleSumming()"));
+        csm::Warning::DATA_NOT_AVAILABLE,
+        "Could not parse the sample direction detector pixel summing.",
+        "Utilities::getSampleSumming()"));
     }
   }
   return summing;
 }
 
-int getLineSumming(json isd, csm::WarningList *list) {
+int
+getLineSumming(json isd, csm::WarningList* list)
+{
   int summing = 0;
   try {
     summing = isd.at("detector_line_summing");
   } catch (...) {
     if (list) {
       list->push_back(csm::Warning(
-          csm::Warning::DATA_NOT_AVAILABLE,
-          "Could not parse the line direction detector pixel summing.",
-          "Utilities::getLineSumming()"));
+        csm::Warning::DATA_NOT_AVAILABLE,
+        "Could not parse the line direction detector pixel summing.",
+        "Utilities::getLineSumming()"));
     }
   }
   return summing;
 }
 
-double getFocalLength(json isd, csm::WarningList *list) {
+double
+getFocalLength(json isd, csm::WarningList* list)
+{
   double length = 0.0;
   try {
     length = isd.at("focal_length_model").at("focal_length");
@@ -735,22 +829,26 @@ double getFocalLength(json isd, csm::WarningList *list) {
   return length;
 }
 
-double getFocalLengthEpsilon(json isd, csm::WarningList *list) {
+double
+getFocalLengthEpsilon(json isd, csm::WarningList* list)
+{
   double epsilon = 0.0;
   try {
     epsilon = isd.at("focal_length_model").at("focal_epsilon");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the focal length uncertainty.",
-                       "Utilities::getFocalLengthEpsilon()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the focal length uncertainty.",
+                     "Utilities::getFocalLengthEpsilon()"));
     }
   }
   return epsilon;
 }
 
-std::vector<double> getFocal2PixelLines(json isd, csm::WarningList *list) {
+std::vector<double>
+getFocal2PixelLines(json isd, csm::WarningList* list)
+{
   std::vector<double> transformation;
   try {
     transformation = isd.at("focal2pixel_lines").get<std::vector<double>>();
@@ -765,7 +863,9 @@ std::vector<double> getFocal2PixelLines(json isd, csm::WarningList *list) {
   return transformation;
 }
 
-std::vector<double> getFocal2PixelSamples(json isd, csm::WarningList *list) {
+std::vector<double>
+getFocal2PixelSamples(json isd, csm::WarningList* list)
+{
   std::vector<double> transformation;
   try {
     transformation = isd.at("focal2pixel_samples").get<std::vector<double>>();
@@ -780,7 +880,9 @@ std::vector<double> getFocal2PixelSamples(json isd, csm::WarningList *list) {
   return transformation;
 }
 
-double getDetectorCenterLine(json isd, csm::WarningList *list) {
+double
+getDetectorCenterLine(json isd, csm::WarningList* list)
+{
   double line;
   try {
     line = isd.at("detector_center").at("line");
@@ -794,122 +896,136 @@ double getDetectorCenterLine(json isd, csm::WarningList *list) {
   return line;
 }
 
-double getDetectorCenterSample(json isd, csm::WarningList *list) {
+double
+getDetectorCenterSample(json isd, csm::WarningList* list)
+{
   double sample;
   try {
     sample = isd.at("detector_center").at("sample");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the detector center sample.",
-                       "Utilities::getDetectorCenterSample()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the detector center sample.",
+                     "Utilities::getDetectorCenterSample()"));
     }
   }
   return sample;
 }
 
-double getDetectorStartingLine(json isd, csm::WarningList *list) {
+double
+getDetectorStartingLine(json isd, csm::WarningList* list)
+{
   double line;
   try {
     line = isd.at("starting_detector_line");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the detector starting line.",
-                       "Utilities::getDetectorStartingLine()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the detector starting line.",
+                     "Utilities::getDetectorStartingLine()"));
     }
   }
   return line;
 }
 
-double getDetectorStartingSample(json isd, csm::WarningList *list) {
+double
+getDetectorStartingSample(json isd, csm::WarningList* list)
+{
   double sample;
   try {
     sample = isd.at("starting_detector_sample");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the detector starting sample.",
-                       "Utilities::getDetectorStartingSample()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the detector starting sample.",
+                     "Utilities::getDetectorStartingSample()"));
     }
   }
   return sample;
 }
 
-double getMinHeight(json isd, csm::WarningList *list) {
+double
+getMinHeight(json isd, csm::WarningList* list)
+{
   double height = 0.0;
   try {
     json referenceHeight = isd.at("reference_height");
     json minHeight = referenceHeight.at("minheight");
     json unit = referenceHeight.at("unit");
     height =
-        metric_conversion(minHeight.get<double>(), unit.get<std::string>());
+      metric_conversion(minHeight.get<double>(), unit.get<std::string>());
   } catch (...) {
     if (list) {
       list->push_back(csm::Warning(
-          csm::Warning::DATA_NOT_AVAILABLE,
-          "Could not parse the minimum height above the reference ellipsoid.",
-          "Utilities::getMinHeight()"));
+        csm::Warning::DATA_NOT_AVAILABLE,
+        "Could not parse the minimum height above the reference ellipsoid.",
+        "Utilities::getMinHeight()"));
     }
   }
   return height;
 }
 
-double getMaxHeight(json isd, csm::WarningList *list) {
+double
+getMaxHeight(json isd, csm::WarningList* list)
+{
   double height = 0.0;
   try {
     json referenceHeight = isd.at("reference_height");
     json maxHeight = referenceHeight.at("maxheight");
     json unit = referenceHeight.at("unit");
     height =
-        metric_conversion(maxHeight.get<double>(), unit.get<std::string>());
+      metric_conversion(maxHeight.get<double>(), unit.get<std::string>());
   } catch (...) {
     if (list) {
       list->push_back(csm::Warning(
-          csm::Warning::DATA_NOT_AVAILABLE,
-          "Could not parse the maximum height above the reference ellipsoid.",
-          "Utilities::getMaxHeight()"));
+        csm::Warning::DATA_NOT_AVAILABLE,
+        "Could not parse the maximum height above the reference ellipsoid.",
+        "Utilities::getMaxHeight()"));
     }
   }
   return height;
 }
 
-double getSemiMajorRadius(json isd, csm::WarningList *list) {
+double
+getSemiMajorRadius(json isd, csm::WarningList* list)
+{
   double radius = 0.0;
   try {
     json radii = isd.at("radii");
     json semiMajor = radii.at("semimajor");
     json unit = radii.at("unit");
     radius =
-        metric_conversion(semiMajor.get<double>(), unit.get<std::string>());
+      metric_conversion(semiMajor.get<double>(), unit.get<std::string>());
   } catch (...) {
     if (list) {
       list->push_back(csm::Warning(
-          csm::Warning::DATA_NOT_AVAILABLE,
-          "Could not parse the reference ellipsoid semimajor radius.",
-          "Utilities::getSemiMajorRadius()"));
+        csm::Warning::DATA_NOT_AVAILABLE,
+        "Could not parse the reference ellipsoid semimajor radius.",
+        "Utilities::getSemiMajorRadius()"));
     }
   }
   return radius;
 }
 
-double getSemiMinorRadius(json isd, csm::WarningList *list) {
+double
+getSemiMinorRadius(json isd, csm::WarningList* list)
+{
   double radius = 0.0;
   try {
     json radii = isd.at("radii");
     json semiMinor = radii.at("semiminor");
     json unit = radii.at("unit");
     radius =
-        metric_conversion(semiMinor.get<double>(), unit.get<std::string>());
+      metric_conversion(semiMinor.get<double>(), unit.get<std::string>());
   } catch (...) {
     if (list) {
       list->push_back(csm::Warning(
-          csm::Warning::DATA_NOT_AVAILABLE,
-          "Could not parse the reference ellipsoid semiminor radius.",
-          "Utilities::getSemiMinorRadius()"));
+        csm::Warning::DATA_NOT_AVAILABLE,
+        "Could not parse the reference ellipsoid semiminor radius.",
+        "Utilities::getSemiMinorRadius()"));
     }
   }
   return radius;
@@ -917,7 +1033,9 @@ double getSemiMinorRadius(json isd, csm::WarningList *list) {
 
 // Converts the distortion model name from the ISD (string) to the enumeration
 // type. Defaults to transverse
-DistortionType getDistortionModel(json isd, csm::WarningList *list) {
+DistortionType
+getDistortionModel(json isd, csm::WarningList* list)
+{
   try {
     json distoriton_subset = isd.at("optical_distortion");
 
@@ -946,8 +1064,9 @@ DistortionType getDistortionModel(json isd, csm::WarningList *list) {
   return DistortionType::TRANSVERSE;
 }
 
-DistortionType getDistortionModel(int aleDistortionModel,
-                                  csm::WarningList *list) {
+DistortionType
+getDistortionModel(int aleDistortionModel, csm::WarningList* list)
+{
   try {
     ale::DistortionType aleDistortionType;
     aleDistortionType = (ale::DistortionType)aleDistortionModel;
@@ -973,7 +1092,9 @@ DistortionType getDistortionModel(int aleDistortionModel,
   return DistortionType::TRANSVERSE;
 }
 
-std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
+std::vector<double>
+getDistortionCoeffs(json isd, csm::WarningList* list)
+{
   std::vector<double> coefficients;
 
   DistortionType distortion = getDistortionModel(isd);
@@ -984,21 +1105,21 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
         std::vector<double> coefficientsX, coefficientsY;
 
         coefficientsX = isd.at("optical_distortion")
-                            .at("transverse")
-                            .at("x")
-                            .get<std::vector<double>>();
+                          .at("transverse")
+                          .at("x")
+                          .get<std::vector<double>>();
         coefficientsX.resize(10, 0.0);
 
         coefficientsY = isd.at("optical_distortion")
-                            .at("transverse")
-                            .at("y")
-                            .get<std::vector<double>>();
+                          .at("transverse")
+                          .at("y")
+                          .get<std::vector<double>>();
         coefficientsY.resize(10, 0.0);
 
         coefficients = coefficientsX;
 
-        coefficients.insert(coefficients.end(), coefficientsY.begin(),
-                            coefficientsY.end());
+        coefficients.insert(
+          coefficients.end(), coefficientsY.begin(), coefficientsY.end());
         return coefficients;
       } catch (...) {
         if (list) {
@@ -1015,17 +1136,17 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
     case DistortionType::RADIAL: {
       try {
         coefficients = isd.at("optical_distortion")
-                           .at("radial")
-                           .at("coefficients")
-                           .get<std::vector<double>>();
+                         .at("radial")
+                         .at("coefficients")
+                         .get<std::vector<double>>();
 
         return coefficients;
       } catch (...) {
         if (list) {
           list->push_back(csm::Warning(
-              csm::Warning::DATA_NOT_AVAILABLE,
-              "Could not parse the radial distortion model coefficients.",
-              "Utilities::getDistortion()"));
+            csm::Warning::DATA_NOT_AVAILABLE,
+            "Could not parse the radial distortion model coefficients.",
+            "Utilities::getDistortion()"));
         }
         coefficients = std::vector<double>(3, 0.0);
       }
@@ -1033,28 +1154,28 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
     case DistortionType::KAGUYALISM: {
       try {
         std::vector<double> coefficientsX = isd.at("optical_distortion")
-                                                .at("kaguyalism")
-                                                .at("x")
-                                                .get<std::vector<double>>();
+                                              .at("kaguyalism")
+                                              .at("x")
+                                              .get<std::vector<double>>();
         std::vector<double> coefficientsY = isd.at("optical_distortion")
-                                                .at("kaguyalism")
-                                                .at("y")
-                                                .get<std::vector<double>>();
+                                              .at("kaguyalism")
+                                              .at("y")
+                                              .get<std::vector<double>>();
         double boresightX = isd.at("optical_distortion")
-                                .at("kaguyalism")
-                                .at("boresight_x")
-                                .get<double>();
+                              .at("kaguyalism")
+                              .at("boresight_x")
+                              .get<double>();
         double boresightY = isd.at("optical_distortion")
-                                .at("kaguyalism")
-                                .at("boresight_y")
-                                .get<double>();
+                              .at("kaguyalism")
+                              .at("boresight_y")
+                              .get<double>();
 
         coefficientsX.resize(4, 0.0);
         coefficientsY.resize(4, 0.0);
         coefficientsX.insert(coefficientsX.begin(), boresightX);
         coefficientsY.insert(coefficientsY.begin(), boresightY);
-        coefficientsX.insert(coefficientsX.end(), coefficientsY.begin(),
-                             coefficientsY.end());
+        coefficientsX.insert(
+          coefficientsX.end(), coefficientsY.begin(), coefficientsY.end());
 
         return coefficientsX;
       } catch (...) {
@@ -1070,17 +1191,17 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
     case DistortionType::DAWNFC: {
       try {
         coefficients = isd.at("optical_distortion")
-                           .at("dawnfc")
-                           .at("coefficients")
-                           .get<std::vector<double>>();
+                         .at("dawnfc")
+                         .at("coefficients")
+                         .get<std::vector<double>>();
 
         return coefficients;
       } catch (...) {
         if (list) {
           list->push_back(csm::Warning(
-              csm::Warning::DATA_NOT_AVAILABLE,
-              "Could not parse the dawn radial distortion model coefficients.",
-              "Utilities::getDistortion()"));
+            csm::Warning::DATA_NOT_AVAILABLE,
+            "Could not parse the dawn radial distortion model coefficients.",
+            "Utilities::getDistortion()"));
         }
         coefficients = std::vector<double>(1, 0.0);
       }
@@ -1088,16 +1209,16 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
     case DistortionType::LROLROCNAC: {
       try {
         coefficients = isd.at("optical_distortion")
-                           .at("lrolrocnac")
-                           .at("coefficients")
-                           .get<std::vector<double>>();
+                         .at("lrolrocnac")
+                         .at("coefficients")
+                         .get<std::vector<double>>();
         return coefficients;
       } catch (...) {
         if (list) {
           list->push_back(csm::Warning(
-              csm::Warning::DATA_NOT_AVAILABLE,
-              "Could not parse the lrolrocnac distortion model coefficients.",
-              "Utilities::getDistortion()"));
+            csm::Warning::DATA_NOT_AVAILABLE,
+            "Could not parse the lrolrocnac distortion model coefficients.",
+            "Utilities::getDistortion()"));
         }
         coefficients = std::vector<double>(1, 0.0);
       }
@@ -1105,26 +1226,28 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
   }
   if (list) {
     list->push_back(
-        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                     "Could not parse the distortion model coefficients.",
-                     "Utilities::getDistortion()"));
+      csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                   "Could not parse the distortion model coefficients.",
+                   "Utilities::getDistortion()"));
   }
 
   return coefficients;
 }
 
-std::vector<double> getSunPositions(json isd, csm::WarningList *list) {
+std::vector<double>
+getSunPositions(json isd, csm::WarningList* list)
+{
   std::vector<double> positions;
   try {
     json jayson = isd.at("sun_position");
     json unit = jayson.at("unit");
-    for (auto &location : jayson.at("positions")) {
-      positions.push_back(metric_conversion(location[0].get<double>(),
-                                            unit.get<std::string>()));
-      positions.push_back(metric_conversion(location[1].get<double>(),
-                                            unit.get<std::string>()));
-      positions.push_back(metric_conversion(location[2].get<double>(),
-                                            unit.get<std::string>()));
+    for (auto& location : jayson.at("positions")) {
+      positions.push_back(
+        metric_conversion(location[0].get<double>(), unit.get<std::string>()));
+      positions.push_back(
+        metric_conversion(location[1].get<double>(), unit.get<std::string>()));
+      positions.push_back(
+        metric_conversion(location[2].get<double>(), unit.get<std::string>()));
     }
   } catch (...) {
     if (list) {
@@ -1136,18 +1259,20 @@ std::vector<double> getSunPositions(json isd, csm::WarningList *list) {
   return positions;
 }
 
-std::vector<double> getSunVelocities(json isd, csm::WarningList *list) {
+std::vector<double>
+getSunVelocities(json isd, csm::WarningList* list)
+{
   std::vector<double> velocities;
   try {
     json jayson = isd.at("sun_position");
     json unit = jayson.at("unit");
-    for (auto &location : jayson.at("velocities")) {
-      velocities.push_back(metric_conversion(location[0].get<double>(),
-                                             unit.get<std::string>()));
-      velocities.push_back(metric_conversion(location[1].get<double>(),
-                                             unit.get<std::string>()));
-      velocities.push_back(metric_conversion(location[2].get<double>(),
-                                             unit.get<std::string>()));
+    for (auto& location : jayson.at("velocities")) {
+      velocities.push_back(
+        metric_conversion(location[0].get<double>(), unit.get<std::string>()));
+      velocities.push_back(
+        metric_conversion(location[1].get<double>(), unit.get<std::string>()));
+      velocities.push_back(
+        metric_conversion(location[2].get<double>(), unit.get<std::string>()));
     }
   } catch (...) {
     std::cout << "Could not parse sun velocity" << std::endl;
@@ -1160,18 +1285,20 @@ std::vector<double> getSunVelocities(json isd, csm::WarningList *list) {
   return velocities;
 }
 
-std::vector<double> getSensorPositions(json isd, csm::WarningList *list) {
+std::vector<double>
+getSensorPositions(json isd, csm::WarningList* list)
+{
   std::vector<double> positions;
   try {
     json jayson = isd.at("sensor_position");
     json unit = jayson.at("unit");
-    for (auto &location : jayson.at("positions")) {
-      positions.push_back(metric_conversion(location[0].get<double>(),
-                                            unit.get<std::string>()));
-      positions.push_back(metric_conversion(location[1].get<double>(),
-                                            unit.get<std::string>()));
-      positions.push_back(metric_conversion(location[2].get<double>(),
-                                            unit.get<std::string>()));
+    for (auto& location : jayson.at("positions")) {
+      positions.push_back(
+        metric_conversion(location[0].get<double>(), unit.get<std::string>()));
+      positions.push_back(
+        metric_conversion(location[1].get<double>(), unit.get<std::string>()));
+      positions.push_back(
+        metric_conversion(location[2].get<double>(), unit.get<std::string>()));
     }
   } catch (...) {
     if (list) {
@@ -1183,18 +1310,20 @@ std::vector<double> getSensorPositions(json isd, csm::WarningList *list) {
   return positions;
 }
 
-std::vector<double> getSensorVelocities(json isd, csm::WarningList *list) {
+std::vector<double>
+getSensorVelocities(json isd, csm::WarningList* list)
+{
   std::vector<double> velocities;
   try {
     json jayson = isd.at("sensor_position");
     json unit = jayson.at("unit");
-    for (auto &velocity : jayson.at("velocities")) {
-      velocities.push_back(metric_conversion(velocity[0].get<double>(),
-                                             unit.get<std::string>()));
-      velocities.push_back(metric_conversion(velocity[1].get<double>(),
-                                             unit.get<std::string>()));
-      velocities.push_back(metric_conversion(velocity[2].get<double>(),
-                                             unit.get<std::string>()));
+    for (auto& velocity : jayson.at("velocities")) {
+      velocities.push_back(
+        metric_conversion(velocity[0].get<double>(), unit.get<std::string>()));
+      velocities.push_back(
+        metric_conversion(velocity[1].get<double>(), unit.get<std::string>()));
+      velocities.push_back(
+        metric_conversion(velocity[2].get<double>(), unit.get<std::string>()));
     }
   } catch (...) {
     if (list) {
@@ -1206,10 +1335,12 @@ std::vector<double> getSensorVelocities(json isd, csm::WarningList *list) {
   return velocities;
 }
 
-std::vector<double> getSensorOrientations(json isd, csm::WarningList *list) {
+std::vector<double>
+getSensorOrientations(json isd, csm::WarningList* list)
+{
   std::vector<double> quaternions;
   try {
-    for (auto &quaternion : isd.at("sensor_orientation").at("quaternions")) {
+    for (auto& quaternion : isd.at("sensor_orientation").at("quaternions")) {
       quaternions.push_back(quaternion[0]);
       quaternions.push_back(quaternion[1]);
       quaternions.push_back(quaternion[2]);
@@ -1225,22 +1356,26 @@ std::vector<double> getSensorOrientations(json isd, csm::WarningList *list) {
   return quaternions;
 }
 
-double getExposureDuration(nlohmann::json isd, csm::WarningList *list) {
+double
+getExposureDuration(nlohmann::json isd, csm::WarningList* list)
+{
   double duration;
   try {
     duration = isd.at("line_exposure_duration");
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the line exposure duration.",
-                       "Utilities::getExposureDuration()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the line exposure duration.",
+                     "Utilities::getExposureDuration()"));
     }
   }
   return duration;
 }
 
-double getScaledPixelWidth(nlohmann::json isd, csm::WarningList *list) {
+double
+getScaledPixelWidth(nlohmann::json isd, csm::WarningList* list)
+{
   double width;
   try {
     width = isd.at("scaled_pixel_width");
@@ -1254,7 +1389,9 @@ double getScaledPixelWidth(nlohmann::json isd, csm::WarningList *list) {
   return width;
 }
 
-std::string getLookDirection(nlohmann::json isd, csm::WarningList *list) {
+std::string
+getLookDirection(nlohmann::json isd, csm::WarningList* list)
+{
   std::string lookDirection = "";
   try {
     lookDirection = isd.at("look_direction");
@@ -1268,27 +1405,29 @@ std::string getLookDirection(nlohmann::json isd, csm::WarningList *list) {
   return lookDirection;
 }
 
-std::vector<double> getScaleConversionTimes(nlohmann::json isd,
-                                            csm::WarningList *list) {
+std::vector<double>
+getScaleConversionTimes(nlohmann::json isd, csm::WarningList* list)
+{
   std::vector<double> time;
   try {
     time = isd.at("range_conversion_times").get<std::vector<double>>();
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the range conversion times.",
-                       "Utilities::getScaleConversionTimes()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the range conversion times.",
+                     "Utilities::getScaleConversionTimes()"));
     }
   }
   return time;
 }
 
-std::vector<double> getScaleConversionCoefficients(nlohmann::json isd,
-                                                   csm::WarningList *list) {
+std::vector<double>
+getScaleConversionCoefficients(nlohmann::json isd, csm::WarningList* list)
+{
   std::vector<double> coefficients;
   try {
-    for (auto &location : isd.at("range_conversion_coefficients")) {
+    for (auto& location : isd.at("range_conversion_coefficients")) {
       coefficients.push_back(location[0]);
       coefficients.push_back(location[1]);
       coefficients.push_back(location[2]);
@@ -1297,15 +1436,17 @@ std::vector<double> getScaleConversionCoefficients(nlohmann::json isd,
   } catch (...) {
     if (list) {
       list->push_back(
-          csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                       "Could not parse the range conversion coefficients.",
-                       "Utilities::getScaleConversionCoefficients()"));
+        csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                     "Could not parse the range conversion coefficients.",
+                     "Utilities::getScaleConversionCoefficients()"));
     }
   }
   return coefficients;
 }
 
-double getWavelength(json isd, csm::WarningList *list) {
+double
+getWavelength(json isd, csm::WarningList* list)
+{
   double wavelength = 0.0;
   try {
     wavelength = isd.at("wavelength");

@@ -7,13 +7,14 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include <math.h>
 #include <functional>
+#include <math.h>
 #include <stdexcept>
 
 using json = nlohmann::json;
 
-TEST(UtilitiesTests, calculateRotationMatrixFromEuler) {
+TEST(UtilitiesTests, calculateRotationMatrixFromEuler)
+{
   double euler[3], rotationMatrix[9];
   euler[0] = 0;
   euler[1] = M_PI / 2;
@@ -34,7 +35,8 @@ TEST(UtilitiesTests, calculateRotationMatrixFromEuler) {
   EXPECT_NEAR(rotationMatrix[8], 0, 1e-8);
 }
 
-TEST(UtilitiesTests, calculateRotationMatrixFromQuaternions) {
+TEST(UtilitiesTests, calculateRotationMatrixFromQuaternions)
+{
   double q[4], rotationMatrix[9];
   q[0] = 0;
   q[1] = -1 / sqrt(2);
@@ -52,91 +54,136 @@ TEST(UtilitiesTests, calculateRotationMatrixFromQuaternions) {
   EXPECT_DOUBLE_EQ(rotationMatrix[8], 0);
 }
 
-TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinates) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinates)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double undistortedFocalPlaneX, undistortedFocalPlaneY;
-  computeDistortedFocalPlaneCoordinates(
-      0.5, 4.0, 8.0, 0.5, 1.0, 1.0, 0.0, 0.0, iTransS, iTransL,
-      undistortedFocalPlaneX, undistortedFocalPlaneY);
+  computeDistortedFocalPlaneCoordinates(0.5,
+                                        4.0,
+                                        8.0,
+                                        0.5,
+                                        1.0,
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        iTransS,
+                                        iTransL,
+                                        undistortedFocalPlaneX,
+                                        undistortedFocalPlaneY);
   EXPECT_DOUBLE_EQ(undistortedFocalPlaneX, 0);
   EXPECT_DOUBLE_EQ(undistortedFocalPlaneY, -0.4);
 }
 
-TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinatesSumming) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinatesSumming)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double undistortedFocalPlaneX, undistortedFocalPlaneY;
-  computeDistortedFocalPlaneCoordinates(
-      2.0, 4.0, 8.0, 8.0, 2.0, 2.0, 0.0, 0.0, iTransS, iTransL,
-      undistortedFocalPlaneX, undistortedFocalPlaneY);
+  computeDistortedFocalPlaneCoordinates(2.0,
+                                        4.0,
+                                        8.0,
+                                        8.0,
+                                        2.0,
+                                        2.0,
+                                        0.0,
+                                        0.0,
+                                        iTransS,
+                                        iTransL,
+                                        undistortedFocalPlaneX,
+                                        undistortedFocalPlaneY);
   EXPECT_DOUBLE_EQ(undistortedFocalPlaneX, -0.4);
   EXPECT_DOUBLE_EQ(undistortedFocalPlaneY, 0);
 }
 
-TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinatesAffine) {
-  double iTransS[] = {-10.0, 0.0, 0.1};
-  double iTransL[] = {10.0, -0.1, 0.0};
+TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinatesAffine)
+{
+  double iTransS[] = { -10.0, 0.0, 0.1 };
+  double iTransL[] = { 10.0, -0.1, 0.0 };
   double undistortedFocalPlaneX, undistortedFocalPlaneY;
-  computeDistortedFocalPlaneCoordinates(
-      11.0, -9.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, iTransS, iTransL,
-      undistortedFocalPlaneX, undistortedFocalPlaneY);
+  computeDistortedFocalPlaneCoordinates(11.0,
+                                        -9.0,
+                                        0.0,
+                                        0.0,
+                                        1.0,
+                                        1.0,
+                                        0.0,
+                                        0.0,
+                                        iTransS,
+                                        iTransL,
+                                        undistortedFocalPlaneX,
+                                        undistortedFocalPlaneY);
   EXPECT_NEAR(undistortedFocalPlaneX, -10.0, 1e-12);
   EXPECT_NEAR(undistortedFocalPlaneY, 10.0, 1e-12);
 }
 
-TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinatesStart) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computeDistortedFocalPlaneCoordinatesStart)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double undistortedFocalPlaneX, undistortedFocalPlaneY;
-  computeDistortedFocalPlaneCoordinates(
-      2.0, 4.0, 8.0, 8.0, 1.0, 1.0, 2.0, 1.0, iTransS, iTransL,
-      undistortedFocalPlaneX, undistortedFocalPlaneY);
+  computeDistortedFocalPlaneCoordinates(2.0,
+                                        4.0,
+                                        8.0,
+                                        8.0,
+                                        1.0,
+                                        1.0,
+                                        2.0,
+                                        1.0,
+                                        iTransS,
+                                        iTransL,
+                                        undistortedFocalPlaneX,
+                                        undistortedFocalPlaneY);
   EXPECT_DOUBLE_EQ(undistortedFocalPlaneX, -0.5);
   EXPECT_DOUBLE_EQ(undistortedFocalPlaneY, -0.2);
 }
 
-TEST(UtilitiesTests, computePixel) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computePixel)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double line, sample;
-  computePixel(0.0, -0.4, 8.0, 0.5, 1.0, 1.0, 0.0, 0.0, iTransS, iTransL, line,
-               sample);
+  computePixel(
+    0.0, -0.4, 8.0, 0.5, 1.0, 1.0, 0.0, 0.0, iTransS, iTransL, line, sample);
   EXPECT_DOUBLE_EQ(line, 0.5);
   EXPECT_DOUBLE_EQ(sample, 4.0);
 }
 
-TEST(UtilitiesTests, computePixelSumming) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computePixelSumming)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double line, sample;
-  computePixel(-0.4, 0.0, 8.0, 8.0, 2.0, 2.0, 0.0, 0.0, iTransS, iTransL, line,
-               sample);
+  computePixel(
+    -0.4, 0.0, 8.0, 8.0, 2.0, 2.0, 0.0, 0.0, iTransS, iTransL, line, sample);
   EXPECT_DOUBLE_EQ(line, 2.0);
   EXPECT_DOUBLE_EQ(sample, 4.0);
 }
 
-TEST(UtilitiesTests, computePixelStart) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computePixelStart)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double line, sample;
-  computePixel(-0.5, -0.2, 8.0, 8.0, 1.0, 1.0, 2.0, 1.0, iTransS, iTransL, line,
-               sample);
+  computePixel(
+    -0.5, -0.2, 8.0, 8.0, 1.0, 1.0, 2.0, 1.0, iTransS, iTransL, line, sample);
   EXPECT_DOUBLE_EQ(line, 2.0);
   EXPECT_DOUBLE_EQ(sample, 4.0);
 }
 
-TEST(UtilitiesTests, computePixelStartSumming) {
-  double iTransS[] = {0.0, 0.0, 10.0};
-  double iTransL[] = {0.0, 10.0, 0.0};
+TEST(UtilitiesTests, computePixelStartSumming)
+{
+  double iTransS[] = { 0.0, 0.0, 10.0 };
+  double iTransL[] = { 0.0, 10.0, 0.0 };
   double line, sample;
-  computePixel(-0.5, -0.2, 8.0, 8.0, 2.0, 4.0, 2.0, 1.0, iTransS, iTransL, line,
-               sample);
+  computePixel(
+    -0.5, -0.2, 8.0, 8.0, 2.0, 4.0, 2.0, 1.0, iTransS, iTransL, line, sample);
   EXPECT_DOUBLE_EQ(line, 0.5);
   EXPECT_DOUBLE_EQ(sample, 2.0);
 }
 
-TEST(UtilitiesTests, createCameraLookVector) {
+TEST(UtilitiesTests, createCameraLookVector)
+{
   double cameraLook[3];
   createCameraLookVector(0, -0.4, 1, 50, cameraLook);
   EXPECT_NEAR(cameraLook[0], 0, 1e-8);
@@ -144,10 +191,11 @@ TEST(UtilitiesTests, createCameraLookVector) {
   EXPECT_NEAR(cameraLook[2], -0.999968001, 1e-8);
 }
 
-TEST(UtilitiesTests, lagrangeInterp1Point) {
+TEST(UtilitiesTests, lagrangeInterp1Point)
+{
   int numTime = 1;
-  std::vector<double> singlePoint = {1};
-  std::vector<double> interpPoint = {0};
+  std::vector<double> singlePoint = { 1 };
+  std::vector<double> interpPoint = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 0;
@@ -155,153 +203,234 @@ TEST(UtilitiesTests, lagrangeInterp1Point) {
   int order = 8;
 
   try {
-    lagrangeInterp(numTime, &singlePoint[0], startTime, delTime, time,
-                   vectorLength, order, &interpPoint[0]);
+    lagrangeInterp(numTime,
+                   &singlePoint[0],
+                   startTime,
+                   delTime,
+                   time,
+                   vectorLength,
+                   order,
+                   &interpPoint[0]);
     FAIL() << "Expected an error";
-  } catch (csm::Error &e) {
+  } catch (csm::Error& e) {
     EXPECT_EQ(e.getError(), csm::Error::INDEX_OUT_OF_RANGE);
   } catch (...) {
     FAIL() << "Expected csm INDEX_OUT_OF_RANGE error";
   }
 }
 
-TEST(UtilitiesTests, lagrangeInterp2ndOrder) {
+TEST(UtilitiesTests, lagrangeInterp2ndOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 3.5;
   int vectorLength = 1;
   int order = 2;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 24.0 / 2.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterp4thOrder) {
+TEST(UtilitiesTests, lagrangeInterp4thOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 3.5;
   int vectorLength = 1;
   int order = 4;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 180.0 / 16.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterp6thOrder) {
+TEST(UtilitiesTests, lagrangeInterp6thOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 3.5;
   int vectorLength = 1;
   int order = 6;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 2898.0 / 256.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterp8thOrder) {
+TEST(UtilitiesTests, lagrangeInterp8thOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 3.5;
   int vectorLength = 1;
   int order = 8;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 23169.0 / 2048.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterpReduced2ndOrder) {
+TEST(UtilitiesTests, lagrangeInterpReduced2ndOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 0.5;
   int vectorLength = 1;
   int order = 8;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 3.0 / 2.0);
 
   time = 6.5;
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 192.0 / 2.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterpReduced4thOrder) {
+TEST(UtilitiesTests, lagrangeInterpReduced4thOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 1.5;
   int vectorLength = 1;
   int order = 8;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 45.0 / 16.0);
 
   time = 5.5;
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 720.0 / 16.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterpReduced6thOrder) {
+TEST(UtilitiesTests, lagrangeInterpReduced6thOrder)
+{
   int numTime = 8;
-  std::vector<double> interpValues = {1, 2, 4, 8, 16, 32, 64, 128};
-  std::vector<double> outputValue = {0};
+  std::vector<double> interpValues = { 1, 2, 4, 8, 16, 32, 64, 128 };
+  std::vector<double> outputValue = { 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 2.5;
   int vectorLength = 1;
   int order = 8;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 1449.0 / 256.0);
 
   time = 4.5;
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 5796.0 / 256.0);
 }
 
-TEST(UtilitiesTests, lagrangeInterp2D) {
+TEST(UtilitiesTests, lagrangeInterp2D)
+{
   int numTime = 2;
-  std::vector<double> interpValues = {0, 1, 1, 2};
-  std::vector<double> outputValue = {0, 0};
+  std::vector<double> interpValues = { 0, 1, 1, 2 };
+  std::vector<double> outputValue = { 0, 0 };
   double startTime = 0;
   double delTime = 1;
   double time = 0.5;
   int vectorLength = 2;
   int order = 2;
 
-  lagrangeInterp(numTime, &interpValues[0], startTime, delTime, time,
-                 vectorLength, order, &outputValue[0]);
+  lagrangeInterp(numTime,
+                 &interpValues[0],
+                 startTime,
+                 delTime,
+                 time,
+                 vectorLength,
+                 order,
+                 &outputValue[0]);
   EXPECT_DOUBLE_EQ(outputValue[0], 0.5);
   EXPECT_DOUBLE_EQ(outputValue[1], 1.5);
 }
 
-TEST(UtilitiesTests, brentRoot) {
+TEST(UtilitiesTests, brentRoot)
+{
   std::function<double(double)> testPoly = [](double x) {
     return (x - 2) * (x + 1) * (x + 7);
   };
@@ -311,8 +440,9 @@ TEST(UtilitiesTests, brentRoot) {
   EXPECT_THROW(brentRoot(-3.0, 3.0, testPoly), std::invalid_argument);
 }
 
-TEST(UtilitiesTests, polynomialEval) {
-  std::vector<double> coeffs = {-12.0, 4.0, -3.0, 1.0};
+TEST(UtilitiesTests, polynomialEval)
+{
+  std::vector<double> coeffs = { -12.0, 4.0, -3.0, 1.0 };
   EXPECT_DOUBLE_EQ(evaluatePolynomial(coeffs, -1.0), -20.0);
   EXPECT_DOUBLE_EQ(evaluatePolynomialDerivative(coeffs, -1.0), 13.0);
   EXPECT_DOUBLE_EQ(evaluatePolynomial(coeffs, 0.0), -12.0);
@@ -327,15 +457,18 @@ TEST(UtilitiesTests, polynomialEval) {
                std::invalid_argument);
 }
 
-TEST(UtilitiesTests, polynomialRoot) {
-  std::vector<double> oneRootCoeffs = {-12.0, 4.0, -3.0,
-                                       1.0};           // roots are 3, +-2i
-  std::vector<double> noRootCoeffs = {4.0, 0.0, 1.0};  // roots are +-2i
+TEST(UtilitiesTests, polynomialRoot)
+{
+  std::vector<double> oneRootCoeffs = {
+    -12.0, 4.0, -3.0, 1.0
+  };                                                    // roots are 3, +-2i
+  std::vector<double> noRootCoeffs = { 4.0, 0.0, 1.0 }; // roots are +-2i
   EXPECT_NEAR(polynomialRoot(oneRootCoeffs, 0.0), 3.0, 1e-10);
   EXPECT_THROW(polynomialRoot(noRootCoeffs, 0.0), std::invalid_argument);
 }
 
-TEST(UtilitiesTests, vectorProduct) {
+TEST(UtilitiesTests, vectorProduct)
+{
   csm::EcefVector vec(1.0, 2.0, 3.0);
   csm::EcefVector leftVec = 2.0 * vec;
   csm::EcefVector rightVec = vec * 2;
@@ -347,7 +480,8 @@ TEST(UtilitiesTests, vectorProduct) {
   EXPECT_DOUBLE_EQ(rightVec.z, 6.0);
 }
 
-TEST(UtilitiesTests, vectorDivision) {
+TEST(UtilitiesTests, vectorDivision)
+{
   csm::EcefVector vec(2.0, 4.0, 6.0);
   csm::EcefVector divVec = vec / 2.0;
   EXPECT_DOUBLE_EQ(divVec.x, 1.0);
@@ -355,7 +489,8 @@ TEST(UtilitiesTests, vectorDivision) {
   EXPECT_DOUBLE_EQ(divVec.z, 3.0);
 }
 
-TEST(UtilitiesTests, vectorAddition) {
+TEST(UtilitiesTests, vectorAddition)
+{
   csm::EcefVector vec1(2.0, 4.0, 6.0);
   csm::EcefVector vec2(1.0, 2.0, 3.0);
   csm::EcefVector sumVec = vec1 + vec2;
@@ -364,7 +499,8 @@ TEST(UtilitiesTests, vectorAddition) {
   EXPECT_DOUBLE_EQ(sumVec.z, 9.0);
 }
 
-TEST(UtilitiesTests, vectorSubtraction) {
+TEST(UtilitiesTests, vectorSubtraction)
+{
   csm::EcefVector vec1(2.0, 4.0, 6.0);
   csm::EcefVector vec2(1.0, 2.0, 3.0);
   csm::EcefVector diffVec = vec1 - vec2;
@@ -373,7 +509,8 @@ TEST(UtilitiesTests, vectorSubtraction) {
   EXPECT_DOUBLE_EQ(diffVec.z, 3.0);
 }
 
-TEST(UtilitiesTests, vectorDot) {
+TEST(UtilitiesTests, vectorDot)
+{
   csm::EcefVector unitX(1.0, 0.0, 0.0);
   csm::EcefVector unitY(0.0, 1.0, 0.0);
   csm::EcefVector unitZ(0.0, 0.0, 1.0);
@@ -383,7 +520,8 @@ TEST(UtilitiesTests, vectorDot) {
   EXPECT_DOUBLE_EQ(dot(testVec, unitZ), 3.0);
 }
 
-TEST(UtilitiesTests, vectorCross) {
+TEST(UtilitiesTests, vectorCross)
+{
   csm::EcefVector unitX(1.0, 0.0, 0.0);
   csm::EcefVector unitY(0.0, 1.0, 0.0);
   csm::EcefVector unitZ(0.0, 0.0, 1.0);
@@ -419,7 +557,8 @@ TEST(UtilitiesTests, vectorCross) {
   EXPECT_DOUBLE_EQ(unitZY.z, 0.0);
 }
 
-TEST(UtilitiesTests, vectorNorm) {
+TEST(UtilitiesTests, vectorNorm)
+{
   csm::EcefVector testVec(1.0, 2.0, 3.0);
   EXPECT_DOUBLE_EQ(norm(testVec), sqrt(14.0));
   csm::EcefVector normVec = normalized(testVec);
@@ -428,7 +567,8 @@ TEST(UtilitiesTests, vectorNorm) {
   EXPECT_DOUBLE_EQ(normVec.z, 3.0 / sqrt(14.0));
 }
 
-TEST(UtilitiesTests, vectorProjection) {
+TEST(UtilitiesTests, vectorProjection)
+{
   csm::EcefVector unitX(1.0, 0.0, 0.0);
   csm::EcefVector unitY(0.0, 1.0, 0.0);
   csm::EcefVector unitZ(0.0, 0.0, 1.0);

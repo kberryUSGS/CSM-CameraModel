@@ -7,10 +7,16 @@
 
 #include "spdlog/spdlog.h"
 
-class UsgsAstroSarSensorModel : public csm::RasterGM,
-                                virtual public csm::SettableEllipsoid {
- public:
-  enum LookDirection { LEFT = 0, RIGHT = 1 };
+class UsgsAstroSarSensorModel
+  : public csm::RasterGM
+  , virtual public csm::SettableEllipsoid
+{
+public:
+  enum LookDirection
+  {
+    LEFT = 0,
+    RIGHT = 1
+  };
 
   UsgsAstroSarSensorModel();
   ~UsgsAstroSarSensorModel() {}
@@ -27,19 +33,23 @@ class UsgsAstroSarSensorModel : public csm::RasterGM,
   std::string getModelNameFromModelState(const std::string& model_state);
 
   virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord& groundPt, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    const csm::EcefCoord& groundPt,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord& groundPt, const std::vector<double> adjustments,
-      double desired_precision = 0.001, double* achieved_precision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    const csm::EcefCoord& groundPt,
+    const std::vector<double> adjustments,
+    double desired_precision = 0.001,
+    double* achieved_precision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::ImageCoordCovar groundToImage(
-      const csm::EcefCoordCovar& groundPt, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    const csm::EcefCoordCovar& groundPt,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
                                        double height,
@@ -48,72 +58,87 @@ class UsgsAstroSarSensorModel : public csm::RasterGM,
                                        csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefCoordCovar imageToGround(
-      const csm::ImageCoordCovar& imagePt, double height, double heightVariance,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    const csm::ImageCoordCovar& imagePt,
+    double height,
+    double heightVariance,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefLocus imageToProximateImagingLocus(
-      const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    const csm::ImageCoord& imagePt,
+    const csm::EcefCoord& groundPt,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefLocus imageToRemoteImagingLocus(
-      const csm::ImageCoord& imagePt, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    const csm::ImageCoord& imagePt,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::ImageCoord getImageStart() const;
 
   virtual csm::ImageVector getImageSize() const;
 
   virtual std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange()
-      const;
+    const;
 
   virtual std::pair<double, double> getValidHeightRange() const;
 
   virtual csm::EcefVector getIlluminationDirection(
-      const csm::EcefCoord& groundPt) const;
+    const csm::EcefCoord& groundPt) const;
 
   virtual double getImageTime(const csm::ImageCoord& imagePt) const;
 
   virtual csm::EcefVector getSpacecraftPosition(double time) const;
 
   virtual csm::EcefVector getAdjustedSpacecraftPosition(
-      double time, std::vector<double> adj) const;
+    double time,
+    std::vector<double> adj) const;
 
   virtual csm::EcefCoord getSensorPosition(
-      const csm::ImageCoord& imagePt) const;
+    const csm::ImageCoord& imagePt) const;
 
   virtual csm::EcefCoord getSensorPosition(double time) const;
 
   virtual csm::EcefCoord getAdjustedSensorPosition(
-      double time, std::vector<double> adjustments) const;
+    double time,
+    std::vector<double> adjustments) const;
 
   virtual csm::EcefVector getSensorVelocity(
-      const csm::ImageCoord& imagePt) const;
+    const csm::ImageCoord& imagePt) const;
 
   virtual csm::EcefVector getSensorVelocity(double time) const;
 
   virtual csm::EcefVector getAdjustedSensorVelocity(
-      double time, std::vector<double> adjustments) const;
+    double time,
+    std::vector<double> adjustments) const;
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    int index,
+    const csm::EcefCoord& groundPt,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+    int index,
+    const csm::ImageCoord& imagePt,
+    const csm::EcefCoord& groundPt,
+    double desiredPrecision = 0.001,
+    double* achievedPrecision = NULL,
+    csm::WarningList* warnings = NULL) const;
 
   virtual std::vector<double> computeGroundPartials(
-      const csm::EcefCoord& groundPt) const;
+    const csm::EcefCoord& groundPt) const;
 
   virtual const csm::CorrelationModel& getCorrelationModel() const;
 
   virtual std::vector<double> getUnmodeledCrossCovariance(
-      const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const;
+    const csm::ImageCoord& pt1,
+    const csm::ImageCoord& pt2) const;
 
   virtual csm::EcefCoord getReferencePoint() const;
 
@@ -141,23 +166,25 @@ class UsgsAstroSarSensorModel : public csm::RasterGM,
 
   virtual double getParameterCovariance(int index1, int index2) const;
 
-  virtual void setParameterCovariance(int index1, int index2,
+  virtual void setParameterCovariance(int index1,
+                                      int index2,
                                       double covariance);
 
   virtual int getNumGeometricCorrectionSwitches() const;
 
   virtual std::string getGeometricCorrectionName(int index) const;
 
-  virtual void setGeometricCorrectionSwitch(int index, bool value,
+  virtual void setGeometricCorrectionSwitch(int index,
+                                            bool value,
                                             csm::param::Type pType);
 
   virtual bool getGeometricCorrectionSwitch(int index) const;
 
   virtual std::vector<double> getCrossCovarianceMatrix(
-      const csm::GeometricModel& comparisonModel,
-      csm::param::Set pSet = csm::param::VALID,
-      const csm::GeometricModel::GeometricModelList& otherModels =
-          csm::GeometricModel::GeometricModelList()) const;
+    const csm::GeometricModel& comparisonModel,
+    csm::param::Set pSet = csm::param::VALID,
+    const csm::GeometricModel::GeometricModelList& otherModels =
+      csm::GeometricModel::GeometricModelList()) const;
 
   virtual csm::Version getVersion() const;
 
@@ -193,14 +220,18 @@ class UsgsAstroSarSensorModel : public csm::RasterGM,
   ////////////////////
   void determineSensorCovarianceInImageSpace(csm::EcefCoord& gp,
                                              double sensor_cov[4]) const;
-  double dopplerShift(csm::EcefCoord groundPt, double tolerance,
+  double dopplerShift(csm::EcefCoord groundPt,
+                      double tolerance,
                       std::vector<double> adj) const;
 
-  double slantRange(csm::EcefCoord surfPt, double time,
+  double slantRange(csm::EcefCoord surfPt,
+                    double time,
                     std::vector<double> adj) const;
 
-  double slantRangeToGroundRange(const csm::EcefCoord& groundPt, double time,
-                                 double slantRange, double tolerance) const;
+  double slantRangeToGroundRange(const csm::EcefCoord& groundPt,
+                                 double time,
+                                 double slantRange,
+                                 double tolerance) const;
 
   double groundRangeToSlantRange(double groundRange,
                                  const std::vector<double>& coeffs) const;
@@ -219,8 +250,8 @@ class UsgsAstroSarSensorModel : public csm::RasterGM,
   static const csm::param::Type PARAM_CHAR_ALL[];
   static const int NUM_PARAMETERS;
   static const std::string PARAMETER_NAME[];
-  csm::NoCorrelationModel _NO_CORR_MODEL;  // A way to report no correlation
-                                           // between images is supported
+  csm::NoCorrelationModel _NO_CORR_MODEL; // A way to report no correlation
+                                          // between images is supported
   std::vector<double> _NO_ADJUSTMENT;
 
   ///////////////////////////

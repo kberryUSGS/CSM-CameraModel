@@ -3,8 +3,12 @@
 #include <Error.h>
 #include <string>
 
-void distortionJacobian(double x, double y, double *jacobian,
-                        const std::vector<double> opticalDistCoeffs) {
+void
+distortionJacobian(double x,
+                   double y,
+                   double* jacobian,
+                   const std::vector<double> opticalDistCoeffs)
+{
   double d_dx[10];
   d_dx[0] = 0;
   d_dx[1] = 1;
@@ -28,10 +32,10 @@ void distortionJacobian(double x, double y, double *jacobian,
   d_dy[8] = 2 * x * y;
   d_dy[9] = 3 * y * y;
 
-  jacobian[0] = 0;  // xx
-  jacobian[1] = 0;  // xy
-  jacobian[2] = 0;  // yx
-  jacobian[3] = 0;  // yy
+  jacobian[0] = 0; // xx
+  jacobian[1] = 0; // xy
+  jacobian[2] = 0; // yx
+  jacobian[3] = 0; // yy
 
   int xPointer = 0;
   int yPointer = opticalDistCoeffs.size() / 2;
@@ -56,8 +60,13 @@ void distortionJacobian(double x, double y, double *jacobian,
  * @returns distortedPoint Newly adjusted focal plane coordinates as an x, y
  * tuple
  */
-void computeTransverseDistortion(double ux, double uy, double &dx, double &dy,
-                                 const std::vector<double> opticalDistCoeffs) {
+void
+computeTransverseDistortion(double ux,
+                            double uy,
+                            double& dx,
+                            double& dy,
+                            const std::vector<double> opticalDistCoeffs)
+{
   double f[10];
   f[0] = 1;
   f[1] = ux;
@@ -82,9 +91,15 @@ void computeTransverseDistortion(double ux, double uy, double &dx, double &dy,
   }
 }
 
-void removeDistortion(double dx, double dy, double &ux, double &uy,
-                      const std::vector<double> opticalDistCoeffs,
-                      DistortionType distortionType, const double tolerance) {
+void
+removeDistortion(double dx,
+                 double dy,
+                 double& ux,
+                 double& uy,
+                 const std::vector<double> opticalDistCoeffs,
+                 DistortionType distortionType,
+                 const double tolerance)
+{
   ux = dx;
   uy = dy;
 
@@ -126,7 +141,8 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
       computeTransverseDistortion(x, y, fx, fy, opticalDistCoeffs);
 
       for (int count = 1;
-           ((fabs(fx) + fabs(fy)) > tolerance) && (count < maxTries); count++) {
+           ((fabs(fx) + fabs(fy)) > tolerance) && (count < maxTries);
+           count++) {
         computeTransverseDistortion(x, y, fx, fy, opticalDistCoeffs);
 
         fx = dx - fx;
@@ -136,7 +152,7 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
 
         // Jxx * Jyy - Jxy * Jyx
         double determinant =
-            jacobian[0] * jacobian[3] - jacobian[1] * jacobian[2];
+          jacobian[0] * jacobian[3] - jacobian[1] * jacobian[2];
         if (fabs(determinant) < 1E-6) {
           ux = x;
           uy = y;
@@ -186,9 +202,9 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
       if (opticalDistCoeffs.size() != 10) {
         csm::Error::ErrorType errorType = csm::Error::INDEX_OUT_OF_RANGE;
         std::string message =
-            "Distortion coefficients for Kaguya LISM must be of size 10, "
-            "got: " +
-            std::to_string(opticalDistCoeffs.size());
+          "Distortion coefficients for Kaguya LISM must be of size 10, "
+          "got: " +
+          std::to_string(opticalDistCoeffs.size());
         std::string function = "removeDistortion";
         throw csm::Error(errorType, message, function);
       }
@@ -270,9 +286,9 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
       if (opticalDistCoeffs.size() != 1) {
         csm::Error::ErrorType errorType = csm::Error::INDEX_OUT_OF_RANGE;
         std::string message =
-            "Distortion coefficients for LRO LROC NAC must be of size 1, "
-            "current size: " +
-            std::to_string(opticalDistCoeffs.size());
+          "Distortion coefficients for LRO LROC NAC must be of size 1, "
+          "current size: " +
+          std::to_string(opticalDistCoeffs.size());
         std::string function = "removeDistortion";
         throw csm::Error(errorType, message, function);
       }
@@ -280,14 +296,13 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
       double dk1 = opticalDistCoeffs[0];
 
       double den =
-          1 +
-          dk1 * dy * dy;  // r = dy*dy = distance from the focal plane center
+        1 + dk1 * dy * dy; // r = dy*dy = distance from the focal plane center
       if (den == 0.0) {
         csm::Error::ErrorType errorType = csm::Error::ALGORITHM;
         std::string message =
-            "Unable to remove distortion for LRO LROC NAC. Focal plane "
-            "position " +
-            std::to_string(dy);
+          "Unable to remove distortion for LRO LROC NAC. Focal plane "
+          "position " +
+          std::to_string(dy);
         std::string function = "removeDistortion";
         throw csm::Error(errorType, message, function);
       }
@@ -300,10 +315,16 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
   }
 }
 
-void applyDistortion(double ux, double uy, double &dx, double &dy,
-                     const std::vector<double> opticalDistCoeffs,
-                     DistortionType distortionType,
-                     const double desiredPrecision, const double tolerance) {
+void
+applyDistortion(double ux,
+                double uy,
+                double& dx,
+                double& dy,
+                const std::vector<double> opticalDistCoeffs,
+                DistortionType distortionType,
+                const double desiredPrecision,
+                const double tolerance)
+{
   dx = ux;
   dy = uy;
 
@@ -319,8 +340,8 @@ void applyDistortion(double ux, double uy, double &dx, double &dy,
         double rp = sqrt(rp2);
         // Compute first fractional distortion using rp
         double drOverR =
-            opticalDistCoeffs[0] +
-            (rp2 * (opticalDistCoeffs[1] + (rp2 * opticalDistCoeffs[2])));
+          opticalDistCoeffs[0] +
+          (rp2 * (opticalDistCoeffs[1] + (rp2 * opticalDistCoeffs[2])));
 
         // Compute first distorted point estimate, r
         double r = rp + (drOverR * rp);
@@ -363,9 +384,9 @@ void applyDistortion(double ux, double uy, double &dx, double &dy,
       if (opticalDistCoeffs.size() != 10) {
         csm::Error::ErrorType errorType = csm::Error::INDEX_OUT_OF_RANGE;
         std::string message =
-            "Distortion coefficients for Kaguya LISM must be of size 10, "
-            "got: " +
-            std::to_string(opticalDistCoeffs.size());
+          "Distortion coefficients for Kaguya LISM must be of size 10, "
+          "got: " +
+          std::to_string(opticalDistCoeffs.size());
         std::string function = "applyDistortion";
         throw csm::Error(errorType, message, function);
       }
@@ -463,9 +484,9 @@ void applyDistortion(double ux, double uy, double &dx, double &dy,
       if (opticalDistCoeffs.size() != 1) {
         csm::Error::ErrorType errorType = csm::Error::INDEX_OUT_OF_RANGE;
         std::string message =
-            "Distortion coefficients for LRO LROC NAC must be of size 1, "
-            "current size: " +
-            std::to_string(opticalDistCoeffs.size());
+          "Distortion coefficients for LRO LROC NAC must be of size 1, "
+          "current size: " +
+          std::to_string(opticalDistCoeffs.size());
         std::string function = "applyDistortion";
         throw csm::Error(errorType, message, function);
       }
@@ -479,7 +500,7 @@ void applyDistortion(double ux, double uy, double &dx, double &dy,
       // iterations.  The points isn't in the cube, and exactly how far outside
       // the cube is irrelevant.  Just let the camera model know its not in the
       // cube....
-      if (fabs(uy) > 40) {  // if the point is way off the image.....
+      if (fabs(uy) > 40) { // if the point is way off the image.....
         dx = ux;
         dy = uy;
         return;
@@ -500,8 +521,8 @@ void applyDistortion(double ux, double uy, double &dx, double &dy,
         // distorted sample
         ydistorted = yt;
 
-        if (yt < -1e121)  // debug
-          break;          // debug
+        if (yt < -1e121) // debug
+          break;         // debug
 
         // check for convergence
         if (fabs(yt - yprevious) <= tolerance) {

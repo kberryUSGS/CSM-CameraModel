@@ -13,14 +13,16 @@ using json = nlohmann::json;
 //   Basic sensor model tests
 // ****************************************************************************
 
-TEST_F(FrameSensorModel, State) {
+TEST_F(FrameSensorModel, State)
+{
   std::string modelState = sensorModel->getModelState();
   EXPECT_NO_THROW(sensorModel->replaceModelState(modelState));
   EXPECT_EQ(sensorModel->getModelState(), modelState);
 }
 
 // centered and slightly off-center:
-TEST_F(FrameSensorModel, Center) {
+TEST_F(FrameSensorModel, Center)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_NEAR(groundPt.x, 10.0, 1e-8);
@@ -28,7 +30,8 @@ TEST_F(FrameSensorModel, Center) {
   EXPECT_NEAR(groundPt.z, 0, 1e-8);
 }
 
-TEST_F(FrameSensorModel, SlightlyOffCenter) {
+TEST_F(FrameSensorModel, SlightlyOffCenter)
+{
   csm::ImageCoord imagePt(7.5, 6.5);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_NEAR(groundPt.x, 9.80194018, 1e-8);
@@ -37,14 +40,16 @@ TEST_F(FrameSensorModel, SlightlyOffCenter) {
 }
 
 // Test all four corners:
-TEST_F(FrameSensorModel, OffBody1) {
+TEST_F(FrameSensorModel, OffBody1)
+{
   csm::ImageCoord imagePt(15.0, 0.0);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_NEAR(groundPt.x, 0.44979759, 1e-8);
   EXPECT_NEAR(groundPt.y, -14.99325304, 1e-8);
   EXPECT_NEAR(groundPt.z, 14.99325304, 1e-8);
 }
-TEST_F(FrameSensorModel, OffBody2) {
+TEST_F(FrameSensorModel, OffBody2)
+{
   csm::ImageCoord imagePt(0.0, 15.0);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_NEAR(groundPt.x, 0.44979759, 1e-8);
@@ -52,7 +57,8 @@ TEST_F(FrameSensorModel, OffBody2) {
   EXPECT_NEAR(groundPt.z, -14.99325304, 1e-8);
 }
 
-TEST_F(FrameSensorModel, OffBody3) {
+TEST_F(FrameSensorModel, OffBody3)
+{
   csm::ImageCoord imagePt(0.0, 0.0);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_NEAR(groundPt.x, 0.44979759, 1e-8);
@@ -60,7 +66,8 @@ TEST_F(FrameSensorModel, OffBody3) {
   EXPECT_NEAR(groundPt.z, 14.99325304, 1e-8);
 }
 
-TEST_F(FrameSensorModel, getReferencePoint) {
+TEST_F(FrameSensorModel, getReferencePoint)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   csm::EcefCoord groundPtCenter = sensorModel->imageToGround(imagePt, 0.0);
   csm::EcefCoord groundPtRef = sensorModel->getReferencePoint();
@@ -69,7 +76,8 @@ TEST_F(FrameSensorModel, getReferencePoint) {
   EXPECT_EQ(groundPtRef.z, groundPtCenter.z);
 }
 
-TEST_F(FrameSensorModel, OffBody4) {
+TEST_F(FrameSensorModel, OffBody4)
+{
   csm::ImageCoord imagePt(15.0, 15.0);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_NEAR(groundPt.x, 0.44979759, 1e-8);
@@ -77,11 +85,13 @@ TEST_F(FrameSensorModel, OffBody4) {
   EXPECT_NEAR(groundPt.z, -14.99325304, 1e-8);
 }
 
-TEST_F(FrameSensorModel, getImageIdentifier) {
+TEST_F(FrameSensorModel, getImageIdentifier)
+{
   EXPECT_EQ("simpleFramerISD", sensorModel->getImageIdentifier());
 }
 
-TEST_F(FrameSensorModel, Inversion) {
+TEST_F(FrameSensorModel, Inversion)
+{
   csm::ImageCoord imagePt1(9.0, 9.0);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt1, 0.0);
   csm::ImageCoord imagePt2 = sensorModel->groundToImage(groundPt);
@@ -93,7 +103,8 @@ TEST_F(FrameSensorModel, Inversion) {
 //   Orbital sensor model tests
 // ****************************************************************************
 
-TEST_F(OrbitalFrameSensorModel, Center) {
+TEST_F(OrbitalFrameSensorModel, Center)
+{
   csm::ImageCoord imagePt(8.0, 8.0);
   csm::EcefCoord groundPt = sensorModel->imageToGround(imagePt, 0.0);
   EXPECT_DOUBLE_EQ(groundPt.x, 1000000.0);
@@ -101,13 +112,15 @@ TEST_F(OrbitalFrameSensorModel, Center) {
   EXPECT_DOUBLE_EQ(groundPt.z, 0);
 }
 
-TEST_F(FrameSensorModel, Radii) {
+TEST_F(FrameSensorModel, Radii)
+{
   csm::Ellipsoid ellipsoid = sensorModel->getEllipsoid();
   EXPECT_DOUBLE_EQ(ellipsoid.getSemiMajorRadius(), 10);
   EXPECT_DOUBLE_EQ(ellipsoid.getSemiMinorRadius(), 10);
 }
 
-TEST_F(FrameSensorModel, SetRadii) {
+TEST_F(FrameSensorModel, SetRadii)
+{
   csm::Ellipsoid ellipsoid1(1000, 1500);
   sensorModel->setEllipsoid(ellipsoid1);
   csm::Ellipsoid ellipsoid2 = sensorModel->getEllipsoid();
@@ -115,7 +128,8 @@ TEST_F(FrameSensorModel, SetRadii) {
   EXPECT_DOUBLE_EQ(ellipsoid2.getSemiMinorRadius(), 1500);
 }
 
-TEST_F(OrbitalFrameSensorModel, GroundPartials) {
+TEST_F(OrbitalFrameSensorModel, GroundPartials)
+{
   csm::EcefCoord groundPt(1000000.0, 0.0, 0.0);
   std::vector<double> partials = sensorModel->computeGroundPartials(groundPt);
   // Pixels are 100m
@@ -135,11 +149,12 @@ TEST_F(OrbitalFrameSensorModel, GroundPartials) {
 // ****************************************************************************
 
 // Focal Length Tests:
-TEST_F(FrameStateTest, FL500_OffBody4) {
+TEST_F(FrameStateTest, FL500_OffBody4)
+{
   std::string key = "m_focalLength";
   double newValue = 500.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(15.0, 15.0);
@@ -152,11 +167,12 @@ TEST_F(FrameStateTest, FL500_OffBody4) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, FL500_OffBody3) {
+TEST_F(FrameStateTest, FL500_OffBody3)
+{
   std::string key = "m_focalLength";
   double newValue = 500.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(0.0, 0.0);
@@ -169,11 +185,12 @@ TEST_F(FrameStateTest, FL500_OffBody3) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, FL500_Center) {
+TEST_F(FrameStateTest, FL500_Center)
+{
   std::string key = "m_focalLength";
   double newValue = 500.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -186,11 +203,12 @@ TEST_F(FrameStateTest, FL500_Center) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, FL500_SlightlyOffCenter) {
+TEST_F(FrameStateTest, FL500_SlightlyOffCenter)
+{
   std::string key = "m_focalLength";
   double newValue = 500.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -204,12 +222,13 @@ TEST_F(FrameStateTest, FL500_SlightlyOffCenter) {
 }
 
 // Ellipsoid axis tests:
-TEST_F(FrameStateTest, SemiMajorAxis100x_Center) {
+TEST_F(FrameStateTest, SemiMajorAxis100x_Center)
+{
   std::string key = "m_majorAxis";
   double newValue = 1000.0;
 
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -222,11 +241,12 @@ TEST_F(FrameStateTest, SemiMajorAxis100x_Center) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, SemiMajorAxis10x_SlightlyOffCenter) {
+TEST_F(FrameStateTest, SemiMajorAxis10x_SlightlyOffCenter)
+{
   std::string key = "m_majorAxis";
   double newValue = 100.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -244,11 +264,12 @@ TEST_F(FrameStateTest, SemiMajorAxis10x_SlightlyOffCenter) {
 
 // The following test is for the scenario where the semi_minor_axis is actually
 // larger than the semi_major_axis:
-TEST_F(FrameStateTest, SemiMinorAxis10x_SlightlyOffCenter) {
+TEST_F(FrameStateTest, SemiMinorAxis10x_SlightlyOffCenter)
+{
   std::string key = "m_minorAxis";
   double newValue = 100.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -261,11 +282,12 @@ TEST_F(FrameStateTest, SemiMinorAxis10x_SlightlyOffCenter) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, SampleSumming) {
+TEST_F(FrameStateTest, SampleSumming)
+{
   std::string key = "m_detectorSampleSumming";
   double newValue = 2.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 3.75);
@@ -278,11 +300,12 @@ TEST_F(FrameStateTest, SampleSumming) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, LineSumming) {
+TEST_F(FrameStateTest, LineSumming)
+{
   std::string key = "m_detectorLineSumming";
   double newValue = 2.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(3.75, 7.5);
@@ -295,11 +318,12 @@ TEST_F(FrameStateTest, LineSumming) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, StartSample) {
+TEST_F(FrameStateTest, StartSample)
+{
   std::string key = "m_startingDetectorSample";
   double newValue = 5.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 2.5);
@@ -312,11 +336,12 @@ TEST_F(FrameStateTest, StartSample) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameStateTest, StartLine) {
+TEST_F(FrameStateTest, StartLine)
+{
   std::string key = "m_startingDetectorLine";
   double newValue = 5.0;
   UsgsAstroFrameSensorModel* sensorModel =
-      createModifiedStateSensorModel(key, newValue);
+    createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(2.5, 7.5);
@@ -334,9 +359,10 @@ TEST_F(FrameStateTest, StartLine) {
 // ****************************************************************************
 
 // Observer x position:
-TEST_F(FrameSensorModel, X10_SlightlyOffCenter) {
+TEST_F(FrameSensorModel, X10_SlightlyOffCenter)
+{
   double newValue = 10.0;
-  sensorModel->setParameterValue(0, newValue);  // X
+  sensorModel->setParameterValue(0, newValue); // X
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -349,9 +375,10 @@ TEST_F(FrameSensorModel, X10_SlightlyOffCenter) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameSensorModel, X1e9_SlightlyOffCenter) {
+TEST_F(FrameSensorModel, X1e9_SlightlyOffCenter)
+{
   double newValue = 1000000000.0;
-  sensorModel->setParameterValue(0, newValue);  // X
+  sensorModel->setParameterValue(0, newValue); // X
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -367,16 +394,17 @@ TEST_F(FrameSensorModel, X1e9_SlightlyOffCenter) {
 }
 
 // Angle rotations:
-TEST_F(FrameSensorModel, Rotation_omegaPi_Center) {
+TEST_F(FrameSensorModel, Rotation_omegaPi_Center)
+{
   sensorModel->setParameterValue(3, 1.0);
   sensorModel->setParameterValue(4, 1.0);
   sensorModel->setParameterValue(5, 1.0);
 
   sensorModel->setParameterValue(6, 1.0);
 
-  sensorModel->setParameterValue(0, 1000.0);  // X
-  sensorModel->setParameterValue(1, 0.0);     // Y
-  sensorModel->setParameterValue(2, 0.0);     // Z
+  sensorModel->setParameterValue(0, 1000.0); // X
+  sensorModel->setParameterValue(1, 0.0);    // Y
+  sensorModel->setParameterValue(2, 0.0);    // Z
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -389,16 +417,17 @@ TEST_F(FrameSensorModel, Rotation_omegaPi_Center) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameSensorModel, Rotation_NPole_Center) {
+TEST_F(FrameSensorModel, Rotation_NPole_Center)
+{
   sensorModel->setParameterValue(3, 0.0);
   sensorModel->setParameterValue(4, -1.0);
   sensorModel->setParameterValue(5, 0.0);
 
   sensorModel->setParameterValue(6, 0.0);
 
-  sensorModel->setParameterValue(0, 0.0);     // X
-  sensorModel->setParameterValue(1, 0.0);     // Y
-  sensorModel->setParameterValue(2, 1000.0);  // Z
+  sensorModel->setParameterValue(0, 0.0);    // X
+  sensorModel->setParameterValue(1, 0.0);    // Y
+  sensorModel->setParameterValue(2, 1000.0); // Z
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -411,11 +440,12 @@ TEST_F(FrameSensorModel, Rotation_NPole_Center) {
   sensorModel = NULL;
 }
 
-TEST_F(FrameSensorModel, Rotation_SPole_Center) {
-  sensorModel->setParameterValue(3, 0.0);      // phi
-  sensorModel->setParameterValue(0, 0.0);      // X
-  sensorModel->setParameterValue(1, 0.0);      // Y
-  sensorModel->setParameterValue(2, -1000.0);  // Z
+TEST_F(FrameSensorModel, Rotation_SPole_Center)
+{
+  sensorModel->setParameterValue(3, 0.0);     // phi
+  sensorModel->setParameterValue(0, 0.0);     // X
+  sensorModel->setParameterValue(1, 0.0);     // Y
+  sensorModel->setParameterValue(2, -1000.0); // Z
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -432,66 +462,84 @@ TEST_F(FrameSensorModel, Rotation_SPole_Center) {
 //   Logging tests
 // ****************************************************************************
 
-TEST_F(FrameSensorModelLogging, GroundToImage) {
+TEST_F(FrameSensorModelLogging, GroundToImage)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->groundToImage(groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, GroundToImageAdjustments) {
+TEST_F(FrameSensorModelLogging, GroundToImageAdjustments)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   std::vector<double> adjustments(7, 0.0);
   sensorModel->groundToImage(groundPt, adjustments);
 }
 
-TEST_F(FrameSensorModelLogging, GroundToImageCovariance) {
+TEST_F(FrameSensorModelLogging, GroundToImageCovariance)
+{
   csm::EcefCoordCovar groundPt(10.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0);
   sensorModel->groundToImage(groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, ImageToGround) {
+TEST_F(FrameSensorModelLogging, ImageToGround)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   sensorModel->imageToGround(imagePt, 0.0, 1.0);
 }
 
-TEST_F(FrameSensorModelLogging, ImageToGroundCovariance) {
+TEST_F(FrameSensorModelLogging, ImageToGroundCovariance)
+{
   csm::ImageCoordCovar imagePt(7.5, 7.5, 1.0, 0.0, 1.0);
   sensorModel->imageToGround(imagePt, 0.0);
 }
 
-TEST_F(FrameSensorModelLogging, ImageToProximateImagingLocus) {
+TEST_F(FrameSensorModelLogging, ImageToProximateImagingLocus)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->imageToProximateImagingLocus(imagePt, groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, ImageToRemoteImagingLocus) {
+TEST_F(FrameSensorModelLogging, ImageToRemoteImagingLocus)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   sensorModel->imageToRemoteImagingLocus(imagePt);
 }
 
-TEST_F(FrameSensorModelLogging, GetImageStart) { sensorModel->getImageStart(); }
+TEST_F(FrameSensorModelLogging, GetImageStart)
+{
+  sensorModel->getImageStart();
+}
 
-TEST_F(FrameSensorModelLogging, GetImageSize) { sensorModel->getImageSize(); }
+TEST_F(FrameSensorModelLogging, GetImageSize)
+{
+  sensorModel->getImageSize();
+}
 
-TEST_F(FrameSensorModelLogging, GetValidImageRange) {
+TEST_F(FrameSensorModelLogging, GetValidImageRange)
+{
   sensorModel->getValidImageRange();
 }
 
-TEST_F(FrameSensorModelLogging, GetValidHeightRange) {
+TEST_F(FrameSensorModelLogging, GetValidHeightRange)
+{
   sensorModel->getValidHeightRange();
 }
 
-TEST_F(FrameSensorModelLogging, GetImageTime) {
+TEST_F(FrameSensorModelLogging, GetImageTime)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   sensorModel->getImageTime(imagePt);
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorPositionPixel) {
+TEST_F(FrameSensorModelLogging, GetSensorPositionPixel)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   sensorModel->getSensorPosition(imagePt);
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorPositionTime) {
+TEST_F(FrameSensorModelLogging, GetSensorPositionTime)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   double time = sensorModel->getImageTime(imagePt);
   // Dump the constents of the stream because getModelState wrote to it
@@ -500,12 +548,14 @@ TEST_F(FrameSensorModelLogging, GetSensorPositionTime) {
   sensorModel->getSensorPosition(time);
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorVelocityPixel) {
+TEST_F(FrameSensorModelLogging, GetSensorVelocityPixel)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   sensorModel->getSensorVelocity(imagePt);
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorVelocityTime) {
+TEST_F(FrameSensorModelLogging, GetSensorVelocityTime)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   double time = sensorModel->getImageTime(imagePt);
   // Dump the constents of the stream because getModelState wrote to it
@@ -514,79 +564,111 @@ TEST_F(FrameSensorModelLogging, GetSensorVelocityTime) {
   sensorModel->getSensorVelocity(time);
 }
 
-TEST_F(FrameSensorModelLogging, ComputeSensorPartialsGround) {
+TEST_F(FrameSensorModelLogging, ComputeSensorPartialsGround)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->computeSensorPartials(0, groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, ComputeSensorPartialsBoth) {
+TEST_F(FrameSensorModelLogging, ComputeSensorPartialsBoth)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->computeSensorPartials(0, imagePt, groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, ComputeAllSensorPartialsGround) {
+TEST_F(FrameSensorModelLogging, ComputeAllSensorPartialsGround)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->computeAllSensorPartials(groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, ComputeAllSensorPartialsBoth) {
+TEST_F(FrameSensorModelLogging, ComputeAllSensorPartialsBoth)
+{
   csm::ImageCoord imagePt(7.5, 7.5);
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->computeAllSensorPartials(imagePt, groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, GetCorrelationModel) {
+TEST_F(FrameSensorModelLogging, GetCorrelationModel)
+{
   sensorModel->getCorrelationModel();
 }
 
-TEST_F(FrameSensorModelLogging, GetUnmodeledCrossCovariance) {
+TEST_F(FrameSensorModelLogging, GetUnmodeledCrossCovariance)
+{
   csm::ImageCoord imagePt1(7.5, 7.5);
   csm::ImageCoord imagePt2(8.5, 8.5);
   sensorModel->getUnmodeledCrossCovariance(imagePt1, imagePt2);
 }
 
-TEST_F(FrameSensorModelLogging, GetVersion) { sensorModel->getVersion(); }
+TEST_F(FrameSensorModelLogging, GetVersion)
+{
+  sensorModel->getVersion();
+}
 
-TEST_F(FrameSensorModelLogging, GetModelName) { sensorModel->getModelName(); }
+TEST_F(FrameSensorModelLogging, GetModelName)
+{
+  sensorModel->getModelName();
+}
 
-TEST_F(FrameSensorModelLogging, GetPedigree) { sensorModel->getPedigree(); }
+TEST_F(FrameSensorModelLogging, GetPedigree)
+{
+  sensorModel->getPedigree();
+}
 
-TEST_F(FrameSensorModelLogging, GetImageIdentifier) {
+TEST_F(FrameSensorModelLogging, GetImageIdentifier)
+{
   sensorModel->getImageIdentifier();
 }
 
-TEST_F(FrameSensorModelLogging, SetImageIdentifier) {
+TEST_F(FrameSensorModelLogging, SetImageIdentifier)
+{
   sensorModel->setImageIdentifier("logging_ID");
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorIdentifier) {
+TEST_F(FrameSensorModelLogging, GetSensorIdentifier)
+{
   sensorModel->getSensorIdentifier();
 }
 
-TEST_F(FrameSensorModelLogging, GetPlatformIdentifier) {
+TEST_F(FrameSensorModelLogging, GetPlatformIdentifier)
+{
   sensorModel->getPlatformIdentifier();
 }
 
-TEST_F(FrameSensorModelLogging, GetCollectionIdentifier) {
+TEST_F(FrameSensorModelLogging, GetCollectionIdentifier)
+{
   sensorModel->getCollectionIdentifier();
 }
 
-TEST_F(FrameSensorModelLogging, GetTrajectoryIdentifier) {
+TEST_F(FrameSensorModelLogging, GetTrajectoryIdentifier)
+{
   sensorModel->getTrajectoryIdentifier();
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorType) { sensorModel->getSensorType(); }
+TEST_F(FrameSensorModelLogging, GetSensorType)
+{
+  sensorModel->getSensorType();
+}
 
-TEST_F(FrameSensorModelLogging, GetSensorMode) { sensorModel->getSensorMode(); }
+TEST_F(FrameSensorModelLogging, GetSensorMode)
+{
+  sensorModel->getSensorMode();
+}
 
-TEST_F(FrameSensorModelLogging, GetReferenceDateAndTime) {
+TEST_F(FrameSensorModelLogging, GetReferenceDateAndTime)
+{
   sensorModel->getReferenceDateAndTime();
 }
 
-TEST_F(FrameSensorModelLogging, GetModelState) { sensorModel->getModelState(); }
+TEST_F(FrameSensorModelLogging, GetModelState)
+{
+  sensorModel->getModelState();
+}
 
-TEST_F(FrameSensorModelLogging, replaceModelState) {
+TEST_F(FrameSensorModelLogging, replaceModelState)
+{
   std::string state = sensorModel->getModelState();
   // Dump the constents of the stream because getModelState wrote to it
   oss.str("");
@@ -594,36 +676,44 @@ TEST_F(FrameSensorModelLogging, replaceModelState) {
   sensorModel->replaceModelState(state);
 }
 
-TEST_F(FrameSensorModelLogging, GetReferencePoint) {
+TEST_F(FrameSensorModelLogging, GetReferencePoint)
+{
   sensorModel->getReferencePoint();
 }
 
-TEST_F(FrameSensorModelLogging, SetReferencePoint) {
+TEST_F(FrameSensorModelLogging, SetReferencePoint)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->setReferencePoint(groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, GetNumParameters) {
+TEST_F(FrameSensorModelLogging, GetNumParameters)
+{
   sensorModel->getNumParameters();
 }
 
-TEST_F(FrameSensorModelLogging, GetParameterName) {
+TEST_F(FrameSensorModelLogging, GetParameterName)
+{
   sensorModel->getParameterName(0);
 }
 
-TEST_F(FrameSensorModelLogging, GetParameterUnits) {
+TEST_F(FrameSensorModelLogging, GetParameterUnits)
+{
   sensorModel->getParameterUnits(0);
 }
 
-TEST_F(FrameSensorModelLogging, HasShareableParameters) {
+TEST_F(FrameSensorModelLogging, HasShareableParameters)
+{
   sensorModel->hasShareableParameters();
 }
 
-TEST_F(FrameSensorModelLogging, IsParameterShareable) {
+TEST_F(FrameSensorModelLogging, IsParameterShareable)
+{
   sensorModel->isParameterShareable(0);
 }
 
-TEST_F(FrameSensorModelLogging, GetParameterSharingCriteria) {
+TEST_F(FrameSensorModelLogging, GetParameterSharingCriteria)
+{
   try {
     sensorModel->getParameterSharingCriteria(0);
   } catch (...) {
@@ -631,35 +721,43 @@ TEST_F(FrameSensorModelLogging, GetParameterSharingCriteria) {
   }
 }
 
-TEST_F(FrameSensorModelLogging, GetParameterValue) {
+TEST_F(FrameSensorModelLogging, GetParameterValue)
+{
   sensorModel->getParameterValue(0);
 }
 
-TEST_F(FrameSensorModelLogging, SetParameterValue) {
+TEST_F(FrameSensorModelLogging, SetParameterValue)
+{
   sensorModel->setParameterValue(0, 10);
 }
 
-TEST_F(FrameSensorModelLogging, GetParameterType) {
+TEST_F(FrameSensorModelLogging, GetParameterType)
+{
   sensorModel->getParameterType(0);
 }
 
-TEST_F(FrameSensorModelLogging, SetParameterType) {
+TEST_F(FrameSensorModelLogging, SetParameterType)
+{
   sensorModel->setParameterType(0, csm::param::REAL);
 }
 
-TEST_F(FrameSensorModelLogging, GetParameterCovariance) {
+TEST_F(FrameSensorModelLogging, GetParameterCovariance)
+{
   sensorModel->getParameterCovariance(0, 0);
 }
 
-TEST_F(FrameSensorModelLogging, SetParameterCovariance) {
+TEST_F(FrameSensorModelLogging, SetParameterCovariance)
+{
   sensorModel->setParameterCovariance(0, 0, 1);
 }
 
-TEST_F(FrameSensorModelLogging, GetNumGeometricCorrectionSwitches) {
+TEST_F(FrameSensorModelLogging, GetNumGeometricCorrectionSwitches)
+{
   sensorModel->getNumGeometricCorrectionSwitches();
 }
 
-TEST_F(FrameSensorModelLogging, GetGeometricCorrectionName) {
+TEST_F(FrameSensorModelLogging, GetGeometricCorrectionName)
+{
   try {
     sensorModel->getGeometricCorrectionName(0);
   } catch (...) {
@@ -667,7 +765,8 @@ TEST_F(FrameSensorModelLogging, GetGeometricCorrectionName) {
   }
 }
 
-TEST_F(FrameSensorModelLogging, SetGeometricCorrectionSwitch) {
+TEST_F(FrameSensorModelLogging, SetGeometricCorrectionSwitch)
+{
   try {
     sensorModel->setGeometricCorrectionSwitch(0, true, csm::param::REAL);
   } catch (...) {
@@ -675,7 +774,8 @@ TEST_F(FrameSensorModelLogging, SetGeometricCorrectionSwitch) {
   }
 }
 
-TEST_F(FrameSensorModelLogging, GetGeometricCorrectionSwitch) {
+TEST_F(FrameSensorModelLogging, GetGeometricCorrectionSwitch)
+{
   try {
     sensorModel->getGeometricCorrectionSwitch(0);
   } catch (...) {
@@ -683,25 +783,30 @@ TEST_F(FrameSensorModelLogging, GetGeometricCorrectionSwitch) {
   }
 }
 
-TEST_F(FrameSensorModelLogging, GetIlluminationDirection) {
+TEST_F(FrameSensorModelLogging, GetIlluminationDirection)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->getIlluminationDirection(groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, ComputeGroundPartials) {
+TEST_F(FrameSensorModelLogging, ComputeGroundPartials)
+{
   csm::EcefCoord groundPt(10.0, 0.0, 0.0);
   sensorModel->computeGroundPartials(groundPt);
 }
 
-TEST_F(FrameSensorModelLogging, IsValidModelState) {
+TEST_F(FrameSensorModelLogging, IsValidModelState)
+{
   sensorModel->isValidModelState("{\"test_key\" : \"test_string\"}", nullptr);
 }
 
-TEST_F(FrameSensorModelLogging, IsValidIsd) {
+TEST_F(FrameSensorModelLogging, IsValidIsd)
+{
   sensorModel->isValidIsd("{\"test_key\" : \"test_string\"}", nullptr);
 }
 
-TEST_F(FrameSensorModelLogging, ConstructStateFromIsd) {
+TEST_F(FrameSensorModelLogging, ConstructStateFromIsd)
+{
   try {
     sensorModel->constructStateFromIsd("{\"test_key\" : \"test_string\"}",
                                        nullptr);
@@ -710,23 +815,27 @@ TEST_F(FrameSensorModelLogging, ConstructStateFromIsd) {
   }
 }
 
-TEST_F(FrameSensorModelLogging, GetValue) {
+TEST_F(FrameSensorModelLogging, GetValue)
+{
   std::vector<double> adjustments(7, 0.0);
   sensorModel->getValue(0, adjustments);
 }
 
-TEST_F(FrameSensorModelLogging, CalcRotationMatrix) {
+TEST_F(FrameSensorModelLogging, CalcRotationMatrix)
+{
   double m[3][3];
   sensorModel->calcRotationMatrix(m);
 }
 
-TEST_F(FrameSensorModelLogging, CalcRotationMatrixAdjusted) {
+TEST_F(FrameSensorModelLogging, CalcRotationMatrixAdjusted)
+{
   std::vector<double> adjustments(7, 0.0);
   double m[3][3];
   sensorModel->calcRotationMatrix(m, adjustments);
 }
 
-TEST_F(FrameSensorModelLogging, losEllipsoidIntersect) {
+TEST_F(FrameSensorModelLogging, losEllipsoidIntersect)
+{
   double height, xc, yc, zc, xl, yl, zl, x, y, z;
   height = 0.0;
   xc = 1000;
@@ -738,7 +847,8 @@ TEST_F(FrameSensorModelLogging, losEllipsoidIntersect) {
   sensorModel->losEllipsoidIntersect(height, xc, yc, zc, xl, yl, zl, x, y, z);
 }
 
-TEST_F(OrbitalFrameSensorModel, ReferenceDateTime) {
+TEST_F(OrbitalFrameSensorModel, ReferenceDateTime)
+{
   std::string date = sensorModel->getReferenceDateAndTime();
   EXPECT_EQ(date, "20000101T001640");
 }
