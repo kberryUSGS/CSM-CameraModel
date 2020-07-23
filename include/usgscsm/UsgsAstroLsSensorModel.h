@@ -28,10 +28,10 @@
 #ifndef __USGS_ASTRO_LINE_SCANNER_SENSORMODEL_H
 #define __USGS_ASTRO_LINE_SCANNER_SENSORMODEL_H
 
+#include "Distortion.h"
 #include <CorrelationModel.h>
 #include <RasterGM.h>
 #include <SettableEllipsoid.h>
-#include "Distortion.h"
 
 #include "ale/Distortion.h"
 #include "ale/Orientations.h"
@@ -40,13 +40,14 @@
 #include "spdlog/spdlog.h"
 
 class UsgsAstroLsSensorModel : public csm::RasterGM,
-                               virtual public csm::SettableEllipsoid {
- public:
+                               virtual public csm::SettableEllipsoid
+{
+public:
   // Initializes the class from state data as formatted
   // in a string by the toString() method
-  void setState(const std::string& state);
+  void setState (const std::string &state);
 
-  virtual void replaceModelState(const std::string& stateString);
+  virtual void replaceModelState (const std::string &stateString);
   //> This method attempts to initialize the current model with the state
   //  given by argState.  The argState argument can be a string previously
   //  retrieved from the getModelState method.
@@ -62,10 +63,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
 
   // This method checks to see if the model name is recognized
   // in the input state string.
-  static std::string getModelNameFromModelState(const std::string& model_state);
+  static std::string
+  getModelNameFromModelState (const std::string &model_state);
 
-  std::string constructStateFromIsd(const std::string imageSupportData,
-                                    csm::WarningList* list);
+  std::string constructStateFromIsd (const std::string imageSupportData,
+                                     csm::WarningList *list);
 
   // State data elements;
   std::string m_imageIdentifier;
@@ -125,10 +127,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   std::vector<double> m_sunVelocity;
 
   // Define logging pointer and file content
-  std::shared_ptr<spdlog::logger> m_logger = spdlog::get("usgscsm_logger");
+  std::shared_ptr<spdlog::logger> m_logger = spdlog::get ("usgscsm_logger");
 
   // Hardcoded
-  static const std::string _SENSOR_MODEL_NAME;  // state date element 0
+  static const std::string _SENSOR_MODEL_NAME; // state date element 0
 
   static const std::string _STATE_KEYWORD[];
   static const int NUM_PARAM_TYPES;
@@ -138,19 +140,19 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   static const std::string PARAMETER_NAME[];
 
   // Set to default values
-  void reset();
+  void reset ();
 
   //--------------------------------------------------------------
   // Constructors/Destructor
   //--------------------------------------------------------------
 
-  UsgsAstroLsSensorModel();
-  ~UsgsAstroLsSensorModel();
+  UsgsAstroLsSensorModel ();
+  ~UsgsAstroLsSensorModel ();
 
-  virtual std::string getModelState() const;
+  virtual std::string getModelState () const;
 
   // Set the sensor model based on the input state data
-  void set(const std::string& state_data);
+  void set (const std::string &state_data);
 
   //----------------------------------------------------------------
   // The following public methods are implementations of
@@ -161,10 +163,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //---
   // Core Photogrammetry
   //---
-  virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord& groundPt, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::ImageCoord groundToImage (const csm::EcefCoord &groundPt,
+                                         double desiredPrecision = 0.001,
+                                         double *achievedPrecision = NULL,
+                                         csm::WarningList *warnings
+                                         = NULL) const;
 
   //> This method converts the given groundPt (x,y,z in ECEF meters) to a
   //  returned image coordinate (line, sample in full image space pixels).
@@ -180,10 +183,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual csm::ImageCoordCovar groundToImage(
-      const csm::EcefCoordCovar& groundPt, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::ImageCoordCovar
+  groundToImage (const csm::EcefCoordCovar &groundPt,
+                 double desiredPrecision = 0.001,
+                 double *achievedPrecision = NULL,
+                 csm::WarningList *warnings = NULL) const;
   //> This method converts the given groundPt (x,y,z in ECEF meters and
   //  corresponding 3x3 covariance in ECEF meters squared) to a returned
   //  image coordinate with covariance (line, sample in full image space
@@ -200,11 +204,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
-                                       double height,
-                                       double desiredPrecision = 0.001,
-                                       double* achievedPrecision = NULL,
-                                       csm::WarningList* warnings = NULL) const;
+  virtual csm::EcefCoord
+  imageToGround (const csm::ImageCoord &imagePt, double height,
+                 double desiredPrecision = 0.001,
+                 double *achievedPrecision = NULL,
+                 csm::WarningList *warnings = NULL) const;
   //> This method converts the given imagePt (line,sample in full image
   //  space pixels) and given height (in meters relative to the WGS-84
   //  ellipsoid) to a returned ground coordinate (x,y,z in ECEF meters).
@@ -220,10 +224,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual csm::EcefCoordCovar imageToGround(
-      const csm::ImageCoordCovar& imagePt, double height, double heightVariance,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::EcefCoordCovar
+  imageToGround (const csm::ImageCoordCovar &imagePt, double height,
+                 double heightVariance, double desiredPrecision = 0.001,
+                 double *achievedPrecision = NULL,
+                 csm::WarningList *warnings = NULL) const;
   //> This method converts the given imagePt (line, sample in full image
   //  space pixels and corresponding 2x2 covariance in pixels squared)
   //  and given height (in meters relative to the WGS-84 ellipsoid) and
@@ -242,10 +247,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual csm::EcefLocus imageToProximateImagingLocus(
-      const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::EcefLocus imageToProximateImagingLocus (
+      const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
+      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
+      csm::WarningList *warnings = NULL) const;
   //> This method, for the given imagePt (line, sample in full image space
   //  pixels), returns the position and direction of the imaging locus
   //  nearest the given groundPt (x,y,z in ECEF meters).
@@ -266,10 +271,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual csm::EcefLocus imageToRemoteImagingLocus(
-      const csm::ImageCoord& imagePt, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::EcefLocus
+  imageToRemoteImagingLocus (const csm::ImageCoord &imagePt,
+                             double desiredPrecision = 0.001,
+                             double *achievedPrecision = NULL,
+                             csm::WarningList *warnings = NULL) const;
   //> This method, for the given imagePt (line, sample in full image space
   //  pixels), returns the position and direction of the imaging locus
   //  at the sensor.
@@ -301,12 +307,12 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //---
   // Monoscopic Mensuration
   //---
-  virtual csm::ImageCoord getImageStart() const;
+  virtual csm::ImageCoord getImageStart () const;
   //> This method returns the starting coordinate (line, sample in full
   //  image space pixels) for the imaging operation.  Typically (0,0).
   //<
 
-  virtual csm::ImageVector getImageSize() const;
+  virtual csm::ImageVector getImageSize () const;
   //> This method returns the number of lines and samples in full image
   //  space pixels for the imaging operation.
   //
@@ -315,8 +321,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  coordinates.
   //<
 
-  virtual std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange()
-      const;
+  virtual std::pair<csm::ImageCoord, csm::ImageCoord>
+  getValidImageRange () const;
   //> This method returns the minimum and maximum image coordinates
   //  (line, sample in full image space pixels), respectively, over which
   //  the current model is valid.  The image coordinates define opposite
@@ -331,7 +337,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  the model is valid.
   //<
 
-  virtual std::pair<double, double> getValidHeightRange() const;
+  virtual std::pair<double, double> getValidHeightRange () const;
   //> This method returns the minimum and maximum heights (in meters
   //  relative to WGS-84 ellipsoid), respectively, over which the model is
   //  valid.  For example, a model for an airborne platform might not be
@@ -341,8 +347,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  will be returned.
   //<
 
-  virtual csm::EcefVector getIlluminationDirection(
-      const csm::EcefCoord& groundPt) const;
+  virtual csm::EcefVector
+  getIlluminationDirection (const csm::EcefCoord &groundPt) const;
   //> This method returns a vector defining the direction of
   //  illumination at the given groundPt (x,y,z in ECEF meters).
   //  Note that there are two opposite directions possible.  Both are
@@ -353,7 +359,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //---
   // Time and Trajectory
   //---
-  virtual double getImageTime(const csm::ImageCoord& imagePt) const;
+  virtual double getImageTime (const csm::ImageCoord &imagePt) const;
   //> This method returns the time in seconds at which the pixel at the
   //  given imagePt (line, sample in full image space pixels) was captured
   //
@@ -361,8 +367,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  by the Model::getReferenceDateAndTime method.
   //<
 
-  virtual csm::EcefCoord getSensorPosition(
-      const csm::ImageCoord& imagePt) const;
+  virtual csm::EcefCoord
+  getSensorPosition (const csm::ImageCoord &imagePt) const;
   //> This method returns the position of the physical sensor
   // (x,y,z in ECEF meters) when the pixel at the given imagePt
   // (line, sample in full image space pixels) was captured.
@@ -370,30 +376,31 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   // A csm::Error will be thrown if the sensor position is not available.
   //<
 
-  virtual csm::EcefCoord getSensorPosition(double time) const;
+  virtual csm::EcefCoord getSensorPosition (double time) const;
   //> This method returns the position of the physical sensor
   //  (x,y,z meters ECEF) at the given time relative to the reference date
   //  and time given by the Model::getReferenceDateAndTime method.
   //<
 
-  virtual csm::EcefVector getSensorVelocity(
-      const csm::ImageCoord& imagePt) const;
+  virtual csm::EcefVector
+  getSensorVelocity (const csm::ImageCoord &imagePt) const;
   //> This method returns the velocity of the physical sensor
   // (x,y,z in ECEF meters per second) when the pixel at the given imagePt
   // (line, sample in full image space pixels) was captured.
   //<
 
-  virtual csm::EcefVector getSensorVelocity(double time) const;
+  virtual csm::EcefVector getSensorVelocity (double time) const;
   //> This method returns the velocity of the physical sensor
   //  (x,y,z in ECEF meters per second ) at the given time relative to the
   //  reference date and time given by the Model::getReferenceDateAndTime
   //  method.
   //<
 
-  virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::RasterGM::SensorPartials
+  computeSensorPartials (int index, const csm::EcefCoord &groundPt,
+                         double desiredPrecision = 0.001,
+                         double *achievedPrecision = NULL,
+                         csm::WarningList *warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes only
   //  the necessary inputs.  Some effieciency can be obtained by using the
   //  other method.  Even more efficiency can be obtained by using the
@@ -420,10 +427,12 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::RasterGM::SensorPartials
+  computeSensorPartials (int index, const csm::ImageCoord &imagePt,
+                         const csm::EcefCoord &groundPt,
+                         double desiredPrecision = 0.001,
+                         double *achievedPrecision = NULL,
+                         csm::WarningList *warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes
   //  an input image coordinate for efficiency.  Even more efficiency can
   //  be obtained by using the computeAllSensorPartials method.
@@ -450,10 +459,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials(
-      const csm::EcefCoord& groundPt, csm::param::Set pSet = csm::param::VALID,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials (
+      const csm::EcefCoord &groundPt, csm::param::Set pSet = csm::param::VALID,
+      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
+      csm::WarningList *warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes only
   //  the necessary inputs.  Some effieciency can be obtained by using the
   //  other method.
@@ -485,11 +494,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  computeSensorPartials method for each desired parameter index.
   //<
 
-  virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials(
-      const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      csm::param::Set pSet = csm::param::VALID, double desiredPrecision = 0.001,
-      double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials (
+      const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
+      csm::param::Set pSet = csm::param::VALID,
+      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
+      csm::WarningList *warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes
   //  an input image coordinate for efficiency.
   //
@@ -525,8 +534,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  computeSensorPartials method for each desired parameter index.
   //<
 
-  virtual std::vector<double> computeGroundPartials(
-      const csm::EcefCoord& groundPt) const;
+  virtual std::vector<double>
+  computeGroundPartials (const csm::EcefCoord &groundPt) const;
   //> This method returns the partial derivatives of line and sample
   //  (in pixels per meter) with respect to the given groundPt
   //  (x,y,z in ECEF meters).
@@ -541,7 +550,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //-  [5] = sample wrt z
   //<
 
-  virtual const csm::CorrelationModel& getCorrelationModel() const;
+  virtual const csm::CorrelationModel &getCorrelationModel () const;
   //> This method returns a reference to a CorrelationModel.
   //  The CorrelationModel is used to determine the correlation between
   //  the model parameters of different models of the same type.
@@ -552,8 +561,9 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  GeometricModel::getCrossCovarianceMatrix() be called instead.
   //<
 
-  virtual std::vector<double> getUnmodeledCrossCovariance(
-      const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const;
+  virtual std::vector<double>
+  getUnmodeledCrossCovariance (const csm::ImageCoord &pt1,
+                               const csm::ImageCoord &pt2) const;
   //> This method returns the 2x2 line and sample cross covariance
   //  (in pixels squared) between the given imagePt1 and imagePt2 for any
   //  model error not accounted for by the model parameters.  The error is
@@ -561,12 +571,12 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  vector.
   //<
 
-  virtual csm::EcefCoord getReferencePoint() const;
+  virtual csm::EcefCoord getReferencePoint () const;
   //> This method returns the ground point indicating the general
   //  location of the image.
   //<
 
-  virtual void setReferencePoint(const csm::EcefCoord& groundPt);
+  virtual void setReferencePoint (const csm::EcefCoord &groundPt);
   //> This method sets the ground point indicating the general location
   //  of the image.
   //<
@@ -574,18 +584,18 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //---
   // Sensor Model Parameters
   //---
-  virtual int getNumParameters() const;
+  virtual int getNumParameters () const;
   //> This method returns the number of adjustable parameters.
   //<
 
-  virtual std::string getParameterName(int index) const;
+  virtual std::string getParameterName (int index) const;
   //> This method returns the name for the adjustable parameter
   //  indicated by the given index.
   //
   //  If the index is out of range, a csm::Error may be thrown.
   //<
 
-  virtual std::string getParameterUnits(int index) const;
+  virtual std::string getParameterUnits (int index) const;
   //> This method returns the units for the adjustable parameter
   //  indicated by the given index.  This string is intended for human
   //  consumption, not automated analysis.  Preferred unit names are:
@@ -641,57 +651,57 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  required.
   //<
 
-  virtual bool hasShareableParameters() const;
+  virtual bool hasShareableParameters () const;
   //> This method returns true if there exists at least one adjustable
   //  parameter on the model that is shareable.  See the
   //  isParameterShareable() method.  This method should return false if
   //  all calls to isParameterShareable() return false.
   //<
 
-  virtual bool isParameterShareable(int index) const;
+  virtual bool isParameterShareable (int index) const;
   //> This method returns a flag to indicate whether or not the adjustable
   //  parameter referenced by index is shareable across models.
   //<
 
-  virtual csm::SharingCriteria getParameterSharingCriteria(int index) const;
+  virtual csm::SharingCriteria getParameterSharingCriteria (int index) const;
   //> This method returns characteristics to indicate how the adjustable
   //  parameter referenced by index is shareable across models.
   //<
 
-  virtual double getParameterValue(int index) const;
+  virtual double getParameterValue (int index) const;
   //> This method returns the value of the adjustable parameter
   //  referenced by the given index.
   //<
 
-  virtual void setParameterValue(int index, double value);
+  virtual void setParameterValue (int index, double value);
   //> This method sets the value for the adjustable parameter referenced by
   //  the given index.
   //<
 
-  virtual csm::param::Type getParameterType(int index) const;
+  virtual csm::param::Type getParameterType (int index) const;
   //> This method returns the type of the adjustable parameter
   //  referenced by the given index.
   //<
 
-  virtual void setParameterType(int index, csm::param::Type pType);
+  virtual void setParameterType (int index, csm::param::Type pType);
   //> This method sets the type of the adjustable parameter
   //  reference by the given index.
   //<
 
-  virtual std::shared_ptr<spdlog::logger> getLogger();
-  virtual void setLogger(std::string logName);
+  virtual std::shared_ptr<spdlog::logger> getLogger ();
+  virtual void setLogger (std::string logName);
 
   //---
   // Uncertainty Propagation
   //---
-  virtual double getParameterCovariance(int index1, int index2) const;
+  virtual double getParameterCovariance (int index1, int index2) const;
   //> This method returns the covariance between the parameters
   //  referenced by index1 and index2.  Variance of a single parameter
   //  is indicated by specifying the samve value for index1 and index2.
   //<
 
-  virtual void setParameterCovariance(int index1, int index2,
-                                      double covariance);
+  virtual void setParameterCovariance (int index1, int index2,
+                                       double covariance);
   //> This method is used to set the covariance between the parameters
   //  referenced by index1 and index2.  Variance of a single parameter
   //  is indicated by specifying the samve value for index1 and index2.
@@ -700,32 +710,32 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //---
   // Error Correction
   //---
-  virtual int getNumGeometricCorrectionSwitches() const;
+  virtual int getNumGeometricCorrectionSwitches () const;
   //> This method returns the number of geometric correction switches
   //  implemented for the current model.
   //<
 
-  virtual std::string getGeometricCorrectionName(int index) const;
+  virtual std::string getGeometricCorrectionName (int index) const;
   //> This method returns the name for the geometric correction switch
   //  referenced by the given index.
   //<
 
-  virtual void setGeometricCorrectionSwitch(int index, bool value,
-                                            csm::param::Type pType);
+  virtual void setGeometricCorrectionSwitch (int index, bool value,
+                                             csm::param::Type pType);
   //> This method is used to enable/disable the geometric correction switch
   //  referenced by the given index.
   //<
 
-  virtual bool getGeometricCorrectionSwitch(int index) const;
+  virtual bool getGeometricCorrectionSwitch (int index) const;
   //> This method returns the value of the geometric correction switch
   //  referenced by the given index.
   //<
 
-  virtual std::vector<double> getCrossCovarianceMatrix(
-      const csm::GeometricModel& comparisonModel,
+  virtual std::vector<double> getCrossCovarianceMatrix (
+      const csm::GeometricModel &comparisonModel,
       csm::param::Set pSet = csm::param::VALID,
-      const csm::GeometricModel::GeometricModelList& otherModels =
-          csm::GeometricModel::GeometricModelList()) const;
+      const csm::GeometricModel::GeometricModelList &otherModels
+      = csm::GeometricModel::GeometricModelList ()) const;
   //> This method returns a matrix containing the elements of the error
   //  cross covariance between this model and a given second model
   //  (comparisonModel).  The set of cross covariance elements returned is
@@ -761,17 +771,17 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  reflects the "un-adjusted" state of the models.
   //<
 
-  virtual csm::Version getVersion() const;
+  virtual csm::Version getVersion () const;
   //> This method returns the version of the model code.  The Version
   //  object can be compared to other Version objects with its comparison
   //  operators.  Not to be confused with the CSM API version.
   //<
 
-  virtual std::string getModelName() const;
+  virtual std::string getModelName () const;
   //> This method returns a string identifying the name of the model.
   //<
 
-  virtual std::string getPedigree() const;
+  virtual std::string getPedigree () const;
   //> This method returns a string that identifies the sensor,
   //  the model type, its mode of acquisition and processing path.
   //  For example, an optical sensor model or a cubic rational polynomial
@@ -782,7 +792,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //---
   // Basic collection information
   //---
-  virtual std::string getImageIdentifier() const;
+  virtual std::string getImageIdentifier () const;
   //> This method returns an identifier to uniquely indicate the imaging
   //  operation associated with this model.
   //  This is the primary identifier of the model.
@@ -790,8 +800,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  This method may return an empty string if the ID is unknown.
   //<
 
-  virtual void setImageIdentifier(const std::string& imageId,
-                                  csm::WarningList* warnings = NULL);
+  virtual void setImageIdentifier (const std::string &imageId,
+                                   csm::WarningList *warnings = NULL);
   //> This method sets an identifier to uniquely indicate the imaging
   //  operation associated with this model.  Typically used for models
   //  whose initialization does not produce an adequate identifier.
@@ -800,7 +810,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  as applicable.
   //<
 
-  virtual std::string getSensorIdentifier() const;
+  virtual std::string getSensorIdentifier () const;
   //> This method returns an identifier to indicate the specific sensor
   //  that was used to acquire the image.  This ID must be unique among
   //  sensors for a given model name.  It is used to determine parameter
@@ -809,7 +819,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  This method may return an empty string if the sensor ID is unknown.
   //<
 
-  virtual std::string getPlatformIdentifier() const;
+  virtual std::string getPlatformIdentifier () const;
   //> This method returns an identifier to indicate the specific platform
   //  that was used to acquire the image.  This ID must unique among
   //  platforms for a given model name.  It is used to determine parameter
@@ -818,33 +828,33 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  This method may return an empty string if the platform ID is unknown.
   //<
 
-  virtual std::string getCollectionIdentifier() const;
+  virtual std::string getCollectionIdentifier () const;
   //> This method returns an identifer to indicate a collection activity
   //  common to a set of images.  This ID must be unique among collection
   //  activities for a given model name.  It is used to determine parameter
   //  correlation and sharing.
   //<
 
-  virtual std::string getTrajectoryIdentifier() const;
+  virtual std::string getTrajectoryIdentifier () const;
   //> This method returns an identifier to indicate a trajectory common
   //  to a set of images.  This ID must be unique among trajectories
   //  for a given model name.  It is used to determine parameter
   //  correlation and sharing.
   //<
 
-  virtual std::string getSensorType() const;
+  virtual std::string getSensorType () const;
   //> This method returns a description of the sensor type (EO, IR, SAR,
   //  etc).  See csm.h for a list of common types.  Should return
   //  CSM_SENSOR_TYPE_UNKNOWN if the sensor type is unknown.
   //<
 
-  virtual std::string getSensorMode() const;
+  virtual std::string getSensorMode () const;
   //> This method returns a description of the sensor mode (FRAME,
   //  PUSHBROOM, SPOT, SCAN, etc).  See csm.h for a list of common modes.
   //  Should return CSM_SENSOR_MODE_UNKNOWN if the sensor mode is unknown.
   //<
 
-  virtual std::string getReferenceDateAndTime() const;
+  virtual std::string getReferenceDateAndTime () const;
   //> This method returns an approximate date and time at which the
   //  image was taken.  The returned string follows the ISO 8601 standard.
   //
@@ -870,126 +880,128 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  current state.
   //<
 
-  virtual csm::Ellipsoid getEllipsoid() const;
+  virtual csm::Ellipsoid getEllipsoid () const;
   //> This method returns the planetary ellipsoid.
   //<
 
-  virtual void setEllipsoid(const csm::Ellipsoid& ellipsoid);
+  virtual void setEllipsoid (const csm::Ellipsoid &ellipsoid);
   //> This method sets the planetary ellipsoid.
   //<
 
-  void calculateAttitudeCorrection(const double& time,
-                                   const std::vector<double>& adj,
-                                   double attCorr[9]) const;
+  void calculateAttitudeCorrection (const double &time,
+                                    const std::vector<double> &adj,
+                                    double attCorr[9]) const;
 
-  virtual csm::EcefVector getSunPosition(const double imageTime) const;
+  virtual csm::EcefVector getSunPosition (const double imageTime) const;
   //> This method returns the position of the sun at the time the image point
   //  was recorded.  If multiple sun positions are available, the method uses
-  //  lagrange interpolation.  If one sun position and at least one sun velocity
-  //  are available, then the position is calculated using linear extrapolation.
-  //  If only one sun position is available, then that value is returned.
+  //  lagrange interpolation.  If one sun position and at least one sun
+  //  velocity are available, then the position is calculated using linear
+  //  extrapolation. If only one sun position is available, then that value is
+  //  returned.
 
- private:
-  void determineSensorCovarianceInImageSpace(csm::EcefCoord& gp,
-                                             double sensor_cov[4]) const;
+private:
+  void determineSensorCovarianceInImageSpace (csm::EcefCoord &gp,
+                                              double sensor_cov[4]) const;
 
   // Some state data values not found in the support data require a
   // sensor model in order to be set.
-  void updateState();
+  void updateState ();
 
   // This method returns the value of the specified adjustable parameter
   // with the associated adjustment added in.
-  double getValue(int index, const std::vector<double>& adjustments) const;
+  double getValue (int index, const std::vector<double> &adjustments) const;
 
   // This private form of the g2i method is used to ensure thread safety.
-  virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord& groundPt, const std::vector<double>& adjustments,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
-      csm::WarningList* warnings = NULL) const;
+  virtual csm::ImageCoord groundToImage (
+      const csm::EcefCoord &groundPt, const std::vector<double> &adjustments,
+      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
+      csm::WarningList *warnings = NULL) const;
 
-  void reconstructSensorDistortion(double& focalX, double& focalY,
-                                   const double& desiredPrecision) const;
+  void reconstructSensorDistortion (double &focalX, double &focalY,
+                                    const double &desiredPrecision) const;
 
-  void getQuaternions(const double& time, double quaternion[4]) const;
+  void getQuaternions (const double &time, double quaternion[4]) const;
 
   // This method computes the imaging locus.
   // imaging locus : set of ground points associated with an image pixel.
-  void losToEcf(
-      const double& line,              // CSM image convention
-      const double& sample,            //    UL pixel center == (0.5, 0.5)
-      const std::vector<double>& adj,  // Parameter Adjustments for partials
-      double& xc,                      // output sensor x coordinate
-      double& yc,                      // output sensor y coordinate
-      double& zc,                      // output sensor z coordinate
-      double& vx,                      // output sensor x velocity
-      double& vy,                      // output sensor y velocity
-      double& vz,                      // output sensor z cvelocity
-      double& bodyFixedX,              // output line-of-sight x coordinate
-      double& bodyFixedY,              // output line-of-sight y coordinate
-      double& bodyFixedZ) const;
+  void losToEcf (
+      const double &line,             // CSM image convention
+      const double &sample,           //    UL pixel center == (0.5, 0.5)
+      const std::vector<double> &adj, // Parameter Adjustments for partials
+      double &xc,                     // output sensor x coordinate
+      double &yc,                     // output sensor y coordinate
+      double &zc,                     // output sensor z coordinate
+      double &vx,                     // output sensor x velocity
+      double &vy,                     // output sensor y velocity
+      double &vz,                     // output sensor z cvelocity
+      double &bodyFixedX,             // output line-of-sight x coordinate
+      double &bodyFixedY,             // output line-of-sight y coordinate
+      double &bodyFixedZ) const;
 
   // Computes the LOS correction due to light aberration
-  void lightAberrationCorr(const double& vx, const double& vy, const double& vz,
-                           const double& xl, const double& yl, const double& zl,
-                           double& dxl, double& dyl, double& dzl) const;
+  void lightAberrationCorr (const double &vx, const double &vy,
+                            const double &vz, const double &xl,
+                            const double &yl, const double &zl, double &dxl,
+                            double &dyl, double &dzl) const;
 
   // Intersects a LOS at a specified height above the ellipsoid.
-  void losEllipsoidIntersect(const double& height, const double& xc,
-                             const double& yc, const double& zc,
-                             const double& xl, const double& yl,
-                             const double& zl, double& x, double& y, double& z,
-                             double& achieved_precision,
-                             const double& desired_precision) const;
+  void losEllipsoidIntersect (const double &height, const double &xc,
+                              const double &yc, const double &zc,
+                              const double &xl, const double &yl,
+                              const double &zl, double &x, double &y,
+                              double &z, double &achieved_precision,
+                              const double &desired_precision) const;
 
   // Intersects the los with a specified plane.
-  void losPlaneIntersect(
-      const double& xc,  // input: camera x coordinate
-      const double& yc,  // input: camera y coordinate
-      const double& zc,  // input: camera z coordinate
-      const double& xl,  // input: component x image ray
-      const double& yl,  // input: component y image ray
-      const double& zl,  // input: component z image ray
-      double& x,         // input/output: ground x coordinate
-      double& y,         // input/output: ground y coordinate
-      double& z,         // input/output: ground z coordinate
-      int& mode) const;  // input: -1 fixed component to be computed
-                         //         0(X), 1(Y), or 2(Z) fixed
-                         // output: 0(X), 1(Y), or 2(Z) fixed
+  void losPlaneIntersect (
+      const double &xc, // input: camera x coordinate
+      const double &yc, // input: camera y coordinate
+      const double &zc, // input: camera z coordinate
+      const double &xl, // input: component x image ray
+      const double &yl, // input: component y image ray
+      const double &zl, // input: component z image ray
+      double &x,        // input/output: ground x coordinate
+      double &y,        // input/output: ground y coordinate
+      double &z,        // input/output: ground z coordinate
+      int &mode) const; // input: -1 fixed component to be computed
+                        //         0(X), 1(Y), or 2(Z) fixed
+                        // output: 0(X), 1(Y), or 2(Z) fixed
   // Intersects a los associated with an image coordinate with a specified
   // plane.
-  void imageToPlane(const double& line,    // CSM Origin UL corner of UL pixel
-                    const double& sample,  // CSM Origin UL corner of UL pixel
-                    const double& height, const std::vector<double>& adj,
-                    double& x, double& y, double& z, int& mode) const;
+  void imageToPlane (const double &line,   // CSM Origin UL corner of UL pixel
+                     const double &sample, // CSM Origin UL corner of UL pixel
+                     const double &height, const std::vector<double> &adj,
+                     double &x, double &y, double &z, int &mode) const;
 
   // determines the sensor velocity accounting for parameter adjustments.
-  void getAdjSensorPosVel(const double& time, const std::vector<double>& adj,
-                          double& xc, double& yc, double& zc, double& vx,
-                          double& vy, double& vz) const;
+  void getAdjSensorPosVel (const double &time, const std::vector<double> &adj,
+                           double &xc, double &yc, double &zc, double &vx,
+                           double &vy, double &vz) const;
 
   // Computes the imaging locus that would view a ground point at a specific
   // time. Computationally, this is the opposite of losToEcf.
-  std::vector<double> computeDetectorView(
-      const double& time,                 // The time to use the EO at
-      const csm::EcefCoord& groundPoint,  // The ground coordinate
-      const std::vector<double>& adj      // Parameter Adjustments for partials
+  std::vector<double> computeDetectorView (
+      const double &time,                // The time to use the EO at
+      const csm::EcefCoord &groundPoint, // The ground coordinate
+      const std::vector<double> &adj     // Parameter Adjustments for partials
       ) const;
 
-  // The linear approximation for the sensor model is used as the starting point
-  // for iterative rigorous calculations.
-  void computeLinearApproximation(const csm::EcefCoord& gp,
-                                  csm::ImageCoord& ip) const;
+  // The linear approximation for the sensor model is used as the starting
+  // point for iterative rigorous calculations.
+  void computeLinearApproximation (const csm::EcefCoord &gp,
+                                   csm::ImageCoord &ip) const;
 
   // Initial setup of the linear approximation
-  void setLinearApproximation();
+  void setLinearApproximation ();
 
   // Compute the determinant of a 3x3 matrix
-  double determinant3x3(double mat[9]) const;
+  double determinant3x3 (double mat[9]) const;
 
-  csm::NoCorrelationModel _no_corr_model;  // A way to report no correlation
-                                           // between images is supported
+  csm::NoCorrelationModel _no_corr_model; // A way to report no correlation
+                                          // between images is supported
   std::vector<double>
-      _no_adjustment;  // A vector of zeros indicating no internal adjustment
+      _no_adjustment; // A vector of zeros indicating no internal adjustment
 
   // The following support the linear approximation of the sensor model
   double _u0;
@@ -1000,7 +1012,7 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   double _dv_dx;
   double _dv_dy;
   double _dv_dz;
-  bool _linear;  // flag indicating if linear approximation is useful.
+  bool _linear; // flag indicating if linear approximation is useful.
 };
 
 #endif
