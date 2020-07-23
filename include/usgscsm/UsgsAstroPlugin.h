@@ -23,29 +23,36 @@ class UsgsAstroPlugin : public csm::Plugin {
   virtual size_t getNumModels() const;
   virtual std::string getModelName(size_t modelIndex) const;
   virtual std::string getModelFamily(size_t modelIndex) const;
-  virtual csm::Version getModelVersion(const std::string &modelName) const;
+  virtual csm::Version getModelVersion(const std::string& modelName) const;
   virtual bool canModelBeConstructedFromState(
-      const std::string &modelName, const std::string &modelState,
-      csm::WarningList *warnings = NULL) const;
+      const std::string& modelName,
+      const std::string& modelState,
+      csm::WarningList* warnings = NULL) const;
   virtual bool canModelBeConstructedFromISD(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
-  virtual csm::Model *constructModelFromState(
-      const std::string &modelState, csm::WarningList *warnings = NULL) const;
-  virtual csm::Model *constructModelFromISD(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
+      const csm::Isd& imageSupportData,
+      const std::string& modelName,
+      csm::WarningList* warnings = NULL) const;
+  virtual csm::Model* constructModelFromState(
+      const std::string& modelState,
+      csm::WarningList* warnings = NULL) const;
+  virtual csm::Model* constructModelFromISD(
+      const csm::Isd& imageSupportData,
+      const std::string& modelName,
+      csm::WarningList* warnings = NULL) const;
   virtual std::string getModelNameFromModelState(
-      const std::string &modelState, csm::WarningList *warnings = NULL) const;
+      const std::string& modelState,
+      csm::WarningList* warnings = NULL) const;
   virtual bool canISDBeConvertedToModelState(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
+      const csm::Isd& imageSupportData,
+      const std::string& modelName,
+      csm::WarningList* warnings = NULL) const;
   virtual std::string convertISDToModelState(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
+      const csm::Isd& imageSupportData,
+      const std::string& modelName,
+      csm::WarningList* warnings = NULL) const;
 
   std::string loadImageSupportData(
-      const csm::Isd &imageSupportDataOriginal) const;
+      const csm::Isd& imageSupportDataOriginal) const;
 
   // TODO when implementing, add any other necessary members.
 
@@ -56,7 +63,7 @@ class UsgsAstroPlugin : public csm::Plugin {
   static const std::string _RELEASE_DATE;
   static const int _N_SENSOR_MODELS;
 
-  typedef csm::Model *(*sensorConstructor)(void);
+  typedef csm::Model* (*sensorConstructor)(void);
   static std::map<std::string, sensorConstructor> MODELS;
   std::shared_ptr<spdlog::logger> m_logger;
 };

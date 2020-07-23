@@ -18,7 +18,8 @@
 #include <spdlog/sinks/ostream_sink.h>
 
 // Should this be positioned somewhere in the public API?
-inline void jsonToIsd(nlohmann::json &object, csm::Isd &isd,
+inline void jsonToIsd(nlohmann::json& object,
+                      csm::Isd& isd,
                       std::string prefix = "") {
   for (nlohmann::json::iterator it = object.begin(); it != object.end(); ++it) {
     nlohmann::json jsonValue = it.value();
@@ -39,7 +40,7 @@ inline void jsonToIsd(nlohmann::json &object, csm::Isd &isd,
 class FrameSensorModel : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroFrameSensorModel *sensorModel;
+  UsgsAstroFrameSensorModel* sensorModel;
 
   void SetUp() override {
     sensorModel = NULL;
@@ -47,9 +48,9 @@ class FrameSensorModel : public ::testing::Test {
     isd.setFilename("data/simpleFramerISD.img");
     UsgsAstroPlugin frameCameraPlugin;
 
-    csm::Model *model = frameCameraPlugin.constructModelFromISD(
+    csm::Model* model = frameCameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_FRAME_SENSOR_MODEL");
-    sensorModel = dynamic_cast<UsgsAstroFrameSensorModel *>(model);
+    sensorModel = dynamic_cast<UsgsAstroFrameSensorModel*>(model);
 
     ASSERT_NE(sensorModel, nullptr);
   }
@@ -65,7 +66,7 @@ class FrameSensorModel : public ::testing::Test {
 class FrameSensorModelLogging : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroFrameSensorModel *sensorModel;
+  UsgsAstroFrameSensorModel* sensorModel;
   std::ostringstream oss;
 
   void SetUp() override {
@@ -74,9 +75,9 @@ class FrameSensorModelLogging : public ::testing::Test {
     isd.setFilename("data/simpleFramerISD.img");
     UsgsAstroPlugin frameCameraPlugin;
 
-    csm::Model *model = frameCameraPlugin.constructModelFromISD(
+    csm::Model* model = frameCameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_FRAME_SENSOR_MODEL");
-    sensorModel = dynamic_cast<UsgsAstroFrameSensorModel *>(model);
+    sensorModel = dynamic_cast<UsgsAstroFrameSensorModel*>(model);
 
     ASSERT_NE(sensorModel, nullptr);
 
@@ -108,7 +109,7 @@ class FrameSensorModelLogging : public ::testing::Test {
 class OrbitalFrameSensorModel : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroFrameSensorModel *sensorModel;
+  UsgsAstroFrameSensorModel* sensorModel;
 
   void SetUp() override {
     sensorModel = NULL;
@@ -116,9 +117,9 @@ class OrbitalFrameSensorModel : public ::testing::Test {
     isd.setFilename("data/orbitalFramer.img");
     UsgsAstroPlugin frameCameraPlugin;
 
-    csm::Model *model = frameCameraPlugin.constructModelFromISD(
+    csm::Model* model = frameCameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_FRAME_SENSOR_MODEL");
-    sensorModel = dynamic_cast<UsgsAstroFrameSensorModel *>(model);
+    sensorModel = dynamic_cast<UsgsAstroFrameSensorModel*>(model);
 
     ASSERT_NE(sensorModel, nullptr);
   }
@@ -153,7 +154,7 @@ class FramerParameterizedTest
  protected:
   csm::Isd isd;
 
-  std::string printIsd(csm::Isd &localIsd) {
+  std::string printIsd(csm::Isd& localIsd) {
     std::string str;
     std::multimap<std::string, std::string> isdmap = localIsd.parameters();
     for (auto it = isdmap.begin(); it != isdmap.end(); ++it) {
@@ -163,13 +164,13 @@ class FramerParameterizedTest
     }
     return str;
   }
-  UsgsAstroFrameSensorModel *createModel(csm::Isd &modifiedIsd) {
+  UsgsAstroFrameSensorModel* createModel(csm::Isd& modifiedIsd) {
     UsgsAstroPlugin frameCameraPlugin;
-    csm::Model *model = frameCameraPlugin.constructModelFromISD(
+    csm::Model* model = frameCameraPlugin.constructModelFromISD(
         modifiedIsd, "USGS_ASTRO_FRAME_SENSOR_MODEL");
 
-    UsgsAstroFrameSensorModel *sensorModel =
-        dynamic_cast<UsgsAstroFrameSensorModel *>(model);
+    UsgsAstroFrameSensorModel* sensorModel =
+        dynamic_cast<UsgsAstroFrameSensorModel*>(model);
 
     if (sensorModel)
       return sensorModel;
@@ -183,14 +184,14 @@ class FramerParameterizedTest
 class FrameStateTest : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroFrameSensorModel *createModifiedStateSensorModel(std::string key,
+  UsgsAstroFrameSensorModel* createModifiedStateSensorModel(std::string key,
                                                             double newValue) {
     UsgsAstroPlugin cameraPlugin;
-    csm::Model *model = cameraPlugin.constructModelFromISD(
+    csm::Model* model = cameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_FRAME_SENSOR_MODEL");
 
-    UsgsAstroFrameSensorModel *sensorModel =
-        dynamic_cast<UsgsAstroFrameSensorModel *>(model);
+    UsgsAstroFrameSensorModel* sensorModel =
+        dynamic_cast<UsgsAstroFrameSensorModel*>(model);
     if (sensorModel) {
       sensorModel->getModelState();
       std::string modelState = sensorModel->getModelState();
@@ -212,7 +213,7 @@ class FrameStateTest : public ::testing::Test {
 class ConstVelocityLineScanSensorModel : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroLsSensorModel *sensorModel;
+  UsgsAstroLsSensorModel* sensorModel;
 
   void SetUp() override {
     sensorModel = NULL;
@@ -220,9 +221,9 @@ class ConstVelocityLineScanSensorModel : public ::testing::Test {
     isd.setFilename("data/constVelocityLineScan.img");
     UsgsAstroPlugin cameraPlugin;
 
-    csm::Model *model = cameraPlugin.constructModelFromISD(
+    csm::Model* model = cameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_LINE_SCANNER_SENSOR_MODEL");
-    sensorModel = dynamic_cast<UsgsAstroLsSensorModel *>(model);
+    sensorModel = dynamic_cast<UsgsAstroLsSensorModel*>(model);
 
     ASSERT_NE(sensorModel, nullptr);
   }
@@ -238,7 +239,7 @@ class ConstVelocityLineScanSensorModel : public ::testing::Test {
 class OrbitalLineScanSensorModel : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroLsSensorModel *sensorModel;
+  UsgsAstroLsSensorModel* sensorModel;
 
   void SetUp() override {
     sensorModel = NULL;
@@ -246,9 +247,9 @@ class OrbitalLineScanSensorModel : public ::testing::Test {
     isd.setFilename("data/orbitalLineScan.img");
     UsgsAstroPlugin cameraPlugin;
 
-    csm::Model *model = cameraPlugin.constructModelFromISD(
+    csm::Model* model = cameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_LINE_SCANNER_SENSOR_MODEL");
-    sensorModel = dynamic_cast<UsgsAstroLsSensorModel *>(model);
+    sensorModel = dynamic_cast<UsgsAstroLsSensorModel*>(model);
 
     ASSERT_NE(sensorModel, nullptr);
   }
@@ -264,8 +265,8 @@ class OrbitalLineScanSensorModel : public ::testing::Test {
 class TwoLineScanSensorModels : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroLsSensorModel *sensorModel1;
-  UsgsAstroLsSensorModel *sensorModel2;
+  UsgsAstroLsSensorModel* sensorModel1;
+  UsgsAstroLsSensorModel* sensorModel2;
 
   void SetUp() override {
     sensorModel1 = nullptr;
@@ -274,12 +275,12 @@ class TwoLineScanSensorModels : public ::testing::Test {
     isd.setFilename("data/orbitalLineScan.img");
     UsgsAstroPlugin cameraPlugin;
 
-    csm::Model *model1 = cameraPlugin.constructModelFromISD(
+    csm::Model* model1 = cameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_LINE_SCANNER_SENSOR_MODEL");
-    sensorModel1 = dynamic_cast<UsgsAstroLsSensorModel *>(model1);
-    csm::Model *model2 = cameraPlugin.constructModelFromISD(
+    sensorModel1 = dynamic_cast<UsgsAstroLsSensorModel*>(model1);
+    csm::Model* model2 = cameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_LINE_SCANNER_SENSOR_MODEL");
-    sensorModel2 = dynamic_cast<UsgsAstroLsSensorModel *>(model2);
+    sensorModel2 = dynamic_cast<UsgsAstroLsSensorModel*>(model2);
 
     ASSERT_NE(sensorModel1, nullptr);
     ASSERT_NE(sensorModel2, nullptr);
@@ -311,7 +312,7 @@ class SarIsdTest : public ::testing::Test {
 class SarSensorModel : public ::testing::Test {
  protected:
   csm::Isd isd;
-  UsgsAstroSarSensorModel *sensorModel;
+  UsgsAstroSarSensorModel* sensorModel;
 
   void SetUp() override {
     sensorModel = NULL;
@@ -319,9 +320,9 @@ class SarSensorModel : public ::testing::Test {
     isd.setFilename("data/orbitalSar.img");
     UsgsAstroPlugin sarCameraPlugin;
 
-    csm::Model *model = sarCameraPlugin.constructModelFromISD(
+    csm::Model* model = sarCameraPlugin.constructModelFromISD(
         isd, "USGS_ASTRO_SAR_SENSOR_MODEL");
-    sensorModel = dynamic_cast<UsgsAstroSarSensorModel *>(model);
+    sensorModel = dynamic_cast<UsgsAstroSarSensorModel*>(model);
     ASSERT_NE(sensorModel, nullptr);
   }
 

@@ -629,8 +629,10 @@ void UsgsAstroLsSensorModel::updateState() {
 // UsgsAstroLsSensorModel::groundToImage
 //***************************************************************************
 csm::ImageCoord UsgsAstroLsSensorModel::groundToImage(
-    const csm::EcefCoord& ground_pt, double desired_precision,
-    double* achieved_precision, csm::WarningList* warnings) const {
+    const csm::EcefCoord& ground_pt,
+    double desired_precision,
+    double* achieved_precision,
+    csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Computing groundToImage(No adjustments) for {}, {}, {}, with desired "
       "precision {}",
@@ -645,8 +647,10 @@ csm::ImageCoord UsgsAstroLsSensorModel::groundToImage(
 // UsgsAstroLsSensorModel::groundToImage (internal version)
 //***************************************************************************
 csm::ImageCoord UsgsAstroLsSensorModel::groundToImage(
-    const csm::EcefCoord& groundPt, const std::vector<double>& adj,
-    double desiredPrecision, double* achievedPrecision,
+    const csm::EcefCoord& groundPt,
+    const std::vector<double>& adj,
+    double desiredPrecision,
+    double* achievedPrecision,
     csm::WarningList* warnings) const {
   // Search for the line, sample coordinate that viewed a given ground point.
   // This method first uses a linear approximation to get an initial point.
@@ -722,8 +726,10 @@ csm::ImageCoord UsgsAstroLsSensorModel::groundToImage(
 // UsgsAstroLsSensorModel::groundToImage
 //***************************************************************************
 csm::ImageCoordCovar UsgsAstroLsSensorModel::groundToImage(
-    const csm::EcefCoordCovar& groundPt, double desired_precision,
-    double* achieved_precision, csm::WarningList* warnings) const {
+    const csm::EcefCoordCovar& groundPt,
+    double desired_precision,
+    double* achieved_precision,
+    csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Computing groundToImage(Covar) for {}, {}, {}, with desired precision "
       "{}",
@@ -781,8 +787,11 @@ csm::ImageCoordCovar UsgsAstroLsSensorModel::groundToImage(
 // UsgsAstroLsSensorModel::imageToGround
 //***************************************************************************
 csm::EcefCoord UsgsAstroLsSensorModel::imageToGround(
-    const csm::ImageCoord& image_pt, double height, double desired_precision,
-    double* achieved_precision, csm::WarningList* warnings) const {
+    const csm::ImageCoord& image_pt,
+    double height,
+    double desired_precision,
+    double* achieved_precision,
+    csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Computing imageToGround for {}, {}, {}, with desired precision {}",
       image_pt.line, image_pt.samp, height, desired_precision);
@@ -798,7 +807,8 @@ csm::EcefCoord UsgsAstroLsSensorModel::imageToGround(
   losEllipsoidIntersect(height, xc, yc, zc, xl, yl, zl, x, y, z, aPrec,
                         desired_precision);
 
-  if (achieved_precision) *achieved_precision = aPrec;
+  if (achieved_precision)
+    *achieved_precision = aPrec;
 
   if (warnings && (desired_precision > 0.0) && (aPrec > desired_precision)) {
     warnings->push_back(csm::Warning(
@@ -819,7 +829,8 @@ csm::EcefCoord UsgsAstroLsSensorModel::imageToGround(
 // UsgsAstroLineScannerSensorModel::determineSensorCovarianceInImageSpace
 //***************************************************************************
 void UsgsAstroLsSensorModel::determineSensorCovarianceInImageSpace(
-    csm::EcefCoord& gp, double sensor_cov[4]) const {
+    csm::EcefCoord& gp,
+    double sensor_cov[4]) const {
   MESSAGE_LOG("Calculating determineSensorCovarianceInImageSpace for {} {} {}",
               gp.x, gp.y, gp.z)
 
@@ -852,8 +863,11 @@ void UsgsAstroLsSensorModel::determineSensorCovarianceInImageSpace(
 // UsgsAstroLsSensorModel::imageToGround
 //***************************************************************************
 csm::EcefCoordCovar UsgsAstroLsSensorModel::imageToGround(
-    const csm::ImageCoordCovar& image_pt, double height, double heightVariance,
-    double desired_precision, double* achieved_precision,
+    const csm::ImageCoordCovar& image_pt,
+    double height,
+    double heightVariance,
+    double desired_precision,
+    double* achieved_precision,
     csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Calculating imageToGround (with error propagation) for {}, {}, {} with "
@@ -939,8 +953,10 @@ csm::EcefCoordCovar UsgsAstroLsSensorModel::imageToGround(
 // UsgsAstroLsSensorModel::imageToProximateImagingLocus
 //***************************************************************************
 csm::EcefLocus UsgsAstroLsSensorModel::imageToProximateImagingLocus(
-    const csm::ImageCoord& image_pt, const csm::EcefCoord& ground_pt,
-    double desired_precision, double* achieved_precision,
+    const csm::ImageCoord& image_pt,
+    const csm::EcefCoord& ground_pt,
+    double desired_precision,
+    double* achieved_precision,
     csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Computing imageToProximateImagingLocus (ground {}, {}, {}) for image "
@@ -1004,8 +1020,10 @@ csm::EcefLocus UsgsAstroLsSensorModel::imageToProximateImagingLocus(
 // UsgsAstroLsSensorModel::imageToRemoteImagingLocus
 //***************************************************************************
 csm::EcefLocus UsgsAstroLsSensorModel::imageToRemoteImagingLocus(
-    const csm::ImageCoord& image_pt, double desired_precision,
-    double* achieved_precision, csm::WarningList* warnings) const {
+    const csm::ImageCoord& image_pt,
+    double desired_precision,
+    double* achieved_precision,
+    csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Calculating imageToRemoteImagingLocus for point {}, {} with desired "
       "precision {}",
@@ -1061,8 +1079,11 @@ std::vector<double> UsgsAstroLsSensorModel::computeGroundPartials(
 // UsgsAstroLsSensorModel::computeSensorPartials
 //***************************************************************************
 csm::RasterGM::SensorPartials UsgsAstroLsSensorModel::computeSensorPartials(
-    int index, const csm::EcefCoord& ground_pt, double desired_precision,
-    double* achieved_precision, csm::WarningList* warnings) const {
+    int index,
+    const csm::EcefCoord& ground_pt,
+    double desired_precision,
+    double* achieved_precision,
+    csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Calculating computeSensorPartials for ground point {}, {}, {} with "
       "desired precision {}",
@@ -1081,8 +1102,11 @@ csm::RasterGM::SensorPartials UsgsAstroLsSensorModel::computeSensorPartials(
 // UsgsAstroLsSensorModel::computeSensorPartials
 //***************************************************************************
 csm::RasterGM::SensorPartials UsgsAstroLsSensorModel::computeSensorPartials(
-    int index, const csm::ImageCoord& image_pt, const csm::EcefCoord& ground_pt,
-    double desired_precision, double* achieved_precision,
+    int index,
+    const csm::ImageCoord& image_pt,
+    const csm::EcefCoord& ground_pt,
+    double desired_precision,
+    double* achieved_precision,
     csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Calculating computeSensorPartials (with image points {}, {}) for ground "
@@ -1110,8 +1134,10 @@ csm::RasterGM::SensorPartials UsgsAstroLsSensorModel::computeSensorPartials(
 //***************************************************************************
 std::vector<csm::RasterGM::SensorPartials>
 UsgsAstroLsSensorModel::computeAllSensorPartials(
-    const csm::EcefCoord& ground_pt, csm::param::Set pSet,
-    double desired_precision, double* achieved_precision,
+    const csm::EcefCoord& ground_pt,
+    csm::param::Set pSet,
+    double desired_precision,
+    double* achieved_precision,
     csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Computing computeAllSensorPartials for ground point {}, {}, {} with "
@@ -1129,8 +1155,11 @@ UsgsAstroLsSensorModel::computeAllSensorPartials(
 //***************************************************************************
 std::vector<csm::RasterGM::SensorPartials>
 UsgsAstroLsSensorModel::computeAllSensorPartials(
-    const csm::ImageCoord& image_pt, const csm::EcefCoord& ground_pt,
-    csm::param::Set pSet, double desired_precision, double* achieved_precision,
+    const csm::ImageCoord& image_pt,
+    const csm::EcefCoord& ground_pt,
+    csm::param::Set pSet,
+    double desired_precision,
+    double* achieved_precision,
     csm::WarningList* warnings) const {
   MESSAGE_LOG(
       "Computing computeAllSensorPartials for image {} {} and ground {}, {}, "
@@ -1165,7 +1194,8 @@ double UsgsAstroLsSensorModel::getParameterCovariance(int index1,
 //***************************************************************************
 // UsgsAstroLsSensorModel::setParameterCovariance
 //***************************************************************************
-void UsgsAstroLsSensorModel::setParameterCovariance(int index1, int index2,
+void UsgsAstroLsSensorModel::setParameterCovariance(int index1,
+                                                    int index2,
                                                     double covariance) {
   int index = UsgsAstroLsSensorModel::NUM_PARAMETERS * index1 + index2;
 
@@ -1564,7 +1594,9 @@ std::string UsgsAstroLsSensorModel::getGeometricCorrectionName(
 // UsgsAstroLsSensorModel::setGeometricCorrectionSwitch
 //***************************************************************************
 void UsgsAstroLsSensorModel::setGeometricCorrectionSwitch(
-    int index, bool value, csm::param::Type pType)
+    int index,
+    bool value,
+    csm::param::Type pType)
 
 {
   MESSAGE_LOG(
@@ -1594,7 +1626,8 @@ bool UsgsAstroLsSensorModel::getGeometricCorrectionSwitch(int index) const {
 // UsgsAstroLsSensorModel::getCrossCovarianceMatrix
 //***************************************************************************
 std::vector<double> UsgsAstroLsSensorModel::getCrossCovarianceMatrix(
-    const csm::GeometricModel& comparisonModel, csm::param::Set pSet,
+    const csm::GeometricModel& comparisonModel,
+    csm::param::Set pSet,
     const csm::GeometricModel::GeometricModelList& otherModels) const {
   // Return covariance matrix
   if (&comparisonModel == this) {
@@ -1632,7 +1665,8 @@ const csm::CorrelationModel& UsgsAstroLsSensorModel::getCorrelationModel()
 // UsgsAstroLsSensorModel::getUnmodeledCrossCovariance
 //***************************************************************************
 std::vector<double> UsgsAstroLsSensorModel::getUnmodeledCrossCovariance(
-    const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const {
+    const csm::ImageCoord& pt1,
+    const csm::ImageCoord& pt2) const {
   // No unmodeled error
   return std::vector<double>(4, 0.0);
 }
@@ -1712,7 +1746,8 @@ void UsgsAstroLsSensorModel::setEllipsoid(const csm::Ellipsoid& ellipsoid) {
 // UsgsAstroLineScannerSensorModel::getValue
 //***************************************************************************
 double UsgsAstroLsSensorModel::getValue(
-    int index, const std::vector<double>& adjustments) const {
+    int index,
+    const std::vector<double>& adjustments) const {
   return m_currentParameterValue[index] + adjustments[index];
 }
 
@@ -1722,9 +1757,11 @@ double UsgsAstroLsSensorModel::getValue(
 void UsgsAstroLsSensorModel::getQuaternions(const double& time,
                                             double q[4]) const {
   int nOrder = 8;
-  if (m_platformFlag == 0) nOrder = 4;
+  if (m_platformFlag == 0)
+    nOrder = 4;
   int nOrderQuat = nOrder;
-  if (m_numQuaternions < 6 && nOrder == 8) nOrderQuat = 4;
+  if (m_numQuaternions < 6 && nOrder == 8)
+    nOrderQuat = 4;
 
   MESSAGE_LOG(
       "Calculating getQuaternions for time {} with {}"
@@ -1738,7 +1775,8 @@ void UsgsAstroLsSensorModel::getQuaternions(const double& time,
 // UsgsAstroLineScannerSensorModel::calculateAttitudeCorrection
 //***************************************************************************
 void UsgsAstroLsSensorModel::calculateAttitudeCorrection(
-    const double& time, const std::vector<double>& adj,
+    const double& time,
+    const std::vector<double>& adj,
     double attCorr[9]) const {
   MESSAGE_LOG(
       "Computing calculateAttitudeCorrection (with adjustment)"
@@ -1862,10 +1900,15 @@ void UsgsAstroLsSensorModel::losToEcf(
 //***************************************************************************
 // UsgsAstroLsSensorModel::lightAberrationCorr
 //**************************************************************************
-void UsgsAstroLsSensorModel::lightAberrationCorr(
-    const double& vx, const double& vy, const double& vz, const double& xl,
-    const double& yl, const double& zl, double& dxl, double& dyl,
-    double& dzl) const {
+void UsgsAstroLsSensorModel::lightAberrationCorr(const double& vx,
+                                                 const double& vy,
+                                                 const double& vz,
+                                                 const double& xl,
+                                                 const double& yl,
+                                                 const double& zl,
+                                                 double& dxl,
+                                                 double& dyl,
+                                                 double& dzl) const {
   MESSAGE_LOG(
       "Computing lightAberrationCorr for camera velocity"
       "{} {} {} and image ray {} {} {}",
@@ -1917,9 +1960,17 @@ void UsgsAstroLsSensorModel::lightAberrationCorr(
 // UsgsAstroLsSensorModel::losEllipsoidIntersect
 //**************************************************************************
 void UsgsAstroLsSensorModel::losEllipsoidIntersect(
-    const double& height, const double& xc, const double& yc, const double& zc,
-    const double& xl, const double& yl, const double& zl, double& x, double& y,
-    double& z, double& achieved_precision,
+    const double& height,
+    const double& xc,
+    const double& yc,
+    const double& zc,
+    const double& xl,
+    const double& yl,
+    const double& zl,
+    double& x,
+    double& y,
+    double& z,
+    double& achieved_precision,
     const double& desired_precision) const {
   MESSAGE_LOG(
       "Computing losEllipsoidIntersect for camera position "
@@ -1964,7 +2015,8 @@ void UsgsAstroLsSensorModel::losEllipsoidIntersect(
   sTerm = sqrt(quadTerm);
   scale = (-bt - sTerm);
   scale1 = (-bt + sTerm);
-  if (fabs(scale1) < fabs(scale)) scale = scale1;
+  if (fabs(scale1) < fabs(scale))
+    scale = scale1;
   scale /= (2.0 * at);
   x = xc + scale * xl;
   y = yc + scale * yl;
@@ -2050,8 +2102,12 @@ void UsgsAstroLsSensorModel::losPlaneIntersect(
 void UsgsAstroLsSensorModel::imageToPlane(
     const double& line,    // CSM Origin UL corner of UL pixel
     const double& sample,  // CSM Origin UL corner of UL pixel
-    const double& height, const std::vector<double>& adj, double& x, double& y,
-    double& z, int& mode) const {
+    const double& height,
+    const std::vector<double>& adj,
+    double& x,
+    double& y,
+    double& z,
+    int& mode) const {
   MESSAGE_LOG("Computing imageToPlane")
   //# func_description
   //  Computes ground coordinates by intersecting image ray with
@@ -2076,14 +2132,18 @@ void UsgsAstroLsSensorModel::imageToPlane(
 //***************************************************************************
 void UsgsAstroLsSensorModel::getAdjSensorPosVel(const double& time,
                                                 const std::vector<double>& adj,
-                                                double& xc, double& yc,
-                                                double& zc, double& vx,
-                                                double& vy, double& vz) const {
+                                                double& xc,
+                                                double& yc,
+                                                double& zc,
+                                                double& vx,
+                                                double& vy,
+                                                double& vz) const {
   MESSAGE_LOG("Calculating getAdjSensorPosVel at time {}", time)
 
   // Sensor position and velocity (4th or 8th order Lagrange).
   int nOrder = 8;
-  if (m_platformFlag == 0) nOrder = 4;
+  if (m_platformFlag == 0)
+    nOrder = 4;
   double sensPosNom[3];
   lagrangeInterp(m_numPositions / 3, &m_positions[0], m_t0Ephem, m_dtEphem,
                  time, 3, nOrder, sensPosNom);
@@ -2098,7 +2158,8 @@ void UsgsAstroLsSensorModel::getAdjSensorPosVel(const double& time,
   double radMag =
       sqrt(sensPosNom[0] * sensPosNom[0] + sensPosNom[1] * sensPosNom[1] +
            sensPosNom[2] * sensPosNom[2]);
-  for (int i = 0; i < 3; i++) radialUnitVec[i] = sensPosNom[i] / radMag;
+  for (int i = 0; i < 3; i++)
+    radialUnitVec[i] = sensPosNom[i] / radMag;
   double crossTrackUnitVec[3];
   crossTrackUnitVec[0] =
       sensPosNom[1] * sensVelNom[2] - sensPosNom[2] * sensVelNom[1];
@@ -2109,7 +2170,8 @@ void UsgsAstroLsSensorModel::getAdjSensorPosVel(const double& time,
   double crossMag = sqrt(crossTrackUnitVec[0] * crossTrackUnitVec[0] +
                          crossTrackUnitVec[1] * crossTrackUnitVec[1] +
                          crossTrackUnitVec[2] * crossTrackUnitVec[2]);
-  for (int i = 0; i < 3; i++) crossTrackUnitVec[i] /= crossMag;
+  for (int i = 0; i < 3; i++)
+    crossTrackUnitVec[i] /= crossMag;
   double inTrackUnitVec[3];
   inTrackUnitVec[0] = crossTrackUnitVec[1] * radialUnitVec[2] -
                       crossTrackUnitVec[2] * radialUnitVec[1];
@@ -2159,7 +2221,8 @@ void UsgsAstroLsSensorModel::getAdjSensorPosVel(const double& time,
 // UsgsAstroLineScannerSensorModel::computeDetectorView
 //***************************************************************************
 std::vector<double> UsgsAstroLsSensorModel::computeDetectorView(
-    const double& time, const csm::EcefCoord& groundPoint,
+    const double& time,
+    const csm::EcefCoord& groundPoint,
     const std::vector<double>& adj) const {
   MESSAGE_LOG(
       "Computing computeDetectorView (with adjusments)"
@@ -2234,7 +2297,8 @@ std::vector<double> UsgsAstroLsSensorModel::computeDetectorView(
 // UsgsAstroLineScannerSensorModel::computeLinearApproximation
 //***************************************************************************
 void UsgsAstroLsSensorModel::computeLinearApproximation(
-    const csm::EcefCoord& gp, csm::ImageCoord& ip) const {
+    const csm::EcefCoord& gp,
+    csm::ImageCoord& ip) const {
   if (_linear) {
     ip.line = _u0 + _du_dx * gp.x + _du_dy * gp.y + _du_dz * gp.z;
     ip.samp = _v0 + _dv_dx * gp.x + _dv_dy * gp.y + _dv_dz * gp.z;
@@ -2243,11 +2307,15 @@ void UsgsAstroLsSensorModel::computeLinearApproximation(
     // don't let result go beyond the image border.
     double numRows = m_nLines;
     double numCols = m_nSamples;
-    if (ip.line < 0.0) ip.line = 0.0;
-    if (ip.line > numRows) ip.line = numRows;
+    if (ip.line < 0.0)
+      ip.line = 0.0;
+    if (ip.line > numRows)
+      ip.line = numRows;
 
-    if (ip.samp < 0.0) ip.samp = 0.0;
-    if (ip.samp > numCols) ip.samp = numCols;
+    if (ip.samp < 0.0)
+      ip.samp = 0.0;
+    if (ip.samp > numCols)
+      ip.samp = numCols;
     MESSAGE_LOG(
         "Computing computeLinearApproximation"
         "with linear approximation")
@@ -2409,7 +2477,8 @@ double UsgsAstroLsSensorModel::determinant3x3(double mat[9]) const {
 // UsgsAstroLineScannerSensorModel::constructStateFromIsd
 //***************************************************************************
 std::string UsgsAstroLsSensorModel::constructStateFromIsd(
-    const std::string imageSupportData, csm::WarningList* warnings) {
+    const std::string imageSupportData,
+    csm::WarningList* warnings) {
   json state = {};
   MESSAGE_LOG("Constructing state from Isd")
   // Instantiate UsgsAstroLineScanner sensor model

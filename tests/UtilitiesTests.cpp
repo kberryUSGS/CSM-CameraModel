@@ -158,7 +158,7 @@ TEST(UtilitiesTests, lagrangeInterp1Point) {
     lagrangeInterp(numTime, &singlePoint[0], startTime, delTime, time,
                    vectorLength, order, &interpPoint[0]);
     FAIL() << "Expected an error";
-  } catch (csm::Error &e) {
+  } catch (csm::Error& e) {
     EXPECT_EQ(e.getError(), csm::Error::INDEX_OUT_OF_RANGE);
   } catch (...) {
     FAIL() << "Expected csm INDEX_OUT_OF_RANGE error";

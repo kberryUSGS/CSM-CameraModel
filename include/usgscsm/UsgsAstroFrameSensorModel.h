@@ -22,28 +22,32 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
   UsgsAstroFrameSensorModel();
   ~UsgsAstroFrameSensorModel();
 
-  bool isValidModelState(const std::string &stringState,
-                         csm::WarningList *warnings);
-  bool isValidIsd(const std::string &stringIsd, csm::WarningList *warnings);
+  bool isValidModelState(const std::string& stringState,
+                         csm::WarningList* warnings);
+  bool isValidIsd(const std::string& stringIsd, csm::WarningList* warnings);
 
   virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord &groundPt, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
-  std::string constructStateFromIsd(const std::string &jsonIsd,
-                                    csm::WarningList *warnings);
+  std::string constructStateFromIsd(const std::string& jsonIsd,
+                                    csm::WarningList* warnings);
   void reset();
 
   virtual csm::ImageCoordCovar groundToImage(
-      const csm::EcefCoordCovar &groundPt, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::EcefCoordCovar& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord &ground_pt, const std::vector<double> &adjustments,
-      double desired_precision = 0.001, double *achieved_precision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::EcefCoord& ground_pt,
+      const std::vector<double>& adjustments,
+      double desired_precision = 0.001,
+      double* achieved_precision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   /**
    * This function determines if a sample, line intersects the target body and
@@ -56,26 +60,32 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    * @return @b vector<double> Returns the body-fixed X,Y,Z coordinates of the
    * intersection. If no intersection, returns a 3-element vector of 0's.
    */
-  virtual csm::EcefCoord imageToGround(const csm::ImageCoord &imagePt,
+  virtual csm::EcefCoord imageToGround(const csm::ImageCoord& imagePt,
                                        double height = 0.0,
                                        double desiredPrecision = 0.001,
-                                       double *achievedPrecision = NULL,
-                                       csm::WarningList *warnings = NULL) const;
+                                       double* achievedPrecision = NULL,
+                                       csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefCoordCovar imageToGround(
-      const csm::ImageCoordCovar &imagePt, double height, double heightVariance,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::ImageCoordCovar& imagePt,
+      double height,
+      double heightVariance,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefLocus imageToProximateImagingLocus(
-      const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::ImageCoord& imagePt,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual csm::EcefLocus imageToRemoteImagingLocus(
-      const csm::ImageCoord &imagePt, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::ImageCoord& imagePt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual csm::ImageCoord getImageStart() const;
 
@@ -96,9 +106,9 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    * the ground point.
    */
   virtual csm::EcefVector getIlluminationDirection(
-      const csm::EcefCoord &groundPt) const;
+      const csm::EcefCoord& groundPt) const;
 
-  virtual double getImageTime(const csm::ImageCoord &imagePt) const;
+  virtual double getImageTime(const csm::ImageCoord& imagePt) const;
 
   /**
    * Determines the body-fixed sensor position for the given image coordinate.
@@ -110,7 +120,7 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    * @throw csm::Error::BOUNDS "Image coordinate () out of bounds."
    */
   virtual csm::EcefCoord getSensorPosition(
-      const csm::ImageCoord &imagePt) const;
+      const csm::ImageCoord& imagePt) const;
 
   virtual csm::EcefCoord getSensorPosition(double time) const;
 
@@ -126,38 +136,48 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    */
 
   virtual csm::EcefVector getSensorVelocity(
-      const csm::ImageCoord &imagePt) const;
+      const csm::ImageCoord& imagePt) const;
 
   virtual csm::EcefVector getSensorVelocity(double time) const;
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::EcefCoord &groundPt,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      int index,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      int index,
+      const csm::ImageCoord& imagePt,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials(
-      const csm::EcefCoord &groundPt, csm::param::Set pSet = csm::param::VALID,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::EcefCoord& groundPt,
+      csm::param::Set pSet = csm::param::VALID,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials(
-      const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
-      csm::param::Set pSet = csm::param::VALID, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+      const csm::ImageCoord& imagePt,
+      const csm::EcefCoord& groundPt,
+      csm::param::Set pSet = csm::param::VALID,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
+      csm::WarningList* warnings = NULL) const;
 
   virtual std::vector<double> computeGroundPartials(
-      const csm::EcefCoord &groundPt) const;
+      const csm::EcefCoord& groundPt) const;
 
-  virtual const csm::CorrelationModel &getCorrelationModel() const;
+  virtual const csm::CorrelationModel& getCorrelationModel() const;
 
   virtual std::vector<double> getUnmodeledCrossCovariance(
-      const csm::ImageCoord &pt1, const csm::ImageCoord &pt2) const;
+      const csm::ImageCoord& pt1,
+      const csm::ImageCoord& pt2) const;
 
   // IMPLEMENT MODEL PURE VIRTUALS
   //---
@@ -192,8 +212,8 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
   //  This method may return an empty string if the ID is unknown.
   //<
 
-  virtual void setImageIdentifier(const std::string &imageId,
-                                  csm::WarningList *warnings = NULL);
+  virtual void setImageIdentifier(const std::string& imageId,
+                                  csm::WarningList* warnings = NULL);
   //> This method sets an identifier to uniquely indicate the imaging
   //  operation associated with this model.  Typically used for models
   //  whose initialization does not produce an adequate identifier.
@@ -272,7 +292,7 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
   //  current state.
   //<
 
-  virtual void replaceModelState(const std::string &argState);
+  virtual void replaceModelState(const std::string& argState);
   //> This method attempts to initialize the current model with the state
   //  given by argState.  The argState argument can be a string previously
   //  retrieved from the getModelState method.
@@ -292,14 +312,14 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
   //> This method returns the planetary ellipsoid.
   //<
 
-  virtual void setEllipsoid(const csm::Ellipsoid &ellipsoid);
+  virtual void setEllipsoid(const csm::Ellipsoid& ellipsoid);
   //> This method sets the planetary ellipsoid.
   //<
 
   // IMPLEMENT GEOMETRICMODEL PURE VIRTUALS
   // See GeometricModel.h for documentation
   virtual csm::EcefCoord getReferencePoint() const;
-  virtual void setReferencePoint(const csm::EcefCoord &groundPt);
+  virtual void setReferencePoint(const csm::EcefCoord& groundPt);
   virtual int getNumParameters() const;
   virtual std::string getParameterName(int index) const;
   virtual std::string getParameterUnits(int index) const;
@@ -311,27 +331,36 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
   virtual csm::param::Type getParameterType(int index) const;
   virtual void setParameterType(int index, csm::param::Type pType);
   virtual double getParameterCovariance(int index1, int index2) const;
-  virtual void setParameterCovariance(int index1, int index2,
+  virtual void setParameterCovariance(int index1,
+                                      int index2,
                                       double covariance);
   virtual int getNumGeometricCorrectionSwitches() const;
   virtual std::string getGeometricCorrectionName(int index) const;
-  virtual void setGeometricCorrectionSwitch(int index, bool value,
+  virtual void setGeometricCorrectionSwitch(int index,
+                                            bool value,
                                             csm::param::Type pType);
   virtual bool getGeometricCorrectionSwitch(int index) const;
   virtual std::vector<double> getCrossCovarianceMatrix(
-      const GeometricModel &comparisonModel,
+      const GeometricModel& comparisonModel,
       csm::param::Set pSet = csm::param::VALID,
-      const GeometricModelList &otherModels = GeometricModelList()) const;
+      const GeometricModelList& otherModels = GeometricModelList()) const;
   virtual std::shared_ptr<spdlog::logger> getLogger();
   virtual void setLogger(std::string logName);
-  double getValue(int index, const std::vector<double> &adjustments) const;
+  double getValue(int index, const std::vector<double>& adjustments) const;
   void calcRotationMatrix(double m[3][3]) const;
   void calcRotationMatrix(double m[3][3],
-                          const std::vector<double> &adjustments) const;
+                          const std::vector<double>& adjustments) const;
 
-  void losEllipsoidIntersect(double height, double xc, double yc, double zc,
-                             double xl, double yl, double zl, double &x,
-                             double &y, double &z) const;
+  void losEllipsoidIntersect(double height,
+                             double xc,
+                             double yc,
+                             double zc,
+                             double xl,
+                             double yl,
+                             double zl,
+                             double& x,
+                             double& y,
+                             double& z) const;
 
   static const std::string _SENSOR_MODEL_NAME;
 

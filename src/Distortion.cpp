@@ -3,7 +3,9 @@
 #include <Error.h>
 #include <string>
 
-void distortionJacobian(double x, double y, double *jacobian,
+void distortionJacobian(double x,
+                        double y,
+                        double* jacobian,
                         const std::vector<double> opticalDistCoeffs) {
   double d_dx[10];
   d_dx[0] = 0;
@@ -56,7 +58,10 @@ void distortionJacobian(double x, double y, double *jacobian,
  * @returns distortedPoint Newly adjusted focal plane coordinates as an x, y
  * tuple
  */
-void computeTransverseDistortion(double ux, double uy, double &dx, double &dy,
+void computeTransverseDistortion(double ux,
+                                 double uy,
+                                 double& dx,
+                                 double& dy,
                                  const std::vector<double> opticalDistCoeffs) {
   double f[10];
   f[0] = 1;
@@ -82,9 +87,13 @@ void computeTransverseDistortion(double ux, double uy, double &dx, double &dy,
   }
 }
 
-void removeDistortion(double dx, double dy, double &ux, double &uy,
+void removeDistortion(double dx,
+                      double dy,
+                      double& ux,
+                      double& uy,
                       const std::vector<double> opticalDistCoeffs,
-                      DistortionType distortionType, const double tolerance) {
+                      DistortionType distortionType,
+                      const double tolerance) {
   ux = dx;
   uy = dy;
 
@@ -300,10 +309,14 @@ void removeDistortion(double dx, double dy, double &ux, double &uy,
   }
 }
 
-void applyDistortion(double ux, double uy, double &dx, double &dy,
+void applyDistortion(double ux,
+                     double uy,
+                     double& dx,
+                     double& dy,
                      const std::vector<double> opticalDistCoeffs,
                      DistortionType distortionType,
-                     const double desiredPrecision, const double tolerance) {
+                     const double desiredPrecision,
+                     const double tolerance) {
   dx = ux;
   dy = uy;
 

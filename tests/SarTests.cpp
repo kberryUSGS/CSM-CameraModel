@@ -25,7 +25,7 @@ TEST_F(SarSensorModel, stateFromIsd) {
   try {
     stateString = sensorModel->constructStateFromIsd(isdString, &warnings);
   } catch (...) {
-    for (auto &warn : warnings) {
+    for (auto& warn : warnings) {
       std::cerr << "Warning in " << warn.getFunction() << std::endl;
       std::cerr << "  " << warn.getMessage() << std::endl;
     }

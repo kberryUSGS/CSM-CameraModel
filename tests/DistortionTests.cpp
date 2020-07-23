@@ -6,7 +6,8 @@
 
 // NOTE: The imagePt format is (Lines,Samples)
 
-INSTANTIATE_TEST_SUITE_P(JacobianTest, ImageCoordParameterizedTest,
+INSTANTIATE_TEST_SUITE_P(JacobianTest,
+                         ImageCoordParameterizedTest,
                          ::testing::Values(csm::ImageCoord(2.5, 2.5),
                                            csm::ImageCoord(7.5, 7.5)));
 

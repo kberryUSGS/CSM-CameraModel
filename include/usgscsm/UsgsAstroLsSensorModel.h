@@ -162,7 +162,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   // Core Photogrammetry
   //---
   virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord& groundPt, double desiredPrecision = 0.001,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
       double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
 
@@ -181,7 +182,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual csm::ImageCoordCovar groundToImage(
-      const csm::EcefCoordCovar& groundPt, double desiredPrecision = 0.001,
+      const csm::EcefCoordCovar& groundPt,
+      double desiredPrecision = 0.001,
       double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This method converts the given groundPt (x,y,z in ECEF meters and
@@ -221,8 +223,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual csm::EcefCoordCovar imageToGround(
-      const csm::ImageCoordCovar& imagePt, double height, double heightVariance,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
+      const csm::ImageCoordCovar& imagePt,
+      double height,
+      double heightVariance,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This method converts the given imagePt (line, sample in full image
   //  space pixels and corresponding 2x2 covariance in pixels squared)
@@ -243,8 +248,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual csm::EcefLocus imageToProximateImagingLocus(
-      const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
+      const csm::ImageCoord& imagePt,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This method, for the given imagePt (line, sample in full image space
   //  pixels), returns the position and direction of the imaging locus
@@ -267,7 +274,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual csm::EcefLocus imageToRemoteImagingLocus(
-      const csm::ImageCoord& imagePt, double desiredPrecision = 0.001,
+      const csm::ImageCoord& imagePt,
+      double desiredPrecision = 0.001,
       double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This method, for the given imagePt (line, sample in full image space
@@ -391,8 +399,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
+      int index,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes only
   //  the necessary inputs.  Some effieciency can be obtained by using the
@@ -421,8 +431,11 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
+      int index,
+      const csm::ImageCoord& imagePt,
+      const csm::EcefCoord& groundPt,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes
   //  an input image coordinate for efficiency.  Even more efficiency can
@@ -451,8 +464,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials(
-      const csm::EcefCoord& groundPt, csm::param::Set pSet = csm::param::VALID,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
+      const csm::EcefCoord& groundPt,
+      csm::param::Set pSet = csm::param::VALID,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes only
   //  the necessary inputs.  Some effieciency can be obtained by using the
@@ -486,8 +501,10 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual std::vector<csm::RasterGM::SensorPartials> computeAllSensorPartials(
-      const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-      csm::param::Set pSet = csm::param::VALID, double desiredPrecision = 0.001,
+      const csm::ImageCoord& imagePt,
+      const csm::EcefCoord& groundPt,
+      csm::param::Set pSet = csm::param::VALID,
+      double desiredPrecision = 0.001,
       double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
   //> This is one of two overloaded methods.  This method takes
@@ -553,7 +570,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //<
 
   virtual std::vector<double> getUnmodeledCrossCovariance(
-      const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const;
+      const csm::ImageCoord& pt1,
+      const csm::ImageCoord& pt2) const;
   //> This method returns the 2x2 line and sample cross covariance
   //  (in pixels squared) between the given imagePt1 and imagePt2 for any
   //  model error not accounted for by the model parameters.  The error is
@@ -690,7 +708,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  is indicated by specifying the samve value for index1 and index2.
   //<
 
-  virtual void setParameterCovariance(int index1, int index2,
+  virtual void setParameterCovariance(int index1,
+                                      int index2,
                                       double covariance);
   //> This method is used to set the covariance between the parameters
   //  referenced by index1 and index2.  Variance of a single parameter
@@ -710,7 +729,8 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   //  referenced by the given index.
   //<
 
-  virtual void setGeometricCorrectionSwitch(int index, bool value,
+  virtual void setGeometricCorrectionSwitch(int index,
+                                            bool value,
                                             csm::param::Type pType);
   //> This method is used to enable/disable the geometric correction switch
   //  referenced by the given index.
@@ -903,11 +923,14 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
 
   // This private form of the g2i method is used to ensure thread safety.
   virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord& groundPt, const std::vector<double>& adjustments,
-      double desiredPrecision = 0.001, double* achievedPrecision = NULL,
+      const csm::EcefCoord& groundPt,
+      const std::vector<double>& adjustments,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       csm::WarningList* warnings = NULL) const;
 
-  void reconstructSensorDistortion(double& focalX, double& focalY,
+  void reconstructSensorDistortion(double& focalX,
+                                   double& focalY,
                                    const double& desiredPrecision) const;
 
   void getQuaternions(const double& time, double quaternion[4]) const;
@@ -929,15 +952,27 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
       double& bodyFixedZ) const;
 
   // Computes the LOS correction due to light aberration
-  void lightAberrationCorr(const double& vx, const double& vy, const double& vz,
-                           const double& xl, const double& yl, const double& zl,
-                           double& dxl, double& dyl, double& dzl) const;
+  void lightAberrationCorr(const double& vx,
+                           const double& vy,
+                           const double& vz,
+                           const double& xl,
+                           const double& yl,
+                           const double& zl,
+                           double& dxl,
+                           double& dyl,
+                           double& dzl) const;
 
   // Intersects a LOS at a specified height above the ellipsoid.
-  void losEllipsoidIntersect(const double& height, const double& xc,
-                             const double& yc, const double& zc,
-                             const double& xl, const double& yl,
-                             const double& zl, double& x, double& y, double& z,
+  void losEllipsoidIntersect(const double& height,
+                             const double& xc,
+                             const double& yc,
+                             const double& zc,
+                             const double& xl,
+                             const double& yl,
+                             const double& zl,
+                             double& x,
+                             double& y,
+                             double& z,
                              double& achieved_precision,
                              const double& desired_precision) const;
 
@@ -959,13 +994,22 @@ class UsgsAstroLsSensorModel : public csm::RasterGM,
   // plane.
   void imageToPlane(const double& line,    // CSM Origin UL corner of UL pixel
                     const double& sample,  // CSM Origin UL corner of UL pixel
-                    const double& height, const std::vector<double>& adj,
-                    double& x, double& y, double& z, int& mode) const;
+                    const double& height,
+                    const std::vector<double>& adj,
+                    double& x,
+                    double& y,
+                    double& z,
+                    int& mode) const;
 
   // determines the sensor velocity accounting for parameter adjustments.
-  void getAdjSensorPosVel(const double& time, const std::vector<double>& adj,
-                          double& xc, double& yc, double& zc, double& vx,
-                          double& vy, double& vz) const;
+  void getAdjSensorPosVel(const double& time,
+                          const std::vector<double>& adj,
+                          double& xc,
+                          double& yc,
+                          double& zc,
+                          double& vx,
+                          double& vy,
+                          double& vz) const;
 
   // Computes the imaging locus that would view a ground point at a specific
   // time. Computationally, this is the opposite of losToEcf.

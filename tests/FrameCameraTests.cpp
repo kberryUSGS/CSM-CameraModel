@@ -469,9 +469,13 @@ TEST_F(FrameSensorModelLogging, ImageToRemoteImagingLocus) {
   sensorModel->imageToRemoteImagingLocus(imagePt);
 }
 
-TEST_F(FrameSensorModelLogging, GetImageStart) { sensorModel->getImageStart(); }
+TEST_F(FrameSensorModelLogging, GetImageStart) {
+  sensorModel->getImageStart();
+}
 
-TEST_F(FrameSensorModelLogging, GetImageSize) { sensorModel->getImageSize(); }
+TEST_F(FrameSensorModelLogging, GetImageSize) {
+  sensorModel->getImageSize();
+}
 
 TEST_F(FrameSensorModelLogging, GetValidImageRange) {
   sensorModel->getValidImageRange();
@@ -546,11 +550,17 @@ TEST_F(FrameSensorModelLogging, GetUnmodeledCrossCovariance) {
   sensorModel->getUnmodeledCrossCovariance(imagePt1, imagePt2);
 }
 
-TEST_F(FrameSensorModelLogging, GetVersion) { sensorModel->getVersion(); }
+TEST_F(FrameSensorModelLogging, GetVersion) {
+  sensorModel->getVersion();
+}
 
-TEST_F(FrameSensorModelLogging, GetModelName) { sensorModel->getModelName(); }
+TEST_F(FrameSensorModelLogging, GetModelName) {
+  sensorModel->getModelName();
+}
 
-TEST_F(FrameSensorModelLogging, GetPedigree) { sensorModel->getPedigree(); }
+TEST_F(FrameSensorModelLogging, GetPedigree) {
+  sensorModel->getPedigree();
+}
 
 TEST_F(FrameSensorModelLogging, GetImageIdentifier) {
   sensorModel->getImageIdentifier();
@@ -576,15 +586,21 @@ TEST_F(FrameSensorModelLogging, GetTrajectoryIdentifier) {
   sensorModel->getTrajectoryIdentifier();
 }
 
-TEST_F(FrameSensorModelLogging, GetSensorType) { sensorModel->getSensorType(); }
+TEST_F(FrameSensorModelLogging, GetSensorType) {
+  sensorModel->getSensorType();
+}
 
-TEST_F(FrameSensorModelLogging, GetSensorMode) { sensorModel->getSensorMode(); }
+TEST_F(FrameSensorModelLogging, GetSensorMode) {
+  sensorModel->getSensorMode();
+}
 
 TEST_F(FrameSensorModelLogging, GetReferenceDateAndTime) {
   sensorModel->getReferenceDateAndTime();
 }
 
-TEST_F(FrameSensorModelLogging, GetModelState) { sensorModel->getModelState(); }
+TEST_F(FrameSensorModelLogging, GetModelState) {
+  sensorModel->getModelState();
+}
 
 TEST_F(FrameSensorModelLogging, replaceModelState) {
   std::string state = sensorModel->getModelState();
