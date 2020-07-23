@@ -6,12 +6,12 @@
 #include <Plugin.h>
 #include <Version.h>
 
-#include <nlohmann/json.hpp>
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
+#include <nlohmann/json.hpp>
 
 class UsgsAstroPlugin : public csm::Plugin {
- public:
+public:
   UsgsAstroPlugin();
   ~UsgsAstroPlugin();
 
@@ -24,32 +24,39 @@ class UsgsAstroPlugin : public csm::Plugin {
   virtual std::string getModelName(size_t modelIndex) const;
   virtual std::string getModelFamily(size_t modelIndex) const;
   virtual csm::Version getModelVersion(const std::string &modelName) const;
-  virtual bool canModelBeConstructedFromState(
-      const std::string &modelName, const std::string &modelState,
-      csm::WarningList *warnings = NULL) const;
-  virtual bool canModelBeConstructedFromISD(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
-  virtual csm::Model *constructModelFromState(
-      const std::string &modelState, csm::WarningList *warnings = NULL) const;
-  virtual csm::Model *constructModelFromISD(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
-  virtual std::string getModelNameFromModelState(
-      const std::string &modelState, csm::WarningList *warnings = NULL) const;
-  virtual bool canISDBeConvertedToModelState(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
-  virtual std::string convertISDToModelState(
-      const csm::Isd &imageSupportData, const std::string &modelName,
-      csm::WarningList *warnings = NULL) const;
+  virtual bool
+  canModelBeConstructedFromState(const std::string &modelName,
+                                 const std::string &modelState,
+                                 csm::WarningList *warnings = NULL) const;
+  virtual bool
+  canModelBeConstructedFromISD(const csm::Isd &imageSupportData,
+                               const std::string &modelName,
+                               csm::WarningList *warnings = NULL) const;
+  virtual csm::Model *
+  constructModelFromState(const std::string &modelState,
+                          csm::WarningList *warnings = NULL) const;
+  virtual csm::Model *
+  constructModelFromISD(const csm::Isd &imageSupportData,
+                        const std::string &modelName,
+                        csm::WarningList *warnings = NULL) const;
+  virtual std::string
+  getModelNameFromModelState(const std::string &modelState,
+                             csm::WarningList *warnings = NULL) const;
+  virtual bool
+  canISDBeConvertedToModelState(const csm::Isd &imageSupportData,
+                                const std::string &modelName,
+                                csm::WarningList *warnings = NULL) const;
+  virtual std::string
+  convertISDToModelState(const csm::Isd &imageSupportData,
+                         const std::string &modelName,
+                         csm::WarningList *warnings = NULL) const;
 
-  std::string loadImageSupportData(
-      const csm::Isd &imageSupportDataOriginal) const;
+  std::string
+  loadImageSupportData(const csm::Isd &imageSupportDataOriginal) const;
 
   // TODO when implementing, add any other necessary members.
 
- private:
+private:
   static const UsgsAstroPlugin m_registeredPlugin;
   static const std::string _PLUGIN_NAME;
   static const std::string _MANUFACTURER_NAME;

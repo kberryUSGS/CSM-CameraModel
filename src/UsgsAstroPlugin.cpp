@@ -25,9 +25,9 @@ using json = nlohmann::json;
 #define DIR_DELIMITER_STR "/"
 #endif
 
-#define MESSAGE_LOG(...)         \
-  if (m_logger) {                \
-    m_logger->info(__VA_ARGS__); \
+#define MESSAGE_LOG(...)                                                       \
+  if (m_logger) {                                                              \
+    m_logger->info(__VA_ARGS__);                                               \
   }
 
 // Declaration of static variables
@@ -99,8 +99,8 @@ std::string UsgsAstroPlugin::getModelFamily(size_t modelIndex) const {
   return CSM_RASTER_FAMILY;
 }
 
-csm::Version UsgsAstroPlugin::getModelVersion(
-    const std::string &modelName) const {
+csm::Version
+UsgsAstroPlugin::getModelVersion(const std::string &modelName) const {
   MESSAGE_LOG("Get Model Version");
   return csm::Version(1, 0, 0);
 }
@@ -205,8 +205,9 @@ std::string UsgsAstroPlugin::loadImageSupportData(
   }
 }
 
-std::string UsgsAstroPlugin::getModelNameFromModelState(
-    const std::string &modelState, csm::WarningList *warnings) const {
+std::string
+UsgsAstroPlugin::getModelNameFromModelState(const std::string &modelState,
+                                            csm::WarningList *warnings) const {
   auto state = json::parse(modelState);
 
   std::string name = state.value<std::string>("name_model", "");
@@ -255,18 +256,20 @@ std::string UsgsAstroPlugin::getStateFromISD(csm::Isd imageSupportData) const {
   return convertISDToModelState(imageSupportData, jsonIsd.at("name_model"));
 }
 
-std::string UsgsAstroPlugin::convertISDToModelState(
-    const csm::Isd &imageSupportData, const std::string &modelName,
-    csm::WarningList *warnings) const {
+std::string
+UsgsAstroPlugin::convertISDToModelState(const csm::Isd &imageSupportData,
+                                        const std::string &modelName,
+                                        csm::WarningList *warnings) const {
   MESSAGE_LOG("Running convertISDToModelState");
   csm::Model *sensor_model =
       constructModelFromISD(imageSupportData, modelName, warnings);
   return sensor_model->getModelState();
 }
 
-csm::Model *UsgsAstroPlugin::constructModelFromISD(
-    const csm::Isd &imageSupportDataOriginal, const std::string &modelName,
-    csm::WarningList *warnings) const {
+csm::Model *
+UsgsAstroPlugin::constructModelFromISD(const csm::Isd &imageSupportDataOriginal,
+                                       const std::string &modelName,
+                                       csm::WarningList *warnings) const {
   MESSAGE_LOG("Running constructModelFromISD");
   std::string stringIsd = loadImageSupportData(imageSupportDataOriginal);
 
@@ -338,8 +341,9 @@ csm::Model *UsgsAstroPlugin::constructModelFromISD(
   }
 }
 
-csm::Model *UsgsAstroPlugin::constructModelFromState(
-    const std::string &modelState, csm::WarningList *warnings) const {
+csm::Model *
+UsgsAstroPlugin::constructModelFromState(const std::string &modelState,
+                                         csm::WarningList *warnings) const {
   MESSAGE_LOG("Runing constructModelFromState with modelState: {}", modelState);
   json state = json::parse(modelState);
   std::string modelName = state["m_modelName"];

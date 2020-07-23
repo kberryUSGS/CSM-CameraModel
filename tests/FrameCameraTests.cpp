@@ -138,7 +138,7 @@ TEST_F(OrbitalFrameSensorModel, GroundPartials) {
 TEST_F(FrameStateTest, FL500_OffBody4) {
   std::string key = "m_focalLength";
   double newValue = 500.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -155,7 +155,7 @@ TEST_F(FrameStateTest, FL500_OffBody4) {
 TEST_F(FrameStateTest, FL500_OffBody3) {
   std::string key = "m_focalLength";
   double newValue = 500.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -172,7 +172,7 @@ TEST_F(FrameStateTest, FL500_OffBody3) {
 TEST_F(FrameStateTest, FL500_Center) {
   std::string key = "m_focalLength";
   double newValue = 500.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -189,7 +189,7 @@ TEST_F(FrameStateTest, FL500_Center) {
 TEST_F(FrameStateTest, FL500_SlightlyOffCenter) {
   std::string key = "m_focalLength";
   double newValue = 500.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -208,7 +208,7 @@ TEST_F(FrameStateTest, SemiMajorAxis100x_Center) {
   std::string key = "m_majorAxis";
   double newValue = 1000.0;
 
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -225,7 +225,7 @@ TEST_F(FrameStateTest, SemiMajorAxis100x_Center) {
 TEST_F(FrameStateTest, SemiMajorAxis10x_SlightlyOffCenter) {
   std::string key = "m_majorAxis";
   double newValue = 100.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -247,7 +247,7 @@ TEST_F(FrameStateTest, SemiMajorAxis10x_SlightlyOffCenter) {
 TEST_F(FrameStateTest, SemiMinorAxis10x_SlightlyOffCenter) {
   std::string key = "m_minorAxis";
   double newValue = 100.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -264,7 +264,7 @@ TEST_F(FrameStateTest, SemiMinorAxis10x_SlightlyOffCenter) {
 TEST_F(FrameStateTest, SampleSumming) {
   std::string key = "m_detectorSampleSumming";
   double newValue = 2.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -281,7 +281,7 @@ TEST_F(FrameStateTest, SampleSumming) {
 TEST_F(FrameStateTest, LineSumming) {
   std::string key = "m_detectorLineSumming";
   double newValue = 2.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -298,7 +298,7 @@ TEST_F(FrameStateTest, LineSumming) {
 TEST_F(FrameStateTest, StartSample) {
   std::string key = "m_startingDetectorSample";
   double newValue = 5.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -315,7 +315,7 @@ TEST_F(FrameStateTest, StartSample) {
 TEST_F(FrameStateTest, StartLine) {
   std::string key = "m_startingDetectorLine";
   double newValue = 5.0;
-  UsgsAstroFrameSensorModel* sensorModel =
+  UsgsAstroFrameSensorModel *sensorModel =
       createModifiedStateSensorModel(key, newValue);
 
   ASSERT_NE(sensorModel, nullptr);
@@ -336,7 +336,7 @@ TEST_F(FrameStateTest, StartLine) {
 // Observer x position:
 TEST_F(FrameSensorModel, X10_SlightlyOffCenter) {
   double newValue = 10.0;
-  sensorModel->setParameterValue(0, newValue);  // X
+  sensorModel->setParameterValue(0, newValue); // X
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -351,7 +351,7 @@ TEST_F(FrameSensorModel, X10_SlightlyOffCenter) {
 
 TEST_F(FrameSensorModel, X1e9_SlightlyOffCenter) {
   double newValue = 1000000000.0;
-  sensorModel->setParameterValue(0, newValue);  // X
+  sensorModel->setParameterValue(0, newValue); // X
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 6.5);
@@ -374,9 +374,9 @@ TEST_F(FrameSensorModel, Rotation_omegaPi_Center) {
 
   sensorModel->setParameterValue(6, 1.0);
 
-  sensorModel->setParameterValue(0, 1000.0);  // X
-  sensorModel->setParameterValue(1, 0.0);     // Y
-  sensorModel->setParameterValue(2, 0.0);     // Z
+  sensorModel->setParameterValue(0, 1000.0); // X
+  sensorModel->setParameterValue(1, 0.0);    // Y
+  sensorModel->setParameterValue(2, 0.0);    // Z
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -396,9 +396,9 @@ TEST_F(FrameSensorModel, Rotation_NPole_Center) {
 
   sensorModel->setParameterValue(6, 0.0);
 
-  sensorModel->setParameterValue(0, 0.0);     // X
-  sensorModel->setParameterValue(1, 0.0);     // Y
-  sensorModel->setParameterValue(2, 1000.0);  // Z
+  sensorModel->setParameterValue(0, 0.0);    // X
+  sensorModel->setParameterValue(1, 0.0);    // Y
+  sensorModel->setParameterValue(2, 1000.0); // Z
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);
@@ -412,10 +412,10 @@ TEST_F(FrameSensorModel, Rotation_NPole_Center) {
 }
 
 TEST_F(FrameSensorModel, Rotation_SPole_Center) {
-  sensorModel->setParameterValue(3, 0.0);      // phi
-  sensorModel->setParameterValue(0, 0.0);      // X
-  sensorModel->setParameterValue(1, 0.0);      // Y
-  sensorModel->setParameterValue(2, -1000.0);  // Z
+  sensorModel->setParameterValue(3, 0.0);     // phi
+  sensorModel->setParameterValue(0, 0.0);     // X
+  sensorModel->setParameterValue(1, 0.0);     // Y
+  sensorModel->setParameterValue(2, -1000.0); // Z
 
   ASSERT_NE(sensorModel, nullptr);
   csm::ImageCoord imagePt(7.5, 7.5);

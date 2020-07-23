@@ -8,9 +8,9 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include <math.h>
 #include <fstream>
 #include <iostream>
+#include <math.h>
 #include <string>
 
 using json = nlohmann::json;

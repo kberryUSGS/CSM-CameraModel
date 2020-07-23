@@ -7,8 +7,8 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include <math.h>
 #include <functional>
+#include <math.h>
 #include <stdexcept>
 
 using json = nlohmann::json;
@@ -329,8 +329,8 @@ TEST(UtilitiesTests, polynomialEval) {
 
 TEST(UtilitiesTests, polynomialRoot) {
   std::vector<double> oneRootCoeffs = {-12.0, 4.0, -3.0,
-                                       1.0};           // roots are 3, +-2i
-  std::vector<double> noRootCoeffs = {4.0, 0.0, 1.0};  // roots are +-2i
+                                       1.0};          // roots are 3, +-2i
+  std::vector<double> noRootCoeffs = {4.0, 0.0, 1.0}; // roots are +-2i
   EXPECT_NEAR(polynomialRoot(oneRootCoeffs, 0.0), 3.0, 1e-10);
   EXPECT_THROW(polynomialRoot(noRootCoeffs, 0.0), std::invalid_argument);
 }

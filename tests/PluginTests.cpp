@@ -54,19 +54,17 @@ TEST(FrameStateTests, BadStateName) {
 
 TEST(FrameStateTests, BadStateValue) {
   UsgsAstroPlugin testPlugin;
-  std::string badState =
-      "{"
-      "\"m_model_name\":\"USGS_ASTRO_FRAME_SENSOR_MODEL\","
-      "\"bad_param\":\"bad_value\"}";
+  std::string badState = "{"
+                         "\"m_model_name\":\"USGS_ASTRO_FRAME_SENSOR_MODEL\","
+                         "\"bad_param\":\"bad_value\"}";
   EXPECT_FALSE(testPlugin.canModelBeConstructedFromState(
       "USGS_ASTRO_FRAME_SENSOR_MODEL", badState));
 }
 
 TEST(FrameStateTests, MissingStateValue) {
   UsgsAstroPlugin testPlugin;
-  std::string badState =
-      "{"
-      "\"m_model_name\":\"USGS_ASTRO_FRAME_SENSOR_MODEL\"}";
+  std::string badState = "{"
+                         "\"m_model_name\":\"USGS_ASTRO_FRAME_SENSOR_MODEL\"}";
   EXPECT_FALSE(testPlugin.canModelBeConstructedFromState(
       "USGS_ASTRO_FRAME_SENSOR_MODEL", badState));
 }

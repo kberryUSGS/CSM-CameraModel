@@ -616,8 +616,9 @@ double getEndingTime(json isd, csm::WarningList *list) {
   return time;
 }
 
-std::vector<double> getIntegrationStartLines(
-    std::vector<std::vector<double>> lineScanRate, csm::WarningList *list) {
+std::vector<double>
+getIntegrationStartLines(std::vector<std::vector<double>> lineScanRate,
+                         csm::WarningList *list) {
   std::vector<double> lines;
   try {
     for (auto &scanRate : lineScanRate) {
@@ -641,8 +642,9 @@ std::vector<double> getIntegrationStartLines(
   return lines;
 }
 
-std::vector<double> getIntegrationStartTimes(
-    std::vector<std::vector<double>> lineScanRate, csm::WarningList *list) {
+std::vector<double>
+getIntegrationStartTimes(std::vector<std::vector<double>> lineScanRate,
+                         csm::WarningList *list) {
   std::vector<double> times;
   try {
     for (auto &scanRate : lineScanRate) {
@@ -666,8 +668,9 @@ std::vector<double> getIntegrationStartTimes(
   return times;
 }
 
-std::vector<double> getIntegrationTimes(
-    std::vector<std::vector<double>> lineScanRate, csm::WarningList *list) {
+std::vector<double>
+getIntegrationTimes(std::vector<std::vector<double>> lineScanRate,
+                    csm::WarningList *list) {
   std::vector<double> times;
   try {
     for (auto &scanRate : lineScanRate) {
@@ -979,129 +982,129 @@ std::vector<double> getDistortionCoeffs(json isd, csm::WarningList *list) {
   DistortionType distortion = getDistortionModel(isd);
 
   switch (distortion) {
-    case DistortionType::TRANSVERSE: {
-      try {
-        std::vector<double> coefficientsX, coefficientsY;
+  case DistortionType::TRANSVERSE: {
+    try {
+      std::vector<double> coefficientsX, coefficientsY;
 
-        coefficientsX = isd.at("optical_distortion")
-                            .at("transverse")
-                            .at("x")
-                            .get<std::vector<double>>();
-        coefficientsX.resize(10, 0.0);
+      coefficientsX = isd.at("optical_distortion")
+                          .at("transverse")
+                          .at("x")
+                          .get<std::vector<double>>();
+      coefficientsX.resize(10, 0.0);
 
-        coefficientsY = isd.at("optical_distortion")
-                            .at("transverse")
-                            .at("y")
-                            .get<std::vector<double>>();
-        coefficientsY.resize(10, 0.0);
+      coefficientsY = isd.at("optical_distortion")
+                          .at("transverse")
+                          .at("y")
+                          .get<std::vector<double>>();
+      coefficientsY.resize(10, 0.0);
 
-        coefficients = coefficientsX;
+      coefficients = coefficientsX;
 
-        coefficients.insert(coefficients.end(), coefficientsY.begin(),
-                            coefficientsY.end());
-        return coefficients;
-      } catch (...) {
-        if (list) {
-          list->push_back(csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                                       "Could not parse a set of transverse "
-                                       "distortion model coefficients.",
-                                       "Utilities::getDistortion()"));
-        }
-        coefficients = std::vector<double>(20, 0.0);
-        coefficients[1] = 1.0;
-        coefficients[12] = 1.0;
+      coefficients.insert(coefficients.end(), coefficientsY.begin(),
+                          coefficientsY.end());
+      return coefficients;
+    } catch (...) {
+      if (list) {
+        list->push_back(csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                                     "Could not parse a set of transverse "
+                                     "distortion model coefficients.",
+                                     "Utilities::getDistortion()"));
       }
-    } break;
-    case DistortionType::RADIAL: {
-      try {
-        coefficients = isd.at("optical_distortion")
-                           .at("radial")
-                           .at("coefficients")
-                           .get<std::vector<double>>();
+      coefficients = std::vector<double>(20, 0.0);
+      coefficients[1] = 1.0;
+      coefficients[12] = 1.0;
+    }
+  } break;
+  case DistortionType::RADIAL: {
+    try {
+      coefficients = isd.at("optical_distortion")
+                         .at("radial")
+                         .at("coefficients")
+                         .get<std::vector<double>>();
 
-        return coefficients;
-      } catch (...) {
-        if (list) {
-          list->push_back(csm::Warning(
-              csm::Warning::DATA_NOT_AVAILABLE,
-              "Could not parse the radial distortion model coefficients.",
-              "Utilities::getDistortion()"));
-        }
-        coefficients = std::vector<double>(3, 0.0);
+      return coefficients;
+    } catch (...) {
+      if (list) {
+        list->push_back(csm::Warning(
+            csm::Warning::DATA_NOT_AVAILABLE,
+            "Could not parse the radial distortion model coefficients.",
+            "Utilities::getDistortion()"));
       }
-    } break;
-    case DistortionType::KAGUYALISM: {
-      try {
-        std::vector<double> coefficientsX = isd.at("optical_distortion")
-                                                .at("kaguyalism")
-                                                .at("x")
-                                                .get<std::vector<double>>();
-        std::vector<double> coefficientsY = isd.at("optical_distortion")
-                                                .at("kaguyalism")
-                                                .at("y")
-                                                .get<std::vector<double>>();
-        double boresightX = isd.at("optical_distortion")
-                                .at("kaguyalism")
-                                .at("boresight_x")
-                                .get<double>();
-        double boresightY = isd.at("optical_distortion")
-                                .at("kaguyalism")
-                                .at("boresight_y")
-                                .get<double>();
+      coefficients = std::vector<double>(3, 0.0);
+    }
+  } break;
+  case DistortionType::KAGUYALISM: {
+    try {
+      std::vector<double> coefficientsX = isd.at("optical_distortion")
+                                              .at("kaguyalism")
+                                              .at("x")
+                                              .get<std::vector<double>>();
+      std::vector<double> coefficientsY = isd.at("optical_distortion")
+                                              .at("kaguyalism")
+                                              .at("y")
+                                              .get<std::vector<double>>();
+      double boresightX = isd.at("optical_distortion")
+                              .at("kaguyalism")
+                              .at("boresight_x")
+                              .get<double>();
+      double boresightY = isd.at("optical_distortion")
+                              .at("kaguyalism")
+                              .at("boresight_y")
+                              .get<double>();
 
-        coefficientsX.resize(4, 0.0);
-        coefficientsY.resize(4, 0.0);
-        coefficientsX.insert(coefficientsX.begin(), boresightX);
-        coefficientsY.insert(coefficientsY.begin(), boresightY);
-        coefficientsX.insert(coefficientsX.end(), coefficientsY.begin(),
-                             coefficientsY.end());
+      coefficientsX.resize(4, 0.0);
+      coefficientsY.resize(4, 0.0);
+      coefficientsX.insert(coefficientsX.begin(), boresightX);
+      coefficientsY.insert(coefficientsY.begin(), boresightY);
+      coefficientsX.insert(coefficientsX.end(), coefficientsY.begin(),
+                           coefficientsY.end());
 
-        return coefficientsX;
-      } catch (...) {
-        if (list) {
-          list->push_back(csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
-                                       "Could not parse a set of Kaguya LISM "
-                                       "distortion model coefficients.",
-                                       "Utilities::getDistortion()"));
-        }
-        coefficients = std::vector<double>(8, 0.0);
+      return coefficientsX;
+    } catch (...) {
+      if (list) {
+        list->push_back(csm::Warning(csm::Warning::DATA_NOT_AVAILABLE,
+                                     "Could not parse a set of Kaguya LISM "
+                                     "distortion model coefficients.",
+                                     "Utilities::getDistortion()"));
       }
-    } break;
-    case DistortionType::DAWNFC: {
-      try {
-        coefficients = isd.at("optical_distortion")
-                           .at("dawnfc")
-                           .at("coefficients")
-                           .get<std::vector<double>>();
+      coefficients = std::vector<double>(8, 0.0);
+    }
+  } break;
+  case DistortionType::DAWNFC: {
+    try {
+      coefficients = isd.at("optical_distortion")
+                         .at("dawnfc")
+                         .at("coefficients")
+                         .get<std::vector<double>>();
 
-        return coefficients;
-      } catch (...) {
-        if (list) {
-          list->push_back(csm::Warning(
-              csm::Warning::DATA_NOT_AVAILABLE,
-              "Could not parse the dawn radial distortion model coefficients.",
-              "Utilities::getDistortion()"));
-        }
-        coefficients = std::vector<double>(1, 0.0);
+      return coefficients;
+    } catch (...) {
+      if (list) {
+        list->push_back(csm::Warning(
+            csm::Warning::DATA_NOT_AVAILABLE,
+            "Could not parse the dawn radial distortion model coefficients.",
+            "Utilities::getDistortion()"));
       }
-    } break;
-    case DistortionType::LROLROCNAC: {
-      try {
-        coefficients = isd.at("optical_distortion")
-                           .at("lrolrocnac")
-                           .at("coefficients")
-                           .get<std::vector<double>>();
-        return coefficients;
-      } catch (...) {
-        if (list) {
-          list->push_back(csm::Warning(
-              csm::Warning::DATA_NOT_AVAILABLE,
-              "Could not parse the lrolrocnac distortion model coefficients.",
-              "Utilities::getDistortion()"));
-        }
-        coefficients = std::vector<double>(1, 0.0);
+      coefficients = std::vector<double>(1, 0.0);
+    }
+  } break;
+  case DistortionType::LROLROCNAC: {
+    try {
+      coefficients = isd.at("optical_distortion")
+                         .at("lrolrocnac")
+                         .at("coefficients")
+                         .get<std::vector<double>>();
+      return coefficients;
+    } catch (...) {
+      if (list) {
+        list->push_back(csm::Warning(
+            csm::Warning::DATA_NOT_AVAILABLE,
+            "Could not parse the lrolrocnac distortion model coefficients.",
+            "Utilities::getDistortion()"));
       }
-    } break;
+      coefficients = std::vector<double>(1, 0.0);
+    }
+  } break;
   }
   if (list) {
     list->push_back(

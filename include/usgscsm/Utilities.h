@@ -110,23 +110,24 @@ int getTotalSamples(nlohmann::json isd, csm::WarningList *list = nullptr);
 double getStartingTime(nlohmann::json isd, csm::WarningList *list = nullptr);
 double getCenterTime(nlohmann::json isd, csm::WarningList *list = nullptr);
 double getEndingTime(nlohmann::json isd, csm::WarningList *list = nullptr);
-std::vector<double> getIntegrationStartLines(
-    std::vector<std::vector<double>> lineScanRate,
-    csm::WarningList *list = nullptr);
-std::vector<double> getIntegrationStartTimes(
-    std::vector<std::vector<double>> lineScanRate,
-    csm::WarningList *list = nullptr);
-std::vector<double> getIntegrationTimes(
-    std::vector<std::vector<double>> lineScanRate,
-    csm::WarningList *list = nullptr);
+std::vector<double>
+getIntegrationStartLines(std::vector<std::vector<double>> lineScanRate,
+                         csm::WarningList *list = nullptr);
+std::vector<double>
+getIntegrationStartTimes(std::vector<std::vector<double>> lineScanRate,
+                         csm::WarningList *list = nullptr);
+std::vector<double>
+getIntegrationTimes(std::vector<std::vector<double>> lineScanRate,
+                    csm::WarningList *list = nullptr);
 double getExposureDuration(nlohmann::json isd,
                            csm::WarningList *list = nullptr);
 double getScaledPixelWidth(nlohmann::json isd,
                            csm::WarningList *list = nullptr);
 std::string getLookDirection(nlohmann::json isd,
                              csm::WarningList *list = nullptr);
-std::vector<double> getScaleConversionCoefficients(
-    nlohmann::json isd, csm::WarningList *list = nullptr);
+std::vector<double>
+getScaleConversionCoefficients(nlohmann::json isd,
+                               csm::WarningList *list = nullptr);
 std::vector<double> getScaleConversionTimes(nlohmann::json isd,
                                             csm::WarningList *list = nullptr);
 int getSampleSumming(nlohmann::json isd, csm::WarningList *list = nullptr);

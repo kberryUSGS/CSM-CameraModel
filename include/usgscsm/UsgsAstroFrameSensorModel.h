@@ -2,14 +2,14 @@
 #ifndef UsgsAstroFrameSensorModel_h
 #define UsgsAstroFrameSensorModel_h
 
-#include <SettableEllipsoid.h>
-#include <cmath>
-#include <iostream>
-#include <vector>
 #include "CorrelationModel.h"
 #include "Distortion.h"
 #include "RasterGM.h"
 #include "Utilities.h"
+#include <SettableEllipsoid.h>
+#include <cmath>
+#include <iostream>
+#include <vector>
 
 #include "spdlog/spdlog.h"
 
@@ -18,7 +18,7 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
   // UsgsAstroFramePlugin needs to access private members
   friend class UsgsAstroFramePlugin;
 
- public:
+public:
   UsgsAstroFrameSensorModel();
   ~UsgsAstroFrameSensorModel();
 
@@ -26,19 +26,20 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
                          csm::WarningList *warnings);
   bool isValidIsd(const std::string &stringIsd, csm::WarningList *warnings);
 
-  virtual csm::ImageCoord groundToImage(
-      const csm::EcefCoord &groundPt, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+  virtual csm::ImageCoord
+  groundToImage(const csm::EcefCoord &groundPt, double desiredPrecision = 0.001,
+                double *achievedPrecision = NULL,
+                csm::WarningList *warnings = NULL) const;
 
   std::string constructStateFromIsd(const std::string &jsonIsd,
                                     csm::WarningList *warnings);
   void reset();
 
-  virtual csm::ImageCoordCovar groundToImage(
-      const csm::EcefCoordCovar &groundPt, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+  virtual csm::ImageCoordCovar
+  groundToImage(const csm::EcefCoordCovar &groundPt,
+                double desiredPrecision = 0.001,
+                double *achievedPrecision = NULL,
+                csm::WarningList *warnings = NULL) const;
 
   virtual csm::ImageCoord groundToImage(
       const csm::EcefCoord &ground_pt, const std::vector<double> &adjustments,
@@ -62,27 +63,29 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
                                        double *achievedPrecision = NULL,
                                        csm::WarningList *warnings = NULL) const;
 
-  virtual csm::EcefCoordCovar imageToGround(
-      const csm::ImageCoordCovar &imagePt, double height, double heightVariance,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+  virtual csm::EcefCoordCovar
+  imageToGround(const csm::ImageCoordCovar &imagePt, double height,
+                double heightVariance, double desiredPrecision = 0.001,
+                double *achievedPrecision = NULL,
+                csm::WarningList *warnings = NULL) const;
 
   virtual csm::EcefLocus imageToProximateImagingLocus(
       const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
       double desiredPrecision = 0.001, double *achievedPrecision = NULL,
       csm::WarningList *warnings = NULL) const;
 
-  virtual csm::EcefLocus imageToRemoteImagingLocus(
-      const csm::ImageCoord &imagePt, double desiredPrecision = 0.001,
-      double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+  virtual csm::EcefLocus
+  imageToRemoteImagingLocus(const csm::ImageCoord &imagePt,
+                            double desiredPrecision = 0.001,
+                            double *achievedPrecision = NULL,
+                            csm::WarningList *warnings = NULL) const;
 
   virtual csm::ImageCoord getImageStart() const;
 
   virtual csm::ImageVector getImageSize() const;
 
-  virtual std::pair<csm::ImageCoord, csm::ImageCoord> getValidImageRange()
-      const;
+  virtual std::pair<csm::ImageCoord, csm::ImageCoord>
+  getValidImageRange() const;
 
   virtual std::pair<double, double> getValidHeightRange() const;
 
@@ -95,8 +98,8 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    * @return @b csm::EcefVector Returns the illumination vector from the sun to
    * the ground point.
    */
-  virtual csm::EcefVector getIlluminationDirection(
-      const csm::EcefCoord &groundPt) const;
+  virtual csm::EcefVector
+  getIlluminationDirection(const csm::EcefCoord &groundPt) const;
 
   virtual double getImageTime(const csm::ImageCoord &imagePt) const;
 
@@ -109,8 +112,8 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    *
    * @throw csm::Error::BOUNDS "Image coordinate () out of bounds."
    */
-  virtual csm::EcefCoord getSensorPosition(
-      const csm::ImageCoord &imagePt) const;
+  virtual csm::EcefCoord
+  getSensorPosition(const csm::ImageCoord &imagePt) const;
 
   virtual csm::EcefCoord getSensorPosition(double time) const;
 
@@ -125,15 +128,16 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
    * @throw csm::Error::BOUNDS "Image coordinate () out of bounds."
    */
 
-  virtual csm::EcefVector getSensorVelocity(
-      const csm::ImageCoord &imagePt) const;
+  virtual csm::EcefVector
+  getSensorVelocity(const csm::ImageCoord &imagePt) const;
 
   virtual csm::EcefVector getSensorVelocity(double time) const;
 
-  virtual csm::RasterGM::SensorPartials computeSensorPartials(
-      int index, const csm::EcefCoord &groundPt,
-      double desiredPrecision = 0.001, double *achievedPrecision = NULL,
-      csm::WarningList *warnings = NULL) const;
+  virtual csm::RasterGM::SensorPartials
+  computeSensorPartials(int index, const csm::EcefCoord &groundPt,
+                        double desiredPrecision = 0.001,
+                        double *achievedPrecision = NULL,
+                        csm::WarningList *warnings = NULL) const;
 
   virtual csm::RasterGM::SensorPartials computeSensorPartials(
       int index, const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
@@ -151,13 +155,14 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
       double *achievedPrecision = NULL,
       csm::WarningList *warnings = NULL) const;
 
-  virtual std::vector<double> computeGroundPartials(
-      const csm::EcefCoord &groundPt) const;
+  virtual std::vector<double>
+  computeGroundPartials(const csm::EcefCoord &groundPt) const;
 
   virtual const csm::CorrelationModel &getCorrelationModel() const;
 
-  virtual std::vector<double> getUnmodeledCrossCovariance(
-      const csm::ImageCoord &pt1, const csm::ImageCoord &pt2) const;
+  virtual std::vector<double>
+  getUnmodeledCrossCovariance(const csm::ImageCoord &pt1,
+                              const csm::ImageCoord &pt2) const;
 
   // IMPLEMENT MODEL PURE VIRTUALS
   //---
@@ -335,7 +340,7 @@ class UsgsAstroFrameSensorModel : public csm::RasterGM,
 
   static const std::string _SENSOR_MODEL_NAME;
 
- private:
+private:
   // Input parameters
   static const int m_numParameters;
   static const std::string m_parameterName[];

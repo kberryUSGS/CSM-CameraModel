@@ -1,8 +1,8 @@
 #ifndef Distortion_h
 #define Distortion_h
 
-#include <math.h>
 #include <iostream>
+#include <math.h>
 #include <tuple>
 #include <vector>
 

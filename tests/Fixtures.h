@@ -37,7 +37,7 @@ inline void jsonToIsd(nlohmann::json &object, csm::Isd &isd,
 //////////Framing Camera Sensor Model Fixtures//////////
 
 class FrameSensorModel : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroFrameSensorModel *sensorModel;
 
@@ -63,7 +63,7 @@ class FrameSensorModel : public ::testing::Test {
 };
 
 class FrameSensorModelLogging : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroFrameSensorModel *sensorModel;
   std::ostringstream oss;
@@ -106,7 +106,7 @@ class FrameSensorModelLogging : public ::testing::Test {
 };
 
 class OrbitalFrameSensorModel : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroFrameSensorModel *sensorModel;
 
@@ -132,14 +132,14 @@ class OrbitalFrameSensorModel : public ::testing::Test {
 };
 
 class FrameIsdTest : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
 
   virtual void SetUp() { isd.setFilename("data/simpleFramerISD.img"); }
 };
 
 class ConstVelLineScanIsdTest : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
 
   virtual void SetUp() { isd.setFilename("data/constVelocityLineScan.img"); }
@@ -150,7 +150,7 @@ class ImageCoordParameterizedTest
 
 class FramerParameterizedTest
     : public ::testing::TestWithParam<csm::ImageCoord> {
- protected:
+protected:
   csm::Isd isd;
 
   std::string printIsd(csm::Isd &localIsd) {
@@ -181,7 +181,7 @@ class FramerParameterizedTest
 };
 
 class FrameStateTest : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroFrameSensorModel *createModifiedStateSensorModel(std::string key,
                                                             double newValue) {
@@ -210,7 +210,7 @@ class FrameStateTest : public ::testing::Test {
 //////////Line Scan Camera Sensor Model Fixtures//////////
 
 class ConstVelocityLineScanSensorModel : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroLsSensorModel *sensorModel;
 
@@ -236,7 +236,7 @@ class ConstVelocityLineScanSensorModel : public ::testing::Test {
 };
 
 class OrbitalLineScanSensorModel : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroLsSensorModel *sensorModel;
 
@@ -262,7 +262,7 @@ class OrbitalLineScanSensorModel : public ::testing::Test {
 };
 
 class TwoLineScanSensorModels : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroLsSensorModel *sensorModel1;
   UsgsAstroLsSensorModel *sensorModel2;
@@ -302,14 +302,14 @@ class TwoLineScanSensorModels : public ::testing::Test {
 //////////////////
 
 class SarIsdTest : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
 
   virtual void SetUp() { isd.setFilename("data/orbitalSar.img"); }
 };
 
 class SarSensorModel : public ::testing::Test {
- protected:
+protected:
   csm::Isd isd;
   UsgsAstroSarSensorModel *sensorModel;
 

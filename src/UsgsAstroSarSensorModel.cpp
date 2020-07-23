@@ -1,31 +1,31 @@
 #include "UsgsAstroSarSensorModel.h"
 #include "Utilities.h"
 
-#include <string.h>
 #include <cmath>
 #include <functional>
 #include <iomanip>
+#include <string.h>
 
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 using namespace std;
 
-#define MESSAGE_LOG(...)         \
-  if (m_logger) {                \
-    m_logger->info(__VA_ARGS__); \
+#define MESSAGE_LOG(...)                                                       \
+  if (m_logger) {                                                              \
+    m_logger->info(__VA_ARGS__);                                               \
   }
 
 const string UsgsAstroSarSensorModel::_SENSOR_MODEL_NAME =
     "USGS_ASTRO_SAR_SENSOR_MODEL";
 const int UsgsAstroSarSensorModel::NUM_PARAMETERS = 6;
 const string UsgsAstroSarSensorModel::PARAMETER_NAME[] = {
-    "X Pos. Bias   ",  // 0
-    "Y Pos. Bias   ",  // 1
-    "Z Pos. Bias   ",  // 2
-    "X Vel. Bias   ",  // 3
-    "Y Vel. Bias   ",  // 4
-    "Z Vel. Bias   "   // 5
+    "X Pos. Bias   ", // 0
+    "Y Pos. Bias   ", // 1
+    "Z Pos. Bias   ", // 2
+    "X Vel. Bias   ", // 3
+    "Y Vel. Bias   ", // 4
+    "Z Vel. Bias   "  // 5
 };
 
 const int UsgsAstroSarSensorModel::NUM_PARAM_TYPES = 4;
@@ -35,14 +35,15 @@ const csm::param::Type UsgsAstroSarSensorModel::PARAM_CHAR_ALL[] = {
     csm::param::NONE, csm::param::FICTITIOUS, csm::param::REAL,
     csm::param::FIXED};
 
-string UsgsAstroSarSensorModel::constructStateFromIsd(
-    const string imageSupportData, csm::WarningList* warnings) {
+string
+UsgsAstroSarSensorModel::constructStateFromIsd(const string imageSupportData,
+                                               csm::WarningList *warnings) {
   MESSAGE_LOG("UsgsAstroSarSensorModel constructing state from ISD, with {}",
               imageSupportData);
   json isd = json::parse(imageSupportData);
   json state = {};
 
-  csm::WarningList* parsingWarnings = new csm::WarningList;
+  csm::WarningList *parsingWarnings = new csm::WarningList;
 
   state["m_modelName"] = getSensorModelName(isd, parsingWarnings);
   state["m_imageIdentifier"] = getImageId(isd, parsingWarnings);
@@ -142,8 +143,8 @@ string UsgsAstroSarSensorModel::constructStateFromIsd(
   return state.dump();
 }
 
-string UsgsAstroSarSensorModel::getModelNameFromModelState(
-    const string& model_state) {
+string
+UsgsAstroSarSensorModel::getModelNameFromModelState(const string &model_state) {
   MESSAGE_LOG("Getting model name from model state: {}", model_state);
   // Parse the string to JSON
   auto j = json::parse(model_state);
@@ -215,7 +216,7 @@ void UsgsAstroSarSensorModel::reset() {
   m_noAdjustments = std::vector<double>(NUM_PARAMETERS, 0.0);
 }
 
-void UsgsAstroSarSensorModel::replaceModelState(const string& argState) {
+void UsgsAstroSarSensorModel::replaceModelState(const string &argState) {
   reset();
 
   MESSAGE_LOG("Replacing model state with: {}", argState);
@@ -334,8 +335,8 @@ string UsgsAstroSarSensorModel::getModelState() const {
 }
 
 csm::ImageCoord UsgsAstroSarSensorModel::groundToImage(
-    const csm::EcefCoord& groundPt, double desiredPrecision,
-    double* achievedPrecision, csm::WarningList* warnings) const {
+    const csm::EcefCoord &groundPt, double desiredPrecision,
+    double *achievedPrecision, csm::WarningList *warnings) const {
   MESSAGE_LOG(
       "Computing groundToImage(ImageCoord) for {}, {}, {}, with desired "
       "precision {}"
@@ -348,9 +349,9 @@ csm::ImageCoord UsgsAstroSarSensorModel::groundToImage(
 }
 
 csm::ImageCoord UsgsAstroSarSensorModel::groundToImage(
-    const csm::EcefCoord& groundPt, const std::vector<double> adj,
-    double desiredPrecision, double* achievedPrecision,
-    csm::WarningList* warnings) const {
+    const csm::EcefCoord &groundPt, const std::vector<double> adj,
+    double desiredPrecision, double *achievedPrecision,
+    csm::WarningList *warnings) const {
   MESSAGE_LOG(
       "Computing groundToImage(ImageCoord) for {}, {}, {}, with desired "
       "precision {}, and "
@@ -375,7 +376,7 @@ csm::ImageCoord UsgsAstroSarSensorModel::groundToImage(
     double line = (time - m_startingEphemerisTime) / m_exposureDuration + 0.5;
     double sample = groundRange / m_scaledPixelWidth;
     return csm::ImageCoord(line, sample);
-  } catch (std::exception& error) {
+  } catch (std::exception &error) {
     std::string message = "Could not calculate groundToImage, with error [";
     message += error.what();
     message += "]";
@@ -385,9 +386,9 @@ csm::ImageCoord UsgsAstroSarSensorModel::groundToImage(
 }
 
 // Calculate the root
-double UsgsAstroSarSensorModel::dopplerShift(
-    csm::EcefCoord groundPt, double tolerance,
-    const std::vector<double> adj) const {
+double
+UsgsAstroSarSensorModel::dopplerShift(csm::EcefCoord groundPt, double tolerance,
+                                      const std::vector<double> adj) const {
   MESSAGE_LOG("Calculating doppler shift with: {}, {}, {}, and tolerance {}.",
               groundPt.x, groundPt.y, groundPt.z, tolerance);
   csm::EcefVector groundVec(groundPt.x, groundPt.y, groundPt.z);
@@ -422,9 +423,10 @@ double UsgsAstroSarSensorModel::slantRange(csm::EcefCoord surfPt, double time,
   return norm(spacecraftPosition - surfVec);
 }
 
-double UsgsAstroSarSensorModel::slantRangeToGroundRange(
-    const csm::EcefCoord& groundPt, double time, double slantRange,
-    double tolerance) const {
+double
+UsgsAstroSarSensorModel::slantRangeToGroundRange(const csm::EcefCoord &groundPt,
+                                                 double time, double slantRange,
+                                                 double tolerance) const {
   MESSAGE_LOG(
       "Calculating slant range to ground range with: {}, {}, {}, {}, {}, {}",
       groundPt.x, groundPt.y, groundPt.z, time, slantRange, tolerance);
@@ -441,13 +443,13 @@ double UsgsAstroSarSensorModel::slantRangeToGroundRange(
 }
 
 double UsgsAstroSarSensorModel::groundRangeToSlantRange(
-    double groundRange, const std::vector<double>& coeffs) const {
+    double groundRange, const std::vector<double> &coeffs) const {
   return evaluatePolynomial(coeffs, groundRange);
 }
 
 csm::ImageCoordCovar UsgsAstroSarSensorModel::groundToImage(
-    const csm::EcefCoordCovar& groundPt, double desiredPrecision,
-    double* achievedPrecision, csm::WarningList* warnings) const {
+    const csm::EcefCoordCovar &groundPt, double desiredPrecision,
+    double *achievedPrecision, csm::WarningList *warnings) const {
   MESSAGE_LOG("Calculating groundToImage with: {}, {}, {}, {}", groundPt.x,
               groundPt.y, groundPt.z, desiredPrecision);
   // Ground to image with error propagation
@@ -478,14 +480,14 @@ csm::ImageCoordCovar UsgsAstroSarSensorModel::groundToImage(
   stz = prt[3] * groundPt.covariance[2] + prt[4] * groundPt.covariance[5] +
         prt[5] * groundPt.covariance[8];
 
-  double gp_cov[4];  // Input gp cov in image space
+  double gp_cov[4]; // Input gp cov in image space
   gp_cov[0] = ltx * prt[0] + lty * prt[1] + ltz * prt[2];
   gp_cov[1] = ltx * prt[3] + lty * prt[4] + ltz * prt[5];
   gp_cov[2] = stx * prt[0] + sty * prt[1] + stz * prt[2];
   gp_cov[3] = stx * prt[3] + sty * prt[4] + stz * prt[5];
 
   std::vector<double> unmodeled_cov = getUnmodeledError(ip);
-  double sensor_cov[4];  // sensor cov in image space
+  double sensor_cov[4]; // sensor cov in image space
   determineSensorCovarianceInImageSpace(gp, sensor_cov);
 
   result.covariance[0] = gp_cov[0] + unmodeled_cov[0] + sensor_cov[0];
@@ -497,8 +499,8 @@ csm::ImageCoordCovar UsgsAstroSarSensorModel::groundToImage(
 }
 
 csm::EcefCoord UsgsAstroSarSensorModel::imageToGround(
-    const csm::ImageCoord& imagePt, double height, double desiredPrecision,
-    double* achievedPrecision, csm::WarningList* warnings) const {
+    const csm::ImageCoord &imagePt, double height, double desiredPrecision,
+    double *achievedPrecision, csm::WarningList *warnings) const {
   MESSAGE_LOG("Calculating imageToGround with: {}, {}, {}, {}", imagePt.samp,
               imagePt.line, height, desiredPrecision);
   double time =
@@ -549,9 +551,9 @@ csm::EcefCoord UsgsAstroSarSensorModel::imageToGround(
 }
 
 csm::EcefCoordCovar UsgsAstroSarSensorModel::imageToGround(
-    const csm::ImageCoordCovar& imagePt, double height, double heightVariance,
-    double desiredPrecision, double* achievedPrecision,
-    csm::WarningList* warnings) const {
+    const csm::ImageCoordCovar &imagePt, double height, double heightVariance,
+    double desiredPrecision, double *achievedPrecision,
+    csm::WarningList *warnings) const {
   MESSAGE_LOG("Calculating imageToGroundWith: {}, {}, {}, {}, {}", imagePt.samp,
               imagePt.line, height, heightVariance, desiredPrecision);
   // Image to ground with error propagation
@@ -579,7 +581,7 @@ csm::EcefCoordCovar UsgsAstroSarSensorModel::imageToGround(
   double zps = (gps.z - gp.z) / DELTA_IMAGE;
 
   ip.line = imagePt.line;
-  ip.samp = imagePt.samp;  // +DELTA_IMAGE;
+  ip.samp = imagePt.samp; // +DELTA_IMAGE;
   csm::EcefCoord gph =
       imageToGround(ip, height + DELTA_GROUND, desiredPrecision);
   double xph = (gph.x - gp.x) / DELTA_GROUND;
@@ -630,9 +632,9 @@ csm::EcefCoordCovar UsgsAstroSarSensorModel::imageToGround(
 }
 
 csm::EcefLocus UsgsAstroSarSensorModel::imageToProximateImagingLocus(
-    const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-    double desiredPrecision, double* achievedPrecision,
-    csm::WarningList* warnings) const {
+    const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
+    double desiredPrecision, double *achievedPrecision,
+    csm::WarningList *warnings) const {
   // Compute the slant range
   double time =
       m_startingEphemerisTime + (imagePt.line - 0.5) * m_exposureDuration;
@@ -663,8 +665,8 @@ csm::EcefLocus UsgsAstroSarSensorModel::imageToProximateImagingLocus(
 }
 
 csm::EcefLocus UsgsAstroSarSensorModel::imageToRemoteImagingLocus(
-    const csm::ImageCoord& imagePt, double desiredPrecision,
-    double* achievedPrecision, csm::WarningList* warnings) const {
+    const csm::ImageCoord &imagePt, double desiredPrecision,
+    double *achievedPrecision, csm::WarningList *warnings) const {
   // Compute the slant range
   double time =
       m_startingEphemerisTime + (imagePt.line - 0.5) * m_exposureDuration;
@@ -714,7 +716,7 @@ pair<double, double> UsgsAstroSarSensorModel::getValidHeightRange() const {
 }
 
 csm::EcefVector UsgsAstroSarSensorModel::getIlluminationDirection(
-    const csm::EcefCoord& groundPt) const {
+    const csm::EcefCoord &groundPt) const {
   csm::EcefVector groundVec(groundPt.x, groundPt.y, groundPt.z);
   csm::EcefVector sunPosition =
       getSunPosition(getImageTime(groundToImage(groundPt)));
@@ -722,13 +724,13 @@ csm::EcefVector UsgsAstroSarSensorModel::getIlluminationDirection(
   return illuminationDirection;
 }
 
-double UsgsAstroSarSensorModel::getImageTime(
-    const csm::ImageCoord& imagePt) const {
+double
+UsgsAstroSarSensorModel::getImageTime(const csm::ImageCoord &imagePt) const {
   return m_startingEphemerisTime + (imagePt.line - 0.5) * m_exposureDuration;
 }
 
-csm::EcefVector UsgsAstroSarSensorModel::getSpacecraftPosition(
-    double time) const {
+csm::EcefVector
+UsgsAstroSarSensorModel::getSpacecraftPosition(double time) const {
   MESSAGE_LOG("getSpacecraftPosition at {} without adjustments", time)
   csm::EcefCoord spacecraftPosition = getSensorPosition(time);
   return csm::EcefVector(spacecraftPosition.x, spacecraftPosition.y,
@@ -751,7 +753,7 @@ csm::EcefCoord UsgsAstroSarSensorModel::getSensorPosition(double time) const {
 }
 
 csm::EcefCoord UsgsAstroSarSensorModel::getSensorPosition(
-    const csm::ImageCoord& imagePt) const {
+    const csm::ImageCoord &imagePt) const {
   MESSAGE_LOG("getSensorPosition at {}, {}.", imagePt.samp, imagePt.line);
   double time = getImageTime(imagePt);
   return getSensorPosition(time);
@@ -781,7 +783,7 @@ csm::EcefCoord UsgsAstroSarSensorModel::getAdjustedSensorPosition(
 }
 
 csm::EcefVector UsgsAstroSarSensorModel::getSensorVelocity(
-    const csm::ImageCoord& imagePt) const {
+    const csm::ImageCoord &imagePt) const {
   MESSAGE_LOG("getSensorVelocity at {}, {}. No adjustments.", imagePt.samp,
               imagePt.line);
   double time = getImageTime(imagePt);
@@ -818,8 +820,8 @@ csm::EcefVector UsgsAstroSarSensorModel::getAdjustedSensorVelocity(
 }
 
 csm::RasterGM::SensorPartials UsgsAstroSarSensorModel::computeSensorPartials(
-    int index, const csm::EcefCoord& groundPt, double desiredPrecision,
-    double* achievedPrecision, csm::WarningList* warnings) const {
+    int index, const csm::EcefCoord &groundPt, double desiredPrecision,
+    double *achievedPrecision, csm::WarningList *warnings) const {
   MESSAGE_LOG(
       "Calculating computeSensorPartials for ground point {}, {}, {} with "
       "desired precision {}",
@@ -835,9 +837,9 @@ csm::RasterGM::SensorPartials UsgsAstroSarSensorModel::computeSensorPartials(
 }
 
 csm::RasterGM::SensorPartials UsgsAstroSarSensorModel::computeSensorPartials(
-    int index, const csm::ImageCoord& imagePt, const csm::EcefCoord& groundPt,
-    double desiredPrecision, double* achievedPrecision,
-    csm::WarningList* warnings) const {
+    int index, const csm::ImageCoord &imagePt, const csm::EcefCoord &groundPt,
+    double desiredPrecision, double *achievedPrecision,
+    csm::WarningList *warnings) const {
   MESSAGE_LOG(
       "Calculating computeSensorPartials (with image points {}, {}) for ground "
       "point {}, {}, "
@@ -861,7 +863,7 @@ csm::RasterGM::SensorPartials UsgsAstroSarSensorModel::computeSensorPartials(
 }
 
 vector<double> UsgsAstroSarSensorModel::computeGroundPartials(
-    const csm::EcefCoord& groundPt) const {
+    const csm::EcefCoord &groundPt) const {
   double GND_DELTA = m_scaledPixelWidth;
   // Partial of line, sample wrt X, Y, Z
   double x = groundPt.x;
@@ -884,13 +886,13 @@ vector<double> UsgsAstroSarSensorModel::computeGroundPartials(
   return partials;
 }
 
-const csm::CorrelationModel& UsgsAstroSarSensorModel::getCorrelationModel()
-    const {
+const csm::CorrelationModel &
+UsgsAstroSarSensorModel::getCorrelationModel() const {
   return _NO_CORR_MODEL;
 }
 
 vector<double> UsgsAstroSarSensorModel::getUnmodeledCrossCovariance(
-    const csm::ImageCoord& pt1, const csm::ImageCoord& pt2) const {
+    const csm::ImageCoord &pt1, const csm::ImageCoord &pt2) const {
   return vector<double>(4, 0.0);
 }
 
@@ -899,7 +901,7 @@ csm::EcefCoord UsgsAstroSarSensorModel::getReferencePoint() const {
 }
 
 void UsgsAstroSarSensorModel::setReferencePoint(
-    const csm::EcefCoord& groundPt) {
+    const csm::EcefCoord &groundPt) {
   m_referencePointXyz = groundPt;
 }
 
@@ -919,8 +921,8 @@ bool UsgsAstroSarSensorModel::isParameterShareable(int index) const {
   return false;
 }
 
-csm::SharingCriteria UsgsAstroSarSensorModel::getParameterSharingCriteria(
-    int index) const {
+csm::SharingCriteria
+UsgsAstroSarSensorModel::getParameterSharingCriteria(int index) const {
   return csm::SharingCriteria();
 }
 
@@ -974,8 +976,8 @@ bool UsgsAstroSarSensorModel::getGeometricCorrectionSwitch(int index) const {
 }
 
 vector<double> UsgsAstroSarSensorModel::getCrossCovarianceMatrix(
-    const csm::GeometricModel& comparisonModel, csm::param::Set pSet,
-    const csm::GeometricModel::GeometricModelList& otherModels) const {
+    const csm::GeometricModel &comparisonModel, csm::param::Set pSet,
+    const csm::GeometricModel::GeometricModelList &otherModels) const {
   // Return covariance matrix
   if (&comparisonModel == this) {
     vector<int> paramIndices = getParameterSetIndices(pSet);
@@ -990,9 +992,9 @@ vector<double> UsgsAstroSarSensorModel::getCrossCovarianceMatrix(
     return covariances;
   }
   // No correlation between models.
-  const vector<int>& indices = getParameterSetIndices(pSet);
+  const vector<int> &indices = getParameterSetIndices(pSet);
   size_t num_rows = indices.size();
-  const vector<int>& indices2 = comparisonModel.getParameterSetIndices(pSet);
+  const vector<int> &indices2 = comparisonModel.getParameterSetIndices(pSet);
   size_t num_cols = indices.size();
 
   return vector<double>(num_rows * num_cols, 0.0);
@@ -1012,8 +1014,8 @@ string UsgsAstroSarSensorModel::getImageIdentifier() const {
   return m_imageIdentifier;
 }
 
-void UsgsAstroSarSensorModel::setImageIdentifier(const string& imageId,
-                                                 csm::WarningList* warnings) {
+void UsgsAstroSarSensorModel::setImageIdentifier(const string &imageId,
+                                                 csm::WarningList *warnings) {
   m_imageIdentifier = imageId;
 }
 
@@ -1041,8 +1043,8 @@ string UsgsAstroSarSensorModel::getReferenceDateAndTime() const {
   csm::ImageCoord referencePointImage = groundToImage(m_referencePointXyz);
   double relativeTime = getImageTime(referencePointImage);
   time_t ephemTime = m_centerEphemerisTime + relativeTime;
-  struct tm t = {0};  // Initalize to all 0's
-  t.tm_year = 100;    // This is year-1900, so 100 = 2000
+  struct tm t = {0}; // Initalize to all 0's
+  t.tm_year = 100;   // This is year-1900, so 100 = 2000
   t.tm_mday = 1;
   time_t timeSinceEpoch = mktime(&t);
   time_t finalTime = ephemTime + timeSinceEpoch;
@@ -1057,13 +1059,13 @@ csm::Ellipsoid UsgsAstroSarSensorModel::getEllipsoid() const {
   return csm::Ellipsoid(m_majorAxis, m_minorAxis);
 }
 
-void UsgsAstroSarSensorModel::setEllipsoid(const csm::Ellipsoid& ellipsoid) {
+void UsgsAstroSarSensorModel::setEllipsoid(const csm::Ellipsoid &ellipsoid) {
   m_majorAxis = ellipsoid.getSemiMajorRadius();
   m_minorAxis = ellipsoid.getSemiMinorRadius();
 }
 
 void UsgsAstroSarSensorModel::determineSensorCovarianceInImageSpace(
-    csm::EcefCoord& gp, double sensor_cov[4]) const {
+    csm::EcefCoord &gp, double sensor_cov[4]) const {
   int i, j, totalAdjParams;
   totalAdjParams = getNumParameters();
 
@@ -1089,8 +1091,8 @@ void UsgsAstroSarSensorModel::determineSensorCovarianceInImageSpace(
   }
 }
 
-std::vector<double> UsgsAstroSarSensorModel::getRangeCoefficients(
-    double time) const {
+std::vector<double>
+UsgsAstroSarSensorModel::getRangeCoefficients(double time) const {
   int numCoeffs = m_scaleConversionCoefficients.size();
   std::vector<double> interpCoeffs;
 
@@ -1115,8 +1117,8 @@ std::vector<double> UsgsAstroSarSensorModel::getRangeCoefficients(
   return interpCoeffs;
 }
 
-csm::EcefVector UsgsAstroSarSensorModel::getSunPosition(
-    const double imageTime) const {
+csm::EcefVector
+UsgsAstroSarSensorModel::getSunPosition(const double imageTime) const {
   int numSunPositions = m_sunPosition.size();
   int numSunVelocities = m_sunVelocity.size();
   csm::EcefVector sunPosition = csm::EcefVector();
@@ -1148,6 +1150,6 @@ csm::EcefVector UsgsAstroSarSensorModel::getSunPosition(
 }
 
 double UsgsAstroSarSensorModel::getValue(
-    int index, const std::vector<double>& adjustments) const {
+    int index, const std::vector<double> &adjustments) const {
   return m_currentParameterValue[index] + adjustments[index];
 }
